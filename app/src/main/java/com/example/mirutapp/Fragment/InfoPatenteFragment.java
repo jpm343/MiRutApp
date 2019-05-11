@@ -61,7 +61,8 @@ public class InfoPatenteFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        String patente = "BCCD12";
+        //test value.
+        String patente = "bbdd12";
         viewModel = ViewModelProviders.of(this).get(InfoPatenteViewModel.class);
         viewModel.init(patente);
     }

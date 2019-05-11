@@ -29,7 +29,7 @@ public class InfoPatenteViewModel extends ViewModel {
                 System.out.println(response.code());
                 try {
                     responseBody = response.body().string();
-                    System.out.println(response.body().string());
+                    System.out.println(responseBody);
 
                 } catch(IOException e) {
                     responseBody = "";
@@ -43,5 +43,10 @@ public class InfoPatenteViewModel extends ViewModel {
                 responseBody = "";
             }
         });
+    }
+
+    //to be used in infoPateteFragment class
+    public String getResponseBody() {
+        return this.responseBody;
     }
 }
