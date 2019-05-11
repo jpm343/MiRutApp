@@ -1,7 +1,9 @@
 package com.example.mirutapp;
 
+import android.net.Uri;
 import android.os.Bundle;
 
+import com.example.mirutapp.Fragment.InfoPatenteFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -18,11 +20,12 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, InfoPatenteFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +88,13 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        Fragment selectedFragment = null;
+        boolean fragmentIsSelected = false;
+
         if (id == R.id.nav_home) {
             // Handle the camera action
+            selectedFragment = new InfoPatenteFragment();
+            fragmentIsSelected = true;
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -99,8 +107,17 @@ public class MainActivity extends AppCompatActivity
 
         }
 
+        if(fragmentIsSelected) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_main, selectedFragment).commit();
+        }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
