@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.mirutapp.Fragment.InfoPatenteFragment;
+import com.example.mirutapp.Fragment.PostFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -25,7 +26,9 @@ import androidx.fragment.app.Fragment;
 import android.view.Menu;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, InfoPatenteFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        InfoPatenteFragment.OnFragmentInteractionListener,
+        PostFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +99,8 @@ public class MainActivity extends AppCompatActivity
             selectedFragment = new InfoPatenteFragment();
             fragmentIsSelected = true;
         } else if (id == R.id.nav_gallery) {
+            selectedFragment = new PostFragment();
+            fragmentIsSelected = true;
 
         } else if (id == R.id.nav_slideshow) {
 
