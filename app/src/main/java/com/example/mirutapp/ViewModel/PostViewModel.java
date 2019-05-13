@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+
 public class PostViewModel extends ViewModel {
     private LiveData<List<Post>> posts;
     private PostRepository postRepository;

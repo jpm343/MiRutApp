@@ -7,17 +7,22 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Post;
 import com.example.mirutapp.R;
 import com.example.mirutapp.ViewModel.PostViewModel;
+import com.example.mirutapp.ViewModel.PostViewModelFactory;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +33,9 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class PostFragment extends Fragment {
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -55,6 +63,7 @@ public class PostFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static PostFragment newInstance(String param1, String param2) {
         PostFragment fragment = new PostFragment();
+
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -66,22 +75,29 @@ public class PostFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //testing
-        viewModel = ViewModelProviders.of(this).get(PostViewModel.class);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(PostViewModel.class);
+        /*
         viewModel.getPosts().observe(this, new Observer<List<Post>>() {
             @Override
             public void onChanged(List<Post> posts) {
 
             }
-        });
+        });*/
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        ((MiRutAppApplication) getActivity().getApplication())
+                .getApplicationComponent()
+                .inject(this);
+
     }
 
     @Override
