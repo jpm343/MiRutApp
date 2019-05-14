@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.mirutapp.DependencyInjection.ApplicationComponent;
 import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Post;
 import com.example.mirutapp.R;

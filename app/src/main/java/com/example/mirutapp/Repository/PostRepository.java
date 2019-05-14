@@ -20,13 +20,13 @@ import retrofit2.Response;
 public class PostRepository {
     private final PostWebService webService;
     private final PostDao postDao;
-    private final Executor executor;
+    //private final Executor executor;
 
     @Inject
-    public PostRepository(PostWebService webService, PostDao postDao, Executor executor) {
+    public PostRepository(PostWebService webService, PostDao postDao) {
         this.webService = webService;
         this.postDao = postDao;
-        this.executor = executor;
+        //this.executor = executor;
     }
 
     public LiveData<List<Post>> getAllPosts() {
@@ -37,6 +37,15 @@ public class PostRepository {
 
     //not implemented yet (by now it just fetches the data)
     private void refreshPosts() {
+        //here we should verify the date
+        try {
+            //it should be a list?
+            Response<List<Post>> response = webService.getAllPosts().execute();
+            postDao.save(response.body());
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        /*
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -50,6 +59,7 @@ public class PostRepository {
                 }
             }
         });
+        */
     }
 
 

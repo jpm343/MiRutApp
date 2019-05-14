@@ -4,7 +4,11 @@ import android.app.Application;
 
 import com.example.mirutapp.DependencyInjection.ApplicationComponent;
 import com.example.mirutapp.DependencyInjection.ApplicationModule;
+import com.example.mirutapp.DependencyInjection.DaggerApplicationComponent;
 import com.example.mirutapp.DependencyInjection.RoomModule;
+import com.example.mirutapp.WebService.PostWebService;
+
+import retrofit2.Retrofit;
 
 
 public class MiRutAppApplication extends Application {
