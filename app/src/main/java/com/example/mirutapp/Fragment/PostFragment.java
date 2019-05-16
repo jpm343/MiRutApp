@@ -81,13 +81,10 @@ public class PostFragment extends Fragment {
         viewModel.getPosts().observe(this, new Observer<List<Post>>() {
             @Override
             public void onChanged(List<Post> posts) {
-                posts.forEach(new Consumer<Post>() {
-                    @Override
-                    public void accept(Post post) {
-                        //test: showing news titles
-                        System.out.println(post.getTitle());
-                    }
-                });
+                for(Post post: posts) {
+                    //test: showing news titles
+                    System.out.println(post.getTitle());
+                }
             }
         });
     }

@@ -9,7 +9,6 @@ import com.example.mirutapp.WebService.PostWebService;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Executor;
-import java.util.function.Consumer;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -45,12 +44,9 @@ public class PostRepository {
                     Response<List<Post>> response = webService.getAllPosts().execute();
                     //save each post on local database
                     if(response.isSuccessful() && response.body()!= null){
-                        response.body().forEach(new Consumer<Post>() {
-                            @Override
-                            public void accept(Post post) {
-                                postDao.save(post);
-                            }
-                        });
+                        for(Post post: response.body()) {
+                            postDao.save(post);
+                        }
                     }
                 } catch(IOException e) {
                     e.printStackTrace();
