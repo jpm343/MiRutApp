@@ -9,11 +9,11 @@ import com.example.mirutapp.WebService.PostWebService;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 @Singleton
@@ -42,11 +42,16 @@ public class PostRepository {
             public void run() {
                 //here we should verify the date
                 try {
-                    //it should be a list?
-                    //Response<List<Post>> response = webService.getAllPosts().execute();
-                    Response<ResponseBody> response = webService.getAllPosts().execute();
-                    System.out.println(response.body().string());
-                    //postDao.save(response.body());
+                    Response<List<Post>> response = webService.getAllPosts().execute();
+                    //save each post on local database
+                    if(response.isSuccessful() && response.body()!= null){
+                        response.body().forEach(new Consumer<Post>() {
+                            @Override
+                            public void accept(Post post) {
+                                postDao.save(post);
+                            }
+                        });
+                    }
                 } catch(IOException e) {
                     e.printStackTrace();
                 }

@@ -14,7 +14,7 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface PostDao {
     @Insert(onConflict = REPLACE)
-    void save(List<Post> post);
+    void save(Post post);
 
     @Query("SELECT * FROM post")
     LiveData<List<Post>> loadAll();

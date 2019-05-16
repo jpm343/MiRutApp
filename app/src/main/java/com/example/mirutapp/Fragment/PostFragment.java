@@ -14,14 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.mirutapp.DependencyInjection.ApplicationComponent;
 import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Post;
 import com.example.mirutapp.R;
 import com.example.mirutapp.ViewModel.PostViewModel;
-import com.example.mirutapp.ViewModel.PostViewModelFactory;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
@@ -78,13 +77,19 @@ public class PostFragment extends Fragment {
         //testing
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PostViewModel.class);
         viewModel.init();
-        /*
+
         viewModel.getPosts().observe(this, new Observer<List<Post>>() {
             @Override
             public void onChanged(List<Post> posts) {
-
+                posts.forEach(new Consumer<Post>() {
+                    @Override
+                    public void accept(Post post) {
+                        //test: showing news titles
+                        System.out.println(post.getTitle());
+                    }
+                });
             }
-        });*/
+        });
     }
 
     @Override
@@ -96,11 +101,10 @@ public class PostFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        //CAST ERROR HERE
+        //dependency injection
         ((MiRutAppApplication) getActivity().getApplication())
                 .getApplicationComponent()
                 .inject(this);
-
     }
 
     @Override

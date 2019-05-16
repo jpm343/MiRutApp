@@ -23,8 +23,6 @@ public class PostViewModel extends ViewModel {
     public void init() {
         System.out.println("debug");
         posts = postRepository.getAllPosts();
-        //debug
-        //System.out.println(posts.getValue());
     }
 
     public LiveData<List<Post>> getPosts() {
