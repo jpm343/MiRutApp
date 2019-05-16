@@ -2,6 +2,9 @@ package com.example.mirutapp.DependencyInjection;
 
 import com.example.mirutapp.WebService.PostWebService;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -22,5 +25,12 @@ public class WebServiceModule {
     @Singleton
     PostWebService providePostWebService(Retrofit retrofit) {
         return retrofit.create(PostWebService.class);
+    }
+
+    //how do i provide an executor
+    @Provides
+    @Singleton
+    Executor provideExecutor() {
+        return Executors.newSingleThreadExecutor();
     }
 }

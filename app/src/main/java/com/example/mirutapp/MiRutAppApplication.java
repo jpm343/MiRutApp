@@ -6,10 +6,7 @@ import com.example.mirutapp.DependencyInjection.ApplicationComponent;
 import com.example.mirutapp.DependencyInjection.ApplicationModule;
 import com.example.mirutapp.DependencyInjection.DaggerApplicationComponent;
 import com.example.mirutapp.DependencyInjection.RoomModule;
-import com.example.mirutapp.WebService.PostWebService;
-
-import retrofit2.Retrofit;
-
+import com.example.mirutapp.DependencyInjection.WebServiceModule;
 
 public class MiRutAppApplication extends Application {
     private ApplicationComponent applicationComponent;
@@ -21,6 +18,7 @@ public class MiRutAppApplication extends Application {
         applicationComponent = DaggerApplicationComponent
                 .builder()
                 .applicationModule(new ApplicationModule(this))
+                .webServiceModule(new WebServiceModule())
                 .roomModule(new RoomModule(this))
                 .build();
     }

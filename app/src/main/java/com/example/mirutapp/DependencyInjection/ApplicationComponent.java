@@ -1,6 +1,5 @@
 package com.example.mirutapp.DependencyInjection;
 
-import android.app.Activity;
 import android.app.Application;
 
 import com.example.mirutapp.Fragment.PostFragment;
@@ -13,6 +12,5 @@ import dagger.Component;
 @Component(modules = {ApplicationModule.class, RoomModule.class, WebServiceModule.class})
 public interface ApplicationComponent {
     void inject(PostFragment postFragment);
-    //void inject(Activity activity);
-    //Application application();
+    Application application();
 }

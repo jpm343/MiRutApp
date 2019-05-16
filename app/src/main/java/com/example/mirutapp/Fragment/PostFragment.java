@@ -77,6 +77,7 @@ public class PostFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         //testing
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PostViewModel.class);
+        viewModel.init();
         /*
         viewModel.getPosts().observe(this, new Observer<List<Post>>() {
             @Override
@@ -95,6 +96,7 @@ public class PostFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        //CAST ERROR HERE
         ((MiRutAppApplication) getActivity().getApplication())
                 .getApplicationComponent()
                 .inject(this);
