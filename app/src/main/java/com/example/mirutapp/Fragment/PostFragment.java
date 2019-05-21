@@ -1,3 +1,4 @@
+/*
 package com.example.mirutapp.Fragment;
 
 import android.content.Context;
@@ -24,6 +25,7 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
+*/
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -31,7 +33,8 @@ import javax.inject.Inject;
  * to handle interaction events.
  * Use the {@link PostFragment#newInstance} factory method to
  * create an instance of this fragment.
- */
+ *//*
+
 public class PostFragment extends Fragment {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -52,14 +55,16 @@ public class PostFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
+    */
+/**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
      * @return A new instance of fragment PostFragment.
-     */
+     *//*
+
     // TODO: Rename and change types and number of parameters
     public static PostFragment newInstance(String param1, String param2) {
         PostFragment fragment = new PostFragment();
@@ -135,7 +140,8 @@ public class PostFragment extends Fragment {
         mListener = null;
     }
 
-    /**
+    */
+/**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
@@ -144,9 +150,11 @@ public class PostFragment extends Fragment {
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
-     */
+     *//*
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }
+*/

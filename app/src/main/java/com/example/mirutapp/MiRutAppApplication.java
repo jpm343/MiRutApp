@@ -1,12 +1,15 @@
 package com.example.mirutapp;
 
 import android.app.Application;
+import android.net.Uri;
 
 import com.example.mirutapp.DependencyInjection.ApplicationComponent;
 import com.example.mirutapp.DependencyInjection.ApplicationModule;
 import com.example.mirutapp.DependencyInjection.DaggerApplicationComponent;
 import com.example.mirutapp.DependencyInjection.RoomModule;
 import com.example.mirutapp.DependencyInjection.WebServiceModule;
+import com.example.mirutapp.Fragment.NewsFragment;
+import com.example.mirutapp.Fragment.dummy.DummyContent;
 
 public class MiRutAppApplication extends Application {
     private ApplicationComponent applicationComponent;
@@ -26,4 +29,6 @@ public class MiRutAppApplication extends Application {
     public ApplicationComponent getApplicationComponent() {
         return applicationComponent;
     }
+
+
 }

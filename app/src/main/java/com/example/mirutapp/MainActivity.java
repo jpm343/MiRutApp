@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.example.mirutapp.Fragment.InfoPatenteFragment;
 import com.example.mirutapp.Fragment.NewsFragment;
-import com.example.mirutapp.Fragment.PostFragment;
+//import com.example.mirutapp.Fragment.PostFragment;
 import com.example.mirutapp.Fragment.dummy.DummyContent;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -40,7 +40,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         InfoPatenteFragment.OnFragmentInteractionListener,
-        PostFragment.OnFragmentInteractionListener, NewsFragment.OnListFragmentInteractionListener{
+        NewsFragment.OnListFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,8 +141,10 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(Uri uri) {
 
     }
+
 }

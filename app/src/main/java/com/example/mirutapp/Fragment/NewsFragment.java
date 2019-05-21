@@ -1,9 +1,13 @@
 package com.example.mirutapp.Fragment;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,11 +16,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.mirutapp.MiRutAppApplication;
+import com.example.mirutapp.Model.Post;
 import com.example.mirutapp.R;
-import com.example.mirutapp.Fragment.dummy.DummyContent;
-import com.example.mirutapp.Fragment.dummy.DummyContent.DummyItem;
+import com.example.mirutapp.ViewModel.PostViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * A fragment representing a list of Items.
@@ -25,17 +33,22 @@ import java.util.List;
  * interface.
  */
 public class NewsFragment extends Fragment {
-
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private PostViewModel viewModel;
+    RecyclerView recyclerNews;
+    ArrayList<Post> listNews;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
+
     public NewsFragment() {
     }
 
@@ -56,6 +69,10 @@ public class NewsFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        //dependency injection
+        ((MiRutAppApplication) getActivity().getApplication())
+                .getApplicationComponent()
+                .inject(this);
     }
 
     @Override
@@ -63,20 +80,41 @@ public class NewsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_news_list, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        listNews = new ArrayList<>();
+        recyclerNews = (RecyclerView) view.findViewById(R.id.list);
+        recyclerNews.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        //OBTENER DATOS JSON
+        /*super.onActivityCreated(savedInstanceState);
+        //testing
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(PostViewModel.class);
+        viewModel.init();
+
+        viewModel.getPosts().observe(this, new Observer<List<Post>>() {
+            @Override
+            public void onChanged(List<Post> posts) {
+                for(Post post: posts) {
+                    //test: showing news titles
+                    listNews.add(post);
+                    //System.out.println(post.getTitle());
+                }
             }
-            recyclerView.setAdapter(new MyNewsRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-        }
+        });*/
+        llenarLista();
+
+        MyNewsRecyclerViewAdapter adapter = new MyNewsRecyclerViewAdapter(listNews);
+        recyclerNews.setAdapter(adapter);
+        //System.out.println(listNews); // ESTÁ VACÍA | SOLUCIONAR
+        //System.out.println("ALACANCE A LLEGAR AQUI");
         return view;
     }
 
+    private void llenarLista() {
+        listNews.add(new Post("Concierto Masivo Trap","Hay un concierto masivo de trap, se hará en el estadio Nacional,habrán muchos invitados","Imagen 1"));
+        listNews.add(new Post("Tocata Punk","Hay un concierto masivo de rock, se hará en el estadio Nacional,habrán muchos invitados","Imagen 1"));
+        listNews.add(new Post("Suicidio masivo en Metro","Hay un suicidio masivo, se hará en Metro de Santiago,habrán muchos invitados","Imagen 1"));
+
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -107,6 +145,7 @@ public class NewsFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Uri uri);
+
     }
 }
