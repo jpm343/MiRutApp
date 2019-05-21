@@ -4,7 +4,9 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.mirutapp.Fragment.InfoPatenteFragment;
+import com.example.mirutapp.Fragment.NewsFragment;
 import com.example.mirutapp.Fragment.PostFragment;
+import com.example.mirutapp.Fragment.dummy.DummyContent;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -38,7 +40,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         InfoPatenteFragment.OnFragmentInteractionListener,
-        PostFragment.OnFragmentInteractionListener{
+        PostFragment.OnFragmentInteractionListener, NewsFragment.OnListFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity
             selectedFragment = new InfoPatenteFragment();
             fragmentIsSelected = true;
         } else if (id == R.id.nav_gallery) {
-            selectedFragment = new PostFragment();
+            selectedFragment = new NewsFragment();
             fragmentIsSelected = true;
 
         } else if (id == R.id.nav_slideshow) {
@@ -136,6 +138,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
 
     }
 }
