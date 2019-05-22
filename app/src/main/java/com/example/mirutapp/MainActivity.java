@@ -5,8 +5,6 @@ import android.os.Bundle;
 
 import com.example.mirutapp.Fragment.InfoPatenteFragment;
 import com.example.mirutapp.Fragment.NewsFragment;
-//import com.example.mirutapp.Fragment.PostFragment;
-import com.example.mirutapp.Fragment.dummy.DummyContent;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

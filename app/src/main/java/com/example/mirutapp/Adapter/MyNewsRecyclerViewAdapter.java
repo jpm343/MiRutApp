@@ -1,22 +1,25 @@
 package com.example.mirutapp.Adapter;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mirutapp.Fragment.NewsFragment.OnListFragmentInteractionListener;
-import com.example.mirutapp.Fragment.dummy.DummyContent.DummyItem;
 import com.example.mirutapp.Model.Post;
 import com.example.mirutapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link } and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */
@@ -26,15 +29,7 @@ public class MyNewsRecyclerViewAdapter extends RecyclerView.Adapter<MyNewsRecycl
     private List<Post> listNews = new ArrayList<>();
     //private final OnListFragmentInteractionListener mListener;
 
-    public MyNewsRecyclerViewAdapter(List<Post> news) {
-        //mValues = items;
-        this.listNews = news;
-    }
-
-    public MyNewsRecyclerViewAdapter() {
-
-    }
-
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -47,7 +42,22 @@ public class MyNewsRecyclerViewAdapter extends RecyclerView.Adapter<MyNewsRecycl
         Post currentNews = listNews.get(position);
         holder.txtTitle.setText(currentNews.getTitle());
         holder.txtDescription.setText(currentNews.getDescription());
-        holder.image.setText(currentNews.getImage());
+        String urlImage = listNews.get(position).getImage();
+        if (urlImage.isEmpty()) { //url.isEmpty()
+            Picasso.get()
+                    .load(R.drawable.goku_cara)
+                    .placeholder(R.drawable.goku_cara)
+                    .error(R.drawable.goku_cara)
+                    .into(holder.image);
+
+        }else{
+            Picasso.get()
+                    .load(urlImage)
+                    .placeholder(R.drawable.goku_cara)
+                    .error(R.drawable.goku_cara)
+                    .into(holder.image);
+        }
+
     }
 
     @Override
@@ -65,18 +75,14 @@ public class MyNewsRecyclerViewAdapter extends RecyclerView.Adapter<MyNewsRecycl
         //public final TextView mIdView;
         public final TextView mContentView;
         public DummyItem mItem;*/
-       TextView txtTitle, txtDescription, image;
+       TextView txtTitle, txtDescription;
+       ImageView image;
 
         public ViewHolder(View view) {
             super(view);
             txtTitle = (TextView) view.findViewById(R.id.idTitle);
             txtDescription = (TextView) view.findViewById(R.id.idDescription);
-            image = (TextView) view.findViewById(R.id.idImage);
+            image = (ImageView) view.findViewById(R.id.idImage);
         }
-
-        /*@Override
-        public String toString() {
-            return super.toString() + " '" + txtTitle.getText() + "'";
-        }*/
     }
 }

@@ -22,11 +22,7 @@ public class Post {
     private String url;
 
     //get, set
-    public Post(String title,String description, String image){
-        this.title=title;
-        this.description=description;
-        this.image=image;
-    }
+
     public int getId() {
         return id;
     }
