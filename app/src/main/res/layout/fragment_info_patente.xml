@@ -1,14 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragment.InfoPatenteFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <SearchView
+        android:id="@+id/searchViewPatente"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical"
+        android:queryHint="Ingrese una patente" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/textViewPatente"
+        android:layout_width="163dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/searchViewPatente"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:text="Patente:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <TextView
+        android:id="@+id/textViewMuni"
+        android:layout_width="163dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/textViewPatente"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="23dp"
+        android:text="Municipalidad:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <TextView
+        android:id="@+id/textViewRevTecnica"
+        android:layout_width="163dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/textViewMuni"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="23dp"
+        android:text="Revisión Técnica"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <TextView
+        android:id="@+id/textViewPatInfo"
+        android:layout_width="136dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/searchViewPatente"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
+        android:layout_toEndOf="@+id/textViewPatente"
+        android:text=""
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    <TextView
+        android:id="@+id/textViewMuniInfo"
+        android:layout_width="136dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/textViewPatInfo"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@+id/textViewMuni"
+        android:text=""
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    <TextView
+        android:id="@+id/textViewRevTecInfo"
+        android:layout_width="136dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/textViewMuniInfo"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@+id/textViewRevTecnica"
+        android:text=""
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+</RelativeLayout>

@@ -8,12 +8,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mirutapp.R;
 import com.example.mirutapp.ViewModel.InfoPatenteViewModel;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.SQLOutput;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,6 +44,13 @@ public class InfoPatenteFragment extends Fragment {
     private InfoPatenteViewModel viewModel;
 
     private OnFragmentInteractionListener mListener;
+
+    private SearchView searchPatente;
+
+    //TextViews
+    private TextView textViewPatInfo;
+    private TextView textViewMuniInfo;
+    private TextView textViewRevTecInfo;
 
     public InfoPatenteFragment() {
         // Required empty public constructor
@@ -62,9 +78,80 @@ public class InfoPatenteFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //test value.
-        String patente = "bbdd12";
+        //String patente = "bbdd12";
         viewModel = ViewModelProviders.of(this).get(InfoPatenteViewModel.class);
-        viewModel.init(patente);
+
+        searchPatente = (SearchView) getView().findViewById(R.id.searchViewPatente);
+        searchPatente.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //viewModel.init(query);
+                //Dinamico
+                //String response = viewModel.getResponseBody();
+
+                //Estatico
+                String response = " {\"response\":\n" +
+                        "\t{\"status\":200,\n" +
+                        "\t \"patente\":\"bbdd12\",\n" +
+                        "\t \"municipalidad\":\"I. Municipalidad de COELEMU\",\n" +
+                        "\t \"estado_patente\":\"Sin pagar\",\n" +
+                        "\t \"TOTAL\":\"$46.362\",\n" +
+                        "\t \"Permiso de circulación NISSAN TERRANO PICK UP DX - HENRIQUEZ MUNOZ CAROLINA ISABELIncluye $1.574 de intereses y reajustes\\n\\t                     Confirme la información de su vehículo\":\"$46.362\",\n" +
+                        "\t \"Registro de multas impagas \":\"$0\",\n" +
+                        "\t \"Revisión técnica Válida hasta el 31 de mayo de 2019\":\"✓ Correcto\",\n" +
+                        "\t \"Revisión de gases Válida hasta el 31 de mayo de 2019\":\"✓ Correcto\"\n" +
+                        "\t}\n" +
+                        "}";
+                System.out.println("PROBANDO");
+                System.out.println(response);
+                assignValues(response);
+
+                //Toast.makeText(getContext(), status.toString(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), status.toString(), Toast.LENGTH_LONG).show();
+                return false;
+
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+    private void setupTextViews(){
+
+        textViewPatInfo = (TextView) getView().findViewById(R.id.textViewPatInfo);
+        textViewMuniInfo = (TextView) getView().findViewById(R.id.textViewMuniInfo);
+        textViewRevTecInfo = (TextView) getView().findViewById(R.id.textViewRevTecInfo);
+
+    }
+
+    private void assignValues(String response){
+        setupTextViews();
+        JSONObject object = stringToJson(response);
+        Object status = null;
+        try{
+            textViewPatInfo.setText(object.get("patente").toString());
+            textViewMuniInfo.setText(object.get("municipalidad").toString());
+            textViewRevTecInfo.setText(object.get("Revisión técnica Válida hasta el 31 de mayo de 2019").toString());
+        }catch(JSONException j){
+            System.out.println("Problem in obtaining status");
+        }
+    }
+
+    private JSONObject stringToJson(String json){
+        JSONObject res;
+        JSONObject obj = null;
+        try{
+             res = new JSONObject(json);
+             String response = res.get("response").toString();
+             obj = new JSONObject(response);
+             System.out.println(obj);
+        }catch (Throwable t){
+            System.out.println("Could not parse string to JSON");
+        }
+        return obj;
     }
 
     @Override
@@ -74,6 +161,8 @@ public class InfoPatenteFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
