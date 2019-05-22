@@ -43,7 +43,7 @@ public class MyNewsRecyclerViewAdapter extends RecyclerView.Adapter<MyNewsRecycl
         Post currentNews = listNews.get(position);
         holder.txtTitle.setText(currentNews.getTitle());
         holder.txtDescription.setText(currentNews.getDescription());
-        String urlImage = listNews.get(position).getImage();
+        String urlImage = listNews.get(position).getImage().getUrl();
         // Si no hay imagen (url) se carga una por defecto
         if (urlImage.isEmpty()) { //url.isEmpty()
             Picasso.get()
