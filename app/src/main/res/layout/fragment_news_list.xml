@@ -6,8 +6,8 @@
     android:name="com.example.mirutapp.Fragment.NewsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
     tools:context=".Fragment.NewsFragment"
     tools:listitem="@layout/fragment_news" />
 
