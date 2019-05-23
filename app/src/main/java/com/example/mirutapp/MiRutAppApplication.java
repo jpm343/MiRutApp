@@ -14,6 +14,7 @@ import com.example.mirutapp.DependencyInjection.ApplicationModule;
 import com.example.mirutapp.DependencyInjection.DaggerApplicationComponent;
 import com.example.mirutapp.DependencyInjection.RoomModule;
 import com.example.mirutapp.DependencyInjection.WebServiceModule;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MiRutAppApplication extends Application {
     public static final String CHANNEL_1_ID = "channel1";

@@ -8,18 +8,20 @@ import com.example.mirutapp.Fragment.InfoPatenteFragment;
 import com.example.mirutapp.Fragment.NewsFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.example.mirutapp.Fragment.PostFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity
         String comesFromNotification = getIntent().getStringExtra("comesFromNotification");
         if(comesFromNotification != null) {
             if(comesFromNotification.equals("postFragment")) {
-                PostFragment fragment = new PostFragment();
+                NewsFragment fragment = new NewsFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragment).commit();
             }
         }
@@ -69,6 +71,22 @@ public class MainActivity extends AppCompatActivity
 
         //subscribe app to NEWS fireBase topic
         FirebaseMessaging.getInstance().subscribeToTopic("NEWS");
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        // Log and toast
+                        System.out.println(token);
+                    }
+                });
     }
 
     @Override
