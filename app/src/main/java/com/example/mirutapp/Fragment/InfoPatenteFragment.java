@@ -100,8 +100,6 @@ public class InfoPatenteFragment extends Fragment {
                         .build();
                 webService = retrofit.create(InfoPatenteWebService.class);
                 Call<ResponseBody> call = webService.getInfoPatente(query);
-
-
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -124,27 +122,6 @@ public class InfoPatenteFragment extends Fragment {
                         responseBody = "";
                     }
                 });
-
-                //Estatico
-                /*
-                String response = " {\"response\":\n" +
-                        "\t{\"status\":200,\n" +
-                        "\t \"patente\":\"bbdd12\",\n" +
-                        "\t \"municipalidad\":\"I. Municipalidad de COELEMU\",\n" +
-                        "\t \"estado_patente\":\"Sin pagar\",\n" +
-                        "\t \"TOTAL\":\"$46.362\",\n" +
-                        "\t \"Permiso de circulación NISSAN TERRANO PICK UP DX - HENRIQUEZ MUNOZ CAROLINA ISABELIncluye $1.574 de intereses y reajustes\\n\\t                     Confirme la información de su vehículo\":\"$46.362\",\n" +
-                        "\t \"Registro de multas impagas \":\"$0\",\n" +
-                        "\t \"Revisión técnica Válida hasta el 31 de mayo de 2019\":\"✓ Correcto\",\n" +
-                        "\t \"Revisión de gases Válida hasta el 31 de mayo de 2019\":\"✓ Correcto\"\n" +
-                        "\t}\n" +
-                        "}";
-                System.out.println("PROBANDO");
-                System.out.println(response);
-                assignValues(response);*/
-
-                //Toast.makeText(getContext(), status.toString(), Toast.LENGTH_LONG).show();
-                //Toast.makeText(getContext(), status.toString(), Toast.LENGTH_LONG).show();
                 return false;
 
             }
@@ -157,26 +134,34 @@ public class InfoPatenteFragment extends Fragment {
     }
 
     private void setupTextViews(){
-
         textViewPatInfo = (TextView) getView().findViewById(R.id.textViewPatInfo);
         textViewMuniInfo = (TextView) getView().findViewById(R.id.textViewMuniInfo);
         textViewRevTecInfo = (TextView) getView().findViewById(R.id.textViewRevTecInfo);
         textViewRevGasesInfo = (TextView) getView().findViewById(R.id.textViewRevGasesInfo);
         textViewEstadoPatenteInfo = (TextView) getView().findViewById(R.id.textViewEstadoPatenteInfo);
-
     }
 
     //assign values to TextViews
     private void assignValues(String response){
         setupTextViews();
+        textViewPatInfo.setText("");
+        textViewMuniInfo.setText("");
+        textViewRevTecInfo.setText("");
+        textViewRevGasesInfo.setText("");
+        textViewEstadoPatenteInfo.setText("");
         JSONObject object = stringToJson(response);
         Object status = null;
         try{
-            textViewPatInfo.setText(object.get("patente").toString());
-            textViewMuniInfo.setText(object.get("municipalidad").toString());
-            textViewRevTecInfo.setText(object.get("Revisión técnica Válida hasta el 31 de mayo de 2019").toString());
-            textViewRevGasesInfo.setText(object.get("Revisión de gases Válida hasta el 31 de mayo de 2019").toString());
-            textViewEstadoPatenteInfo.setText(object.get("estado_patente").toString());
+            Integer statusCode = (int) object.get("status");
+            if(statusCode == 200){
+                textViewPatInfo.setText(object.get("patente").toString());
+                textViewMuniInfo.setText(object.get("municipalidad").toString());
+                textViewRevTecInfo.setText(object.get("Revisión técnica Válida hasta el 31 de mayo de 2019").toString());
+                textViewRevGasesInfo.setText(object.get("Revisión de gases Válida hasta el 31 de mayo de 2019").toString());
+                textViewEstadoPatenteInfo.setText(object.get("estado_patente").toString());
+            }else {
+                Toast.makeText(getContext(), "¡Patente no existe! Pruebe con otra patente.", Toast.LENGTH_LONG).show();
+            }
         }catch(JSONException j){
             System.out.println("Problem in obtaining status");
         }
