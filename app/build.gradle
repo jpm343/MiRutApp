@@ -53,4 +53,11 @@ dependencies {
 
     //Gson converter
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    //for firebase
+    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.google.firebase:firebase-messaging:18.0.0'
 }
+
+//for firebase
+apply plugin: 'com.google.gms.google-services'

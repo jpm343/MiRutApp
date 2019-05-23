@@ -16,6 +16,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -51,6 +52,19 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        //verify if the app is launched from a notification
+        String comesFromNotification = getIntent().getStringExtra("comesFromNotification");
+        if(comesFromNotification != null) {
+            if(comesFromNotification.equals("postFragment")) {
+                PostFragment fragment = new PostFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragment).commit();
+            }
+        }
+
+
+        //subscribe app to NEWS fireBase topic
+        FirebaseMessaging.getInstance().subscribeToTopic("NEWS");
     }
 
     @Override
