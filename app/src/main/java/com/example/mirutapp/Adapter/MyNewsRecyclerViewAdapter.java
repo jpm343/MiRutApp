@@ -40,11 +40,12 @@ public class MyNewsRecyclerViewAdapter extends RecyclerView.Adapter<MyNewsRecycl
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        Post currentNews = listNews.get(position);
+        final Post currentNews = listNews.get(position);
         holder.txtTitle.setText(currentNews.getTitle());
+        holder.preTxtDescription.setText(currentNews.getDescription());
         holder.txtDescription.setText(currentNews.getDescription());
         String urlImage = listNews.get(position).getImage().getUrl();
-        // Si no hay imagen (url) se carga una por defecto
+        // Si no hay imagen (url) se carga la del logo
         if (urlImage.isEmpty()) { //url.isEmpty()
             Picasso.get()
                     .load(R.drawable.logo)
@@ -63,12 +64,12 @@ public class MyNewsRecyclerViewAdapter extends RecyclerView.Adapter<MyNewsRecycl
         // Esto es para que al hacer click se colapse o se expanda la descripcion
         final boolean isExpanded = position==mExpandedPosition;
         holder.txtDescription.setVisibility(isExpanded?View.VISIBLE:View.GONE);
+        holder.preTxtDescription.setVisibility(isExpanded?View.GONE:View.VISIBLE);
         holder.itemView.setActivated(isExpanded);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mExpandedPosition = isExpanded ? -1:position;
-                //TransitionManager.beginDelayedTransition();
                 notifyDataSetChanged();
             }
         });
@@ -86,16 +87,13 @@ public class MyNewsRecyclerViewAdapter extends RecyclerView.Adapter<MyNewsRecycl
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-       /* public final View mView;
-        //public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;*/
-       TextView txtTitle, txtDescription;
+       TextView txtTitle, txtDescription,preTxtDescription;
        ImageView image;
 
         public ViewHolder(View view) {
             super(view);
             txtTitle = (TextView) view.findViewById(R.id.idTitle);
+            preTxtDescription = (TextView) view.findViewById(R.id.idPreview);
             txtDescription = (TextView) view.findViewById(R.id.idDescription);
             image = (ImageView) view.findViewById(R.id.idImage);
         }

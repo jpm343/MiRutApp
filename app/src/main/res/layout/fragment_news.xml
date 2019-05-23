@@ -2,36 +2,55 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="8dp"
-    android:layout_marginStart="8dp"
+    android:layout_marginEnd="4dp"
+    android:layout_marginStart="4dp"
     android:layout_marginTop="8dp"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:background="@drawable/comment_background"
+    android:stateListAnimator="@animator/comment_selection">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:padding="2dp">
 
         <ImageView
             android:id="@+id/idImage"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="2dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="105dp">
-
+            android:layout_marginLeft="107dp"
+            android:layout_marginTop="5dp">
             <TextView
                 android:id="@+id/idTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:fontFamily="sans-serif-condensed-medium"
                 android:text="Título Noticia"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:drawableRight="@drawable/icon_down_arrow"/>
+
+            <TextView
+                android:id="@+id/idPreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:maxLength="100"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="15dp"
+                android:textSize="15sp"
+                android:fadingEdge="horizontal"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Descripción " />
 
             <TextView
                 android:id="@+id/idDescription"
@@ -39,7 +58,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="15dp"
-                android:text="Descripcion " />
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Descripción " />
 
         </LinearLayout>
 
