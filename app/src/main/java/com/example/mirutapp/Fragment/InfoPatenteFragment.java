@@ -51,6 +51,8 @@ public class InfoPatenteFragment extends Fragment {
     private TextView textViewPatInfo;
     private TextView textViewMuniInfo;
     private TextView textViewRevTecInfo;
+    private TextView textViewRevGasesInfo;
+    private TextView textViewEstadoPatenteInfo;
 
     public InfoPatenteFragment() {
         // Required empty public constructor
@@ -124,9 +126,12 @@ public class InfoPatenteFragment extends Fragment {
         textViewPatInfo = (TextView) getView().findViewById(R.id.textViewPatInfo);
         textViewMuniInfo = (TextView) getView().findViewById(R.id.textViewMuniInfo);
         textViewRevTecInfo = (TextView) getView().findViewById(R.id.textViewRevTecInfo);
+        textViewRevGasesInfo = (TextView) getView().findViewById(R.id.textViewRevGasesInfo);
+        textViewEstadoPatenteInfo = (TextView) getView().findViewById(R.id.textViewEstadoPatenteInfo);
 
     }
 
+    //assign values to TextViews
     private void assignValues(String response){
         setupTextViews();
         JSONObject object = stringToJson(response);
@@ -135,11 +140,14 @@ public class InfoPatenteFragment extends Fragment {
             textViewPatInfo.setText(object.get("patente").toString());
             textViewMuniInfo.setText(object.get("municipalidad").toString());
             textViewRevTecInfo.setText(object.get("Revisión técnica Válida hasta el 31 de mayo de 2019").toString());
+            textViewRevGasesInfo.setText(object.get("Revisión de gases Válida hasta el 31 de mayo de 2019").toString());
+            textViewEstadoPatenteInfo.setText(object.get("estado_patente").toString());
         }catch(JSONException j){
             System.out.println("Problem in obtaining status");
         }
     }
 
+    //Converts a string to JSONObject
     private JSONObject stringToJson(String json){
         JSONObject res;
         JSONObject obj = null;
