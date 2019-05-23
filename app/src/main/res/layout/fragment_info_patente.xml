@@ -1,14 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragment.InfoPatenteFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <SearchView
+        android:id="@+id/searchViewPatente"
+        android:layout_width="314dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="49dp"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="48dp"
+        android:background="@drawable/search_view_background"
+        android:gravity="center|center_horizontal"
+        android:iconifiedByDefault="false"
+        android:orientation="vertical"
+        android:queryHint="Ingrese una patente"
+        android:queryBackground="@android:color/transparent"/>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/textViewPatente"
+        android:layout_width="163dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/searchViewPatente"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="52dp"
+        android:text="Patente:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textSize="18sp"
+        android:textColor="#616161"/>
+
+    <TextView
+        android:id="@+id/textViewMuni"
+        android:layout_width="163dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/textViewPatente"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="25dp"
+        android:text="Municipalidad:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textSize="18sp"
+        android:textColor="#616161"/>
+
+    <TextView
+        android:id="@+id/textViewRevTecnica"
+        android:layout_width="163dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/textViewMuni"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="25dp"
+        android:text="Revisión Técnica:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textSize="18sp"
+        android:textColor="#616161"/>
+
+    <TextView
+        android:id="@+id/textViewRevGases"
+        android:layout_width="163dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/textViewRevTecnica"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="25dp"
+        android:text="Revisión Gases:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textSize="18sp"
+        android:textColor="#616161"/>
+
+    <TextView
+        android:id="@+id/textViewEstadoPatente"
+        android:layout_width="163dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/textViewRevGases"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="25dp"
+        android:text="Estado Patente:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textSize="18sp"
+        android:textColor="#616161"/>
+
+    <TextView
+        android:id="@+id/textViewPatInfo"
+        android:layout_width="163dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/searchViewPatente"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="38dp"
+        android:layout_toEndOf="@+id/textViewPatente"
+        android:background="@drawable/edit_text_bottom_border"
+        android:text=""
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+    <TextView
+        android:id="@+id/textViewMuniInfo"
+        android:layout_width="163dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/textViewPatInfo"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="39dp"
+        android:layout_toEndOf="@+id/textViewMuni"
+        android:background="@drawable/edit_text_bottom_border"
+        android:text=""
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+    <TextView
+        android:id="@+id/textViewRevTecInfo"
+        android:layout_width="163dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/textViewMuniInfo"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="39dp"
+        android:layout_toEndOf="@+id/textViewRevTecnica"
+        android:background="@drawable/edit_text_bottom_border"
+        android:text=""
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+    <TextView
+        android:id="@+id/textViewRevGasesInfo"
+        android:layout_width="163dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/textViewRevTecInfo"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="39dp"
+        android:layout_toEndOf="@+id/textViewRevGases"
+        android:background="@drawable/edit_text_bottom_border"
+        android:text=""
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+    <TextView
+        android:id="@+id/textViewEstadoPatenteInfo"
+        android:layout_width="163dp"
+        android:layout_height="32dp"
+        android:layout_below="@+id/textViewRevGasesInfo"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="39dp"
+        android:layout_toEndOf="@+id/textViewEstadoPatente"
+        android:background="@drawable/edit_text_bottom_border"
+        android:text=""
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+</RelativeLayout>
