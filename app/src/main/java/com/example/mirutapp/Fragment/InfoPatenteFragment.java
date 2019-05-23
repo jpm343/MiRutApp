@@ -18,11 +18,19 @@ import android.widget.Toast;
 
 import com.example.mirutapp.R;
 import com.example.mirutapp.ViewModel.InfoPatenteViewModel;
+import com.example.mirutapp.WebService.InfoPatenteWebService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.sql.SQLOutput;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +49,8 @@ public class InfoPatenteFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private InfoPatenteViewModel viewModel;
+    private InfoPatenteWebService webService;
+    private String responseBody;
 
     private OnFragmentInteractionListener mListener;
 
@@ -81,17 +90,43 @@ public class InfoPatenteFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         //test value.
         //String patente = "bbdd12";
-        viewModel = ViewModelProviders.of(this).get(InfoPatenteViewModel.class);
 
         searchPatente = (SearchView) getView().findViewById(R.id.searchViewPatente);
         searchPatente.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //viewModel.init(query);
-                //Dinamico
-                //String response = viewModel.getResponseBody();
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://mirutapp.herokuapp.com/")
+                        .build();
+                webService = retrofit.create(InfoPatenteWebService.class);
+                Call<ResponseBody> call = webService.getInfoPatente(query);
+
+
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        //prints para debug
+                        System.out.println(response.code());
+                        try {
+                            responseBody = response.body().string();
+                            System.out.println(responseBody);
+                            assignValues(responseBody);
+
+                        } catch(IOException e) {
+                            responseBody = "";
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        t.printStackTrace();
+                        responseBody = "";
+                    }
+                });
 
                 //Estatico
+                /*
                 String response = " {\"response\":\n" +
                         "\t{\"status\":200,\n" +
                         "\t \"patente\":\"bbdd12\",\n" +
@@ -106,7 +141,7 @@ public class InfoPatenteFragment extends Fragment {
                         "}";
                 System.out.println("PROBANDO");
                 System.out.println(response);
-                assignValues(response);
+                assignValues(response);*/
 
                 //Toast.makeText(getContext(), status.toString(), Toast.LENGTH_LONG).show();
                 //Toast.makeText(getContext(), status.toString(), Toast.LENGTH_LONG).show();
