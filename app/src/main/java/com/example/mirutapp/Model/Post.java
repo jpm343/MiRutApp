@@ -2,6 +2,10 @@ package com.example.mirutapp.Model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Post {
@@ -12,7 +16,8 @@ public class Post {
     private int user_id;
 
     //url to image
-    private String image;
+    @TypeConverters(ImageConverter.class)
+    private Image image;
 
     //date?
     private String created_at;
@@ -22,7 +27,6 @@ public class Post {
     private String url;
 
     //get, set
-
 
     public int getId() {
         return id;
@@ -56,11 +60,11 @@ public class Post {
         this.user_id = user_id;
     }
 
-    public String getImage() {
+    public Image getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(Image image) {
         this.image = image;
     }
 

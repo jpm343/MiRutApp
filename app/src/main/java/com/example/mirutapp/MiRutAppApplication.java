@@ -1,9 +1,13 @@
 package com.example.mirutapp;
 
 import android.app.Application;
+
+import android.net.Uri;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
+
 
 import com.example.mirutapp.DependencyInjection.ApplicationComponent;
 import com.example.mirutapp.DependencyInjection.ApplicationModule;
