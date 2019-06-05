@@ -2,14 +2,17 @@ package com.example.mirutapp.DependencyInjection;
 
 import android.app.Application;
 
-import androidx.annotation.MainThread;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
+import com.example.mirutapp.LocalDataBase.AppDataBase;
 import com.example.mirutapp.LocalDataBase.PostDao;
-import com.example.mirutapp.LocalDataBase.PostDataBase;
+import com.example.mirutapp.LocalDataBase.VehicleDao;
 import com.example.mirutapp.Repository.PostRepository;
+import com.example.mirutapp.Repository.VehicleRepository;
 import com.example.mirutapp.ViewModel.PostViewModelFactory;
+import com.example.mirutapp.ViewModel.VehicleViewModelFactory;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -18,31 +21,41 @@ import dagger.Provides;
 @Module
 public class RoomModule {
     //declare the local databases
-    private final PostDataBase postDatabase;
+    private final AppDataBase appDatabase;
 
     public RoomModule(Application application) {
-        this.postDatabase = Room.databaseBuilder(
+        this.appDatabase = Room.databaseBuilder(
                 application,
-                PostDataBase.class,
+                AppDataBase.class,
                 "Post.db"
         ).build();
     }
 
     @Provides
     @Singleton
-    PostDataBase providePostDatabase(Application application){
-        return postDatabase;
+    AppDataBase provideAppDatabase(Application application){
+        return appDatabase;
     }
 
     @Provides
     @Singleton
-    PostDao providePostDao(PostDataBase postDataBase) {
-        return postDataBase.postDao();
+    PostDao providePostDao(AppDataBase appDataBase) {
+        return appDataBase.postDao();
     }
 
     @Provides
     @Singleton
-    ViewModelProvider.Factory provideViewModelFactory(PostRepository postRepository) {
+    VehicleDao provideVehicleDao(AppDataBase appDataBase) { return appDataBase.vehicleDao(); }
+
+    @Provides
+    @Singleton
+    PostViewModelFactory provideViewModelFactory(PostRepository postRepository) {
         return new PostViewModelFactory(postRepository);
+    }
+
+    @Provides
+    @Singleton
+    VehicleViewModelFactory provideVehicleViewModelFactory(VehicleRepository vehicleRepository) {
+        return new VehicleViewModelFactory(vehicleRepository);
     }
 }
