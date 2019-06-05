@@ -13,6 +13,12 @@ public class Vehicle {
     private String patente;
     private String alias;
 
+    //constructor
+    public Vehicle(String patente, String alias) {
+        this.patente = patente;
+        this.alias = alias;
+    }
+
     //getters and setters
     public int getId() { return id; }
     public String getPatente() { return patente; }

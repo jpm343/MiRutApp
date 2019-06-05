@@ -20,6 +20,7 @@ import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Post;
 import com.example.mirutapp.R;
 import com.example.mirutapp.ViewModel.PostViewModel;
+import com.example.mirutapp.ViewModel.PostViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ import javax.inject.Inject;
  */
 public class NewsFragment extends Fragment {
     @Inject
-    ViewModelProvider.Factory viewModelFactory;
+    PostViewModelFactory viewModelFactory;
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters

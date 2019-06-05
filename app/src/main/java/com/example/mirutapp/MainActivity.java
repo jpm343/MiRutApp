@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.example.mirutapp.Fragment.InfoPatenteFragment;
 
 import com.example.mirutapp.Fragment.NewsFragment;
+import com.example.mirutapp.Fragment.VehicleFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -35,7 +36,8 @@ import android.view.Menu;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         InfoPatenteFragment.OnFragmentInteractionListener,
-        NewsFragment.OnListFragmentInteractionListener{
+        NewsFragment.OnListFragmentInteractionListener,
+        VehicleFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +141,8 @@ public class MainActivity extends AppCompatActivity
             fragmentIsSelected = true;
 
         } else if (id == R.id.nav_slideshow) {
+            selectedFragment = new VehicleFragment();
+            fragmentIsSelected = true;
 
         } else if (id == R.id.nav_tools) {
 
