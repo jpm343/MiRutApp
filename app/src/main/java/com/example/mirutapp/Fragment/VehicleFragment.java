@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Vehicle;
@@ -88,7 +89,9 @@ public class VehicleFragment extends Fragment {
         // Inflate the layout for this fragment
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(VehicleViewModel.class);
         viewModel.init();
-        viewModel.saveVehicle("bbdd12", "autito");
+        VehicleViewModel.Status status =viewModel.saveVehicle("bbdd11", "autito");
+        if(status == VehicleViewModel.Status.ERROR)
+            Toast.makeText(getContext(), "Error en el formato de la patente. (formato de ejemplo: aabb12)", Toast.LENGTH_LONG).show();
         viewModel.getVehicles().observe(this, new Observer<List<Vehicle>>() {
             @Override
             public void onChanged(List<Vehicle> vehicles) {
