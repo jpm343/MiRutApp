@@ -98,6 +98,7 @@ public class VehicleFragment extends Fragment {
                 for (Vehicle vehicle: vehicles) {
                     System.out.println(vehicle.getPatente());
                     System.out.println(vehicle.getAlias());
+                    System.out.println(vehicle.isNotificating());
                 }
             }
         });

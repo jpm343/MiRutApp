@@ -34,4 +34,14 @@ public class VehicleRepository {
             }
         });
     }
+
+    public void turnOffNotifications(final Vehicle vehicle) {
+        vehicle.setNotificating(false);
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                vehicleDao.save(vehicle);
+            }
+        });
+    }
 }
