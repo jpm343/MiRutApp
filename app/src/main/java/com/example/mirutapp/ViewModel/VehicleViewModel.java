@@ -30,6 +30,9 @@ public class VehicleViewModel extends ViewModel {
             return Status.ERROR;
         Vehicle vehicle = new Vehicle(patente, alias);
         vehicleRepository.createVehicle(vehicle);
+        vehicleRepository.turnOffNotifications(vehicle);
         return Status.OK;
     }
+
+
 }
