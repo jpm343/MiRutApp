@@ -4,13 +4,14 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.mirutapp.Fragment.InfoPatenteFragment;
+
 import com.example.mirutapp.Fragment.NewsFragment;
+import com.example.mirutapp.Fragment.VehicleFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -31,14 +32,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.Menu;
-import android.widget.Toast;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         InfoPatenteFragment.OnFragmentInteractionListener,
-        NewsFragment.OnListFragmentInteractionListener{
+        NewsFragment.OnListFragmentInteractionListener,
+        VehicleFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +61,34 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
+        //verify if the app is launched from a notification
+        String comesFromNotification = getIntent().getStringExtra("comesFromNotification");
+        if(comesFromNotification != null) {
+            if(comesFromNotification.equals("postFragment")) {
+                NewsFragment fragment = new NewsFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragment).commit();
+            }
+        }
+
+
         //subscribe app to NEWS fireBase topic
         FirebaseMessaging.getInstance().subscribeToTopic("NEWS");
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        // Log and toast
+                        System.out.println(token);
+                    }
+                });
     }
 
     @Override
@@ -116,6 +141,8 @@ public class MainActivity extends AppCompatActivity
             fragmentIsSelected = true;
 
         } else if (id == R.id.nav_slideshow) {
+            selectedFragment = new VehicleFragment();
+            fragmentIsSelected = true;
 
         } else if (id == R.id.nav_tools) {
 
