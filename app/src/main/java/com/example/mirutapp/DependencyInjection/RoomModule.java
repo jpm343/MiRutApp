@@ -28,7 +28,9 @@ public class RoomModule {
                 application,
                 AppDataBase.class,
                 "Post.db"
-        ).build();
+        ).allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
     }
 
     @Provides

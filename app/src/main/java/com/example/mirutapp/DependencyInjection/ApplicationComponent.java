@@ -17,5 +17,6 @@ public interface ApplicationComponent {
     void inject(NewsFragment postFragment);
     void inject(VehicleFragment vehicleFragment);
     void inject(VehicleCheckJobService vehicleCheckJobService);
+    void inject(VehicleCheckJobService_MembersInjector vehicleCheckJobService_membersInjector);
     Application application();
 }

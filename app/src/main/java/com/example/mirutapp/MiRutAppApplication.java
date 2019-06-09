@@ -2,10 +2,10 @@ package com.example.mirutapp;
 
 import android.app.Application;
 
+import android.app.Service;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
-import android.net.Uri;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -19,12 +19,24 @@ import com.example.mirutapp.DependencyInjection.DaggerApplicationComponent;
 import com.example.mirutapp.DependencyInjection.RoomModule;
 import com.example.mirutapp.DependencyInjection.WebServiceModule;
 import com.example.mirutapp.Services.VehicleCheckJobService;
-import com.google.firebase.messaging.FirebaseMessaging;
 
-public class MiRutAppApplication extends Application {
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasServiceInjector;
+
+public class MiRutAppApplication extends Application implements HasServiceInjector {
+    @Inject
+    DispatchingAndroidInjector<Service> serviceInjector;
     public static final String TAG = "MiRutAppApplication";
     public static final String CHANNEL_1_ID = "channel1";
     private ApplicationComponent applicationComponent;
+
+    @Override
+    public AndroidInjector<Service> serviceInjector() {
+        return serviceInjector;
+    }
 
     @Override
     public void onCreate() {
@@ -36,7 +48,6 @@ public class MiRutAppApplication extends Application {
                 .webServiceModule(new WebServiceModule())
                 .roomModule(new RoomModule(this))
                 .build();
-
         createNotificationsChannels();
         scheduleVehicleCheckJob();
     }

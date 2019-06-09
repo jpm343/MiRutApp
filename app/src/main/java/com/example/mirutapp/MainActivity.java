@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -66,6 +67,10 @@ public class MainActivity extends AppCompatActivity
         if(comesFromNotification != null) {
             if(comesFromNotification.equals("postFragment")) {
                 NewsFragment fragment = new NewsFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragment).commit();
+            }
+            else if(comesFromNotification.equals("vehiclesFragment")) {
+                VehicleFragment fragment = new VehicleFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragment).commit();
             }
         }

@@ -26,6 +26,11 @@ public class VehicleRepository {
         return vehicleDao.loadAll();
     }
 
+    //this could freeze UI. be aware to use this method in background services only
+    public List<Vehicle> loadAll() {
+        return vehicleDao.getAllVehicles();
+    }
+
     public void createVehicle(final Vehicle vehicle) {
         executor.execute(new Runnable() {
             @Override

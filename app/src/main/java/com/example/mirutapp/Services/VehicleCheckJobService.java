@@ -5,13 +5,14 @@ import android.app.PendingIntent;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.lifecycle.LiveData;
 
 import com.example.mirutapp.LocalDataBase.RevisionTecnica;
 import com.example.mirutapp.MainActivity;
+import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Vehicle;
 import com.example.mirutapp.R;
 import com.example.mirutapp.Repository.VehicleRepository;
@@ -25,18 +26,27 @@ import javax.inject.Inject;
 import static com.example.mirutapp.MiRutAppApplication.CHANNEL_1_ID;
 
 public class VehicleCheckJobService extends JobService {
-    private LiveData<List<Vehicle>> vehicles;
+    public static final String TAG = "VehicleCheckingService";
+    private List<Vehicle> vehicles;
     @Inject VehicleRepository vehicleRepository;
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        ((MiRutAppApplication) getApplication())
+                .getApplicationComponent()
+                .inject(this);
+    }
+
+    @Override
     public boolean onStartJob(JobParameters params) {
-        vehicles = vehicleRepository.getAllVehicles();
-        List<Vehicle> vehicleList = vehicles.getValue();
-        if(vehicleList != null){
+        vehicles = vehicleRepository.loadAll();
+        if(vehicles != null){
             //get month and check its corresponding vehicle number
             Calendar c = Calendar.getInstance();
             int month = c.get(Calendar.MONTH);
             int vehicleNumber = RevisionTecnica.rules.get(month, -1);
+            Log.d(TAG, String.valueOf(vehicleNumber));
             if(vehicleNumber != -1) {
                 notifyVehiclesEndingIn(vehicleNumber);
             }
@@ -57,7 +67,7 @@ public class VehicleCheckJobService extends JobService {
     }
 
     private void notifyVehiclesEndingIn(int digit) {
-        List<Vehicle> vehicleList = vehicles.getValue();
+        List<Vehicle> vehicleList = vehicles;
         if(vehicleList == null)
             return;
 
@@ -65,7 +75,8 @@ public class VehicleCheckJobService extends JobService {
             if(vehicle.isNotificating()) {
                 //check for rules
                 char lastDigit = vehicle.getPatente().charAt(5);
-                if(lastDigit == digit)
+                String message = lastDigit + "=" + digit;
+                if(digit == Character.getNumericValue(lastDigit))
                     sendNotification(vehicle);
             }
         }
@@ -86,7 +97,7 @@ public class VehicleCheckJobService extends JobService {
         if(vehicle == null) {
             messageBody = "Recuerda que en marzo debes renovar las revisión de tus vehículos atrasados";
         } else {
-            messageBody = "Para: " + vehicle.getAlias() + "(Patente: " + vehicle.getPatente() + ")";
+            messageBody = "Para: " + vehicle.getAlias() + " (Patente: " + vehicle.getPatente() + ")";
         }
 
         //intent with extra information in order to load vehicles section
