@@ -18,4 +18,7 @@ public interface VehicleDao {
 
     @Query("SELECT * FROM vehicle")
     LiveData<List<Vehicle>> loadAll();
+
+    @Query("SELECT * FROM vehicle")
+    List<Vehicle> getAllVehicles();
 }

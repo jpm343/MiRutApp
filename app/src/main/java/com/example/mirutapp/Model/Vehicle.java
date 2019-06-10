@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(indices = {@Index(value = "patente", unique = true)})
 public class Vehicle {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo(name = "patente")
     private String patente;
