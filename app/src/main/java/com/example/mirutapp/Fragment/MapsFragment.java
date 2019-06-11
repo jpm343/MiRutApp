@@ -216,7 +216,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-33.4495857, -70.6823836);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marcador en tu posición"));
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marcador en tu posición").icon(BitmapDescriptorFactory.fromResource(R.drawable.user)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
@@ -255,9 +255,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                 if (MarkerPoints.size() == 1) {
                     options.title("Punto de Inicio");
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+
                 } else if (MarkerPoints.size() == 2) {
                     options.title("Punto Final");
-                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+//                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                    options.icon(BitmapDescriptorFactory.fromResource(R.drawable.finish2));
                 }
 
 
@@ -510,8 +512,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         protected JSONObject doInBackground(Void... params)
         {
 
-            String str="http://www.uoct.cl/historial/ultimos-eventos/json-waze/";
-//            String str="https://api.myjson.com/bins/o16ox";
+//            String str="http://www.uoct.cl/historial/ultimos-eventos/json-waze/";
+            String str="https://api.myjson.com/bins/o16ox";
 
             System.out.printf(str);
 
@@ -604,7 +606,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                          * for the end location, the color of marker is RED.
                          */
 
-                        options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+//                        options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+
+                        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.shieldwarning));
+
+
 
 
                         Log.e("Marker","options" +options);
