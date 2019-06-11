@@ -9,18 +9,23 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.mirutapp.Adapter.PatentesRecyclerViewAdapter;
 import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Vehicle;
 import com.example.mirutapp.R;
 import com.example.mirutapp.ViewModel.VehicleViewModel;
 import com.example.mirutapp.ViewModel.VehicleViewModelFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -47,6 +52,10 @@ public class VehicleFragment extends Fragment {
     private VehicleViewModel viewModel;
 
     private OnFragmentInteractionListener mListener;
+
+    private ArrayList<String> patenteList = new ArrayList<>();
+    private ArrayList<String> aliasList = new ArrayList<>();
+    private RecyclerView recyclerView;
 
     public VehicleFragment() {
         // Required empty public constructor
@@ -87,11 +96,29 @@ public class VehicleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        System.out.println("ENTRA onCreateView");
+
+        View view =  inflater.inflate(R.layout.fragment_vehicle, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewPatentes);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(VehicleViewModel.class);
         viewModel.init();
+
+
         VehicleViewModel.Status status =viewModel.saveVehicle("bbdd13", "auto de Sebastian");
-        if(status == VehicleViewModel.Status.ERROR)
-            Toast.makeText(getContext(), "Error en el formato de la patente. (formato de ejemplo: aabb12)", Toast.LENGTH_LONG).show();
+        VehicleViewModel.Status status2 =viewModel.saveVehicle("aacc14", "moto de María");
+
+
+        if(status == VehicleViewModel.Status.ERROR) {
+            Toast.makeText(getContext(), "Error en el formato de la patente. (Ejemplo: AABB12)", Toast.LENGTH_LONG).show();
+        }else{
+            patenteList.add("bbdd13");
+            aliasList.add("auto de Sebastian");
+            patenteList.add("aacc14");
+            aliasList.add("moto de María");
+        }
+
         viewModel.getVehicles().observe(this, new Observer<List<Vehicle>>() {
             @Override
             public void onChanged(List<Vehicle> vehicles) {
@@ -102,7 +129,9 @@ public class VehicleFragment extends Fragment {
                 }
             }
         });
-        return inflater.inflate(R.layout.fragment_vehicle, container, false);
+        PatentesRecyclerViewAdapter prv = new PatentesRecyclerViewAdapter(patenteList,aliasList,this.getContext());
+        recyclerView.setAdapter(prv);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
