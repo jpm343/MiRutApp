@@ -3,6 +3,10 @@ package com.example.mirutapp.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,6 +50,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static android.content.Context.LOCATION_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -54,7 +61,7 @@ import java.util.List;
  * Use the {@link MapsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapsFragment extends Fragment implements OnMapReadyCallback {
+public class MapsFragment extends Fragment implements OnMapReadyCallback{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -74,6 +81,52 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public MapsFragment() {
         // Required empty public constructor
     }
+
+
+//
+//    class mylocationlistener implements LocationListener{
+//
+//        @Override
+//        public void onLocationChanged(Location location) {
+//
+//            if(location!=null)
+//            {
+//                double lat = location.getLatitude();
+//                double lng = location.getLongitude();
+//
+//            }
+//        }
+//
+//        @Override
+//        public void onProviderDisabled(String provider) {
+//            // TODO Auto-generated method stub
+//
+//        }
+//        @Override
+//        public void onProviderEnabled(String provider) {
+//            // TODO Auto-generated method stub
+//        }
+//        @Override
+//        public void onStatusChanged(String provider, int status,
+//                                    Bundle extras) {
+//            // TODO Auto-generated method stub
+//        }
+//    }
+
+//    mylocationlistener mylocationlistener = new mylocationlistener();
+//
+//    LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//    Criteria criteria = new Criteria();
+//    String provider = locationManager.getBestProvider(criteria,
+//            true);
+//    Location location = locationManager.getLastKnownLocation(provider);
+//
+//    if (location != null) {
+//        mylocationlistener.onLocationChanged(location);
+//    }
+//    // updates location 30seconds once
+//    locationManager.requestLocationUpdates(provider, 30000, 0, this);
+
 
 
 
@@ -158,6 +211,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+
+
+
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-33.4495857, -70.6823836);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marcador en tu posición"));
@@ -197,8 +253,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                  * for the end location, the color of marker is RED.
                  */
                 if (MarkerPoints.size() == 1) {
+                    options.title("Punto de Inicio");
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                 } else if (MarkerPoints.size() == 2) {
+                    options.title("Punto Final");
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                 }
 
@@ -406,10 +464,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
 
 
-                        if (distance<300){
+                        if (distance < 300){
                             System.out.println("es menor a 100");
                             System.out.println("PUNTO QUE INFLUYE LA RUTA"+MarkerPointsUOCT.get(k).getDescription());
 //                            continue;
+
+//                            MarkerPointsUOCT.get(k)
+
                         }
 
                     }
@@ -449,8 +510,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         protected JSONObject doInBackground(Void... params)
         {
 
-//            String str="http://www.uoct.cl/historial/ultimos-eventos/json-waze/";
-            String str="https://api.myjson.com/bins/o16ox";
+            String str="http://www.uoct.cl/historial/ultimos-eventos/json-waze/";
+//            String str="https://api.myjson.com/bins/o16ox";
 
             System.out.printf(str);
 
