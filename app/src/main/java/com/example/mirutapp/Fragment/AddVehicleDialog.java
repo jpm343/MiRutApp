@@ -20,7 +20,7 @@ public class AddVehicleDialog extends DialogFragment {
 
     //Interface which passes the parameters to the VehicleFragment
     public interface ConnectFragment{
-        void sendInput(String patente, String alias);
+        int sendInput(String patente, String alias);
     }
 
     public ConnectFragment connectFragment;
@@ -58,8 +58,8 @@ public class AddVehicleDialog extends DialogFragment {
 
                 if(!inputAlias.equals("")){
                     if(!inputPatente.equals("")){
-                        connectFragment.sendInput(inputPatente, inputAlias);
-                        getDialog().dismiss();
+                        if(connectFragment.sendInput(inputPatente, inputAlias) == 1)
+                            getDialog().dismiss();
                     }else{
                         Toast.makeText(getContext(), "Debe ingresar una patente", Toast.LENGTH_LONG).show();
                     }

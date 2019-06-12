@@ -129,13 +129,6 @@ public class VehicleFragment extends Fragment implements AddVehicleDialog.Connec
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(VehicleViewModel.class);
         viewModel.init();
 
-        //Save vehicles
-        /*VehicleViewModel.Status status =viewModel.saveVehicle("bbdd13", "auto de Sebastian");
-        VehicleViewModel.Status status2 =viewModel.saveVehicle("aajj17", "moto de María");
-
-        if(status == VehicleViewModel.Status.ERROR)
-            Toast.makeText(getContext(), "Error en el formato de la patente. (Ejemplo: AABB12)", Toast.LENGTH_LONG).show();*/
-
         //Save all vehicles in the lists and set the recyclerView's adapter
         viewModel.getVehicles().observe(this, new Observer<List<Vehicle>>() {
             @Override
@@ -178,10 +171,14 @@ public class VehicleFragment extends Fragment implements AddVehicleDialog.Connec
     }
 
     @Override
-    public void sendInput(String patente, String alias) {
+    public int sendInput(String patente, String alias) {
+        //Saves a vehicle
         VehicleViewModel.Status status =viewModel.saveVehicle(patente,alias);
-        if(status == VehicleViewModel.Status.ERROR)
+        if(status == VehicleViewModel.Status.ERROR){
             Toast.makeText(getContext(), "Error en el formato de la patente. (Ejemplo: AABB12)", Toast.LENGTH_LONG).show();
+            return 0;
+        }else
+            return 1;
     }
 
     /**
