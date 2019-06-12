@@ -96,6 +96,9 @@ public class MainActivity extends AppCompatActivity
                         System.out.println(token);
                     }
                 });
+
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new MapsFragment()).commit();
     }
 
     @Override
@@ -138,6 +141,8 @@ public class MainActivity extends AppCompatActivity
 
         Fragment selectedFragment = null;
         boolean fragmentIsSelected = false;
+
+
 
         if (id == R.id.nav_home) {
             // Handle the camera action

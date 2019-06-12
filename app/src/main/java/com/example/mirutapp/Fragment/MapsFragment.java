@@ -1,5 +1,6 @@
 package com.example.mirutapp.Fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -77,6 +78,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     ArrayList<Incident> MarkerPointsUOCT = new ArrayList<>();
 
     private OnFragmentInteractionListener mListener;
+
+    private Activity mActivity;
 
     public MapsFragment() {
         // Required empty public constructor
@@ -185,11 +188,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+            if (context instanceof Activity){
+                mActivity =(Activity) context;
+            }
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
+
 
     @Override
     public void onDetach() {
@@ -216,7 +224,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-33.4495857, -70.6823836);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marcador en tu posición").icon(BitmapDescriptorFactory.fromResource(R.drawable.user)));
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marcador en tu posición").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconuser)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
@@ -293,23 +301,72 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 //                Intent i = new Intent(Intent.ACTION_VIEW);
 //                i.setData(Uri.parse(url));
 //                startActivity(i);
+//
+//                Log.d("urlASD", "onInfoWindowClick: "+arg0.getSnippet());
 //            }
 //
 //        });
 
-//        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//            @Override
-//            public boolean onMarkerClick(Marker marker) {
-//
+
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+
+
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+                Log.d("urlASD", "onInfoWindowClick: "+marker.getSnippet());
+
 //                Toast.makeText(, "Clicked"+marker.getTitle(), Toast.LENGTH_SHORT).show();
+
+//                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+
+//                startActivity(new Intent(getActivity().getApplicationContext(), MapsFragment.class));
 //
-//                return false;
-//            }
-//        });
+
+
+//                startActivity(browserIntent);
+
+//                String url = "http://www.google.com";
+//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+//                // Note the Chooser below. If no applications match,
+//                // Android displays a system message.So here there is no need for try-catch.
+//                startActivity(Intent.createChooser(intent, "Browse with"));
+
+
+
+//                startActivity(browserIntent);
+
+                String url = "http://www.example.com";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+
+                Activity activity = getActivity();
+                if(activity != null){
+
+                    // etc ...
+                    Log.d("activity not null", "onMarkerClick: ");
+                    startActivity(i);
+                }else {
+                    Log.d("activity null", "onMarkerClick: ");
+                }
+
+
+
+                return false;
+            }
+        });
+
+
+
 
 
 
     }
+
+
+
 
 
 
