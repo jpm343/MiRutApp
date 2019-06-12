@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -96,41 +97,39 @@ public class VehicleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        System.out.println("ENTRA onCreateView");
-
         View view =  inflater.inflate(R.layout.fragment_vehicle, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewPatentes);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
+        //Instance the recyclerView adapter
+        final PatentesRecyclerViewAdapter prvAdapter = new PatentesRecyclerViewAdapter(patenteList,aliasList,this.getContext());
+        recyclerView.setAdapter(prvAdapter);
+
+        //Initialize viewModel
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(VehicleViewModel.class);
         viewModel.init();
 
-
+        //Save vehicles
         VehicleViewModel.Status status =viewModel.saveVehicle("bbdd13", "auto de Sebastian");
-        VehicleViewModel.Status status2 =viewModel.saveVehicle("aacc14", "moto de María");
+        VehicleViewModel.Status status2 =viewModel.saveVehicle("aajj17", "moto de María");
 
-
-        if(status == VehicleViewModel.Status.ERROR) {
+        if(status == VehicleViewModel.Status.ERROR)
             Toast.makeText(getContext(), "Error en el formato de la patente. (Ejemplo: AABB12)", Toast.LENGTH_LONG).show();
-        }else{
-            patenteList.add("bbdd13");
-            aliasList.add("auto de Sebastian");
-            patenteList.add("aacc14");
-            aliasList.add("moto de María");
-        }
 
+        //Save all vehicles in the lists and set the recyclerView's adapter
         viewModel.getVehicles().observe(this, new Observer<List<Vehicle>>() {
             @Override
             public void onChanged(List<Vehicle> vehicles) {
+                patenteList.clear();
+                aliasList.clear();
                 for (Vehicle vehicle: vehicles) {
-                    System.out.println(vehicle.getPatente());
-                    System.out.println(vehicle.getAlias());
-                    System.out.println(vehicle.isNotificating());
+                    patenteList.add(vehicle.getPatente());
+                    aliasList.add(vehicle.getAlias());
                 }
+                prvAdapter.setInfoList(patenteList,aliasList);
+                recyclerView.setAdapter(prvAdapter);
             }
         });
-        PatentesRecyclerViewAdapter prv = new PatentesRecyclerViewAdapter(patenteList,aliasList,this.getContext());
-        recyclerView.setAdapter(prv);
         return view;
     }
 

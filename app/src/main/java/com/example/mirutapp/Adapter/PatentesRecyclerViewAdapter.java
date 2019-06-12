@@ -39,7 +39,6 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        System.out.println("SE AGREGO UN NUEVO ELEMENTO AL FRAGMENTO");
         holder.textPatente.setText(patentesList.get(position));
         holder.textAlias.setText(aliasList.get(position));
         holder.misPatentesLayout.setOnClickListener(new View.OnClickListener(){
@@ -53,6 +52,11 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
     @Override
     public int getItemCount() {
         return patentesList.size();
+    }
+
+    public void setInfoList(ArrayList<String> patentesList, ArrayList<String> aliasList){
+       this.patentesList = patentesList;
+       this.aliasList = aliasList;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

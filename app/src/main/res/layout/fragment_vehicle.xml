@@ -16,5 +16,6 @@
         android:id="@+id/recyclerViewPatentes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="200dp" />
+        android:layout_marginTop="200dp"
+        tools:listitem="@layout/fragment_patentes_item"/>
 </FrameLayout>
