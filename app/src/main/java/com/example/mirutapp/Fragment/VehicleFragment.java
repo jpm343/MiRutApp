@@ -180,9 +180,6 @@ public class VehicleFragment extends Fragment implements AddVehicleDialog.Connec
     @Override
     public void sendInput(String patente, String alias) {
         VehicleViewModel.Status status =viewModel.saveVehicle(patente,alias);
-        System.out.println("SEND INPUT");
-        System.out.println(patente);
-        System.out.println(alias);
         if(status == VehicleViewModel.Status.ERROR)
             Toast.makeText(getContext(), "Error en el formato de la patente. (Ejemplo: AABB12)", Toast.LENGTH_LONG).show();
     }
