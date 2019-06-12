@@ -25,6 +25,7 @@ import com.example.mirutapp.Model.Vehicle;
 import com.example.mirutapp.R;
 import com.example.mirutapp.ViewModel.VehicleViewModel;
 import com.example.mirutapp.ViewModel.VehicleViewModelFactory;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ import javax.inject.Inject;
  * Use the {@link VehicleFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class VehicleFragment extends Fragment {
+public class VehicleFragment extends Fragment implements AddVehicleDialog.ConnectFragment {
     @Inject
     VehicleViewModelFactory viewModelFactory;
     // TODO: Rename parameter arguments, choose names that match
@@ -54,9 +55,13 @@ public class VehicleFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    //Important attributes for vehicles
     private ArrayList<String> patenteList = new ArrayList<>();
     private ArrayList<String> aliasList = new ArrayList<>();
     private RecyclerView recyclerView;
+
+    //Attributes for dialogFragment (add vehicle)
+    private FloatingActionButton addVehicleButton;
 
     public VehicleFragment() {
         // Required empty public constructor
@@ -98,6 +103,21 @@ public class VehicleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_vehicle, container, false);
+
+        //Button which opens the dialogFragment
+        addVehicleButton = view.findViewById(R.id.addVehicleButton);
+
+        addVehicleButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                AddVehicleDialog dialog = new AddVehicleDialog();
+                dialog.setTargetFragment(VehicleFragment.this,1);
+                dialog.show(getFragmentManager(),"AddVehicleDialog");
+            }
+        });
+
+        //RecyclerView
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerViewPatentes);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
@@ -110,11 +130,11 @@ public class VehicleFragment extends Fragment {
         viewModel.init();
 
         //Save vehicles
-        VehicleViewModel.Status status =viewModel.saveVehicle("bbdd13", "auto de Sebastian");
+        /*VehicleViewModel.Status status =viewModel.saveVehicle("bbdd13", "auto de Sebastian");
         VehicleViewModel.Status status2 =viewModel.saveVehicle("aajj17", "moto de María");
 
         if(status == VehicleViewModel.Status.ERROR)
-            Toast.makeText(getContext(), "Error en el formato de la patente. (Ejemplo: AABB12)", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Error en el formato de la patente. (Ejemplo: AABB12)", Toast.LENGTH_LONG).show();*/
 
         //Save all vehicles in the lists and set the recyclerView's adapter
         viewModel.getVehicles().observe(this, new Observer<List<Vehicle>>() {
@@ -155,6 +175,16 @@ public class VehicleFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void sendInput(String patente, String alias) {
+        VehicleViewModel.Status status =viewModel.saveVehicle(patente,alias);
+        System.out.println("SEND INPUT");
+        System.out.println(patente);
+        System.out.println(alias);
+        if(status == VehicleViewModel.Status.ERROR)
+            Toast.makeText(getContext(), "Error en el formato de la patente. (Ejemplo: AABB12)", Toast.LENGTH_LONG).show();
     }
 
     /**
