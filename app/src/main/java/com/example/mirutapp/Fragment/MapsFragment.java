@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -77,6 +78,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     ArrayList<Incident> MarkerPointsUOCT = new ArrayList<>();
 
     private OnFragmentInteractionListener mListener;
+
+    //Button Bottom Dialog Hazards
+    private FloatingActionButton seeHazardButton;
 
     public MapsFragment() {
         // Required empty public constructor
@@ -161,7 +165,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-
+        View view = inflater.inflate(R.layout.fragment_maps, container, false);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragment_maps);
         if (mapFragment == null) {
             mapFragment = SupportMapFragment.newInstance();
@@ -170,7 +174,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         mapFragment.getMapAsync(this);
         MarkerPoints = new ArrayList<>();
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+        seeHazardButton = (FloatingActionButton) view.findViewById(R.id.incidentButton);
+
+        seeHazardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //IncidentListDialogFragment incidentListDialogFragment=new IncidentListDialogFragment();
+                IncidentListDialogFragment.newInstance(30).show(getFragmentManager(), "dialog");
+            }
+        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -211,22 +224,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-
-
-
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-33.4495857, -70.6823836);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marcador en tu posición").icon(BitmapDescriptorFactory.fromResource(R.drawable.user)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
 
         GetUOCT getUOCT = new GetUOCT();
 
         getUOCT.execute();
-
-
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
@@ -306,12 +312,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 //                return false;
 //            }
 //        });
-
-
-
     }
-
-
 
     private String getUrl(LatLng origin, LatLng dest) {
 
@@ -334,8 +335,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters +"&key=AIzaSyCd9EduZIayU6ESWl8xB13Cily5Ju2y3hA";
         return url;
     }
-
-
 
     // Fetches data from url passed
     private class FetchUrl extends AsyncTask<String, Void, String> {
@@ -560,14 +559,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                 try {
                     JSONArray incidents = response.getJSONArray("incidents");
 
-
 //                    System.out.println(incidents.length());
 
                     Gson gson=new Gson();
 
                     Incident[] incidentsObjects = new Incident[incidents.length()];
-
-
 
                     for (int i = 0; i < incidents.length(); i++) {
 //                        Log.e("Incidents"+i,incidents.get(i).toString());
@@ -610,15 +606,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
                         options.icon(BitmapDescriptorFactory.fromResource(R.drawable.shieldwarning));
 
-
-
-
                         Log.e("Marker","options" +options);
                         // Add new marker to the Google Map Android API V2
                         mMap.addMarker(options);
-
-
-
 
                     }
 
@@ -630,6 +620,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                     Log.e("App", "Failure", ex);
                 }
             }
+            /// Botón MOSTRAR INCIDENTES ///////////////////////// ACÁ
+
+
         }
 
     }
