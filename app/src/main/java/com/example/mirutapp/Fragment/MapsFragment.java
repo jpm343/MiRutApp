@@ -49,6 +49,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import static android.content.Context.LOCATION_SERVICE;
@@ -338,19 +339,19 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
 //                startActivity(browserIntent);
 
-                String url = "http://www.example.com";
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-
-                Activity activity = getActivity();
-                if(activity != null){
-
-                    // etc ...
-                    Log.d("activity not null", "onMarkerClick: ");
-                    startActivity(i);
-                }else {
-                    Log.d("activity null", "onMarkerClick: ");
-                }
+//                String url = "http://www.example.com";
+//                Intent i = new Intent(Intent.ACTION_VIEW);
+//                i.setData(Uri.parse(url));
+//
+//                Activity activity = getActivity();
+//                if( !isAdded()){
+//
+//                    // etc ...
+//                    Log.d("activity not null", "onMarkerClick: ");
+//                    startActivity(i);
+//                }else {
+//                    Log.d("activity null", "onMarkerClick: ");
+//                }
 
 
 
@@ -496,6 +497,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             ArrayList<LatLng> points;
             PolylineOptions lineOptions = null;
 
+
+            LinkedHashSet<Incident> hashSet = new LinkedHashSet<Incident>();
+
             // Traversing through all the routes
             for (int i = 0; i < result.size(); i++) {
                 points = new ArrayList<>();
@@ -515,6 +519,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
                     System.out.println("largo UOCT:"+MarkerPointsUOCT.size());
 
+
+
+
+
                     for (int k = 0; k < MarkerPointsUOCT.size(); k++) {
                         float distance = MarkerPointsUOCT.get(k).distanceInMeters(position);
 
@@ -526,6 +534,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                         if (distance < 300){
                             System.out.println("es menor a 100");
                             System.out.println("PUNTO QUE INFLUYE LA RUTA"+MarkerPointsUOCT.get(k).getDescription());
+
+                            hashSet.add(MarkerPointsUOCT.get(k));
+
 //                            continue;
 
 //                            MarkerPointsUOCT.get(k)

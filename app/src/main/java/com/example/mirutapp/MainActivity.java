@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity
                 });
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new MapsFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new MapsFragment() ).commit();
     }
 
     @Override
