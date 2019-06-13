@@ -1,9 +1,14 @@
-package com.example.mirutapp;
+package com.example.mirutapp.Fragment;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,10 +17,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.mirutapp.dummy.DummyContent;
-import com.example.mirutapp.dummy.DummyContent.DummyItem;
+import com.example.mirutapp.Adapter.MyRouteRecyclerViewAdapter;
+import com.example.mirutapp.MiRutAppApplication;
+import com.example.mirutapp.Model.Route;
+import com.example.mirutapp.R;
+import com.example.mirutapp.ViewModel.RouteViewModel;
+import com.example.mirutapp.ViewModel.RouteViewModelFactory;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
 
 /**
  * A fragment representing a list of Items.
@@ -24,12 +40,18 @@ import java.util.List;
  * interface.
  */
 public class RouteFragment extends Fragment {
-
+    @Inject
+    RouteViewModelFactory viewModelFactory;
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private RouteViewModel viewModel;
+
+    //Important attribute for routes
+    private ArrayList<Route> routes = new ArrayList<>();
+    private RecyclerView recyclerRoutes;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -51,31 +73,47 @@ public class RouteFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        //dependency injection
+        ((MiRutAppApplication) getActivity().getApplication())
+                .getApplicationComponent()
+                .inject(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.route_fragment_item_list, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+        View view = inflater.inflate(R.layout.route_fragment_item_list, container, false);
+        recyclerRoutes = view.findViewById(R.id.routeList);
+        recyclerRoutes.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerRoutes.setHasFixedSize(true);
+
+        final MyRouteRecyclerViewAdapter adapter = new MyRouteRecyclerViewAdapter();
+        recyclerRoutes.setAdapter(adapter);
+
+        /*viewModel = ViewModelProviders.of(this,viewModelFactory).get(RouteViewModel.class);
+        viewModel.init();
+        viewModel.getRoutes().observe(this, new Observer<List<Route>>() {
+            @Override
+            public void onChanged(List<Route> routes) {
+                adapter.setRoutes(routes);
+                recyclerRoutes.setAdapter(adapter);
             }
-            recyclerView.setAdapter(new MyRouteRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-        }
+        });*/
+        List<Route> routesFake = new ArrayList<>();
+        //FAKE RUTAS
+        Set<Integer> days = new HashSet<Integer> ();
+        days.add(1);
+        days.add(2);
+        days.add(0);
+        Route ruta = new Route("https:1123","Casa a Trabajo",15,45,days);
+        routesFake.add(ruta);
+        adapter.setRoutes(routesFake);
         return view;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -106,6 +144,6 @@ public class RouteFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onFragmentInteraction(Uri uri);
     }
 }
