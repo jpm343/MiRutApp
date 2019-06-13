@@ -1,6 +1,7 @@
 package com.example.mirutapp.Fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -20,6 +21,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mirutapp.MainActivity;
@@ -589,7 +593,39 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                     points.add(position);
                 }
 
-                mMap.mark
+
+                // custom dialog
+                final Dialog dialog = new Dialog(mContext);
+
+                dialog.setContentView(R.layout.custom3);
+                dialog.setTitle("Title...");
+
+
+
+                // set the custom dialog components - text, image and button
+                TextView text = (TextView) dialog.findViewById(R.id.text);
+
+
+                text.setText("Android custom dialog example!");
+
+                ImageView image = (ImageView) dialog.findViewById(R.id.image);
+
+//                image.setImageResource(R.drawable.ic_launcher_foreground);
+
+
+                Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+//                 if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+
+
+
 
 
 
