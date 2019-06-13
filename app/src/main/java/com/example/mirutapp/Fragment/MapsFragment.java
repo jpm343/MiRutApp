@@ -1,32 +1,25 @@
 package com.example.mirutapp.Fragment;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.mirutapp.MainActivity;
+//import com.codetroopers.betterpickers.recurrencepicker.RecurrencePickerDialogFragment;
+//import com.codetroopers.betterpickers.timepicker.TimePickerBuilder;
 import com.example.mirutapp.Model.DataParser;
 import com.example.mirutapp.Model.Incident;
 import com.example.mirutapp.R;
@@ -41,6 +34,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,9 +51,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-
-import static android.content.Context.LOCATION_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -596,36 +587,44 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
                 // custom dialog
                 final Dialog dialog = new Dialog(mContext);
-
                 dialog.setContentView(R.layout.custom);
                 dialog.setTitle("Title...");
+//                // set the custom dialog components - text, image and button
+//                TextView text = (TextView) dialog.findViewById(R.id.text);
+//                text.setText("Android custom dialog example!");
+//                ImageView image = (ImageView) dialog.findViewById(R.id.image);
+//
+////                image.setImageResource(R.drawable.ic_launcher_foreground);
+//
+//
+//                Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+//
+//                dialogButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//
+//                dialog.show();
+
+
+//                RecurrencePickerDialog recurrencePickerDialog = new RecurrencePickerDialog();
+
+
+//                recurrencePickerDialog.show(getSupportFragmentManager(),"recurrencePicker");
 
 
 
-                // set the custom dialog components - text, image and button
-                TextView text = (TextView) dialog.findViewById(R.id.text);
 
 
-                text.setText("Android custom dialog example!");
 
-                ImageView image = (ImageView) dialog.findViewById(R.id.image);
+                TimePicker timePicker = (TimePicker) dialog.findViewById(R.id.timePicker);
 
-//                image.setImageResource(R.drawable.ic_launcher_foreground);
-
-
-                Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-//                 if button is clicked, close the custom dialog
-                dialogButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
+                timePicker.setIs24HourView(true); // to set 24 hours mode
+                timePicker.setIs24HourView(false); // to set 12 hours mode
 
                 dialog.show();
-
-
-
 
 
 
