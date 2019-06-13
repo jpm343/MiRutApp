@@ -181,6 +181,16 @@ public class VehicleFragment extends Fragment implements AddVehicleDialog.Connec
             return 1;
     }
 
+    @Override
+    public int updateInput(String patenteOld, String patenteNew, String alias) {
+        VehicleViewModel.Status status = viewModel.updateVehicle(patenteOld,patenteNew,alias);
+        if(status == VehicleViewModel.Status.OK){
+            return 1;
+        }else {
+            return 0;
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
