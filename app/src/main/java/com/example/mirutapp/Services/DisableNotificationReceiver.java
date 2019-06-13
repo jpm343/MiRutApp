@@ -23,10 +23,11 @@ public class DisableNotificationReceiver extends BroadcastReceiver {
                 .inject(this);
 
         String action = intent.getStringExtra("action");
+        int vehicleId = intent.getIntExtra("vehicleId", -1);
         //String action = intent.getAction();
         Log.d(TAG, action);
+        Log.d(TAG, String.valueOf(vehicleId));
         if(action.equals("disable")) {
-            int vehicleId = intent.getIntExtra("vehicleId", -1);
             vehicleRepository.turnOffNotificationsById(vehicleId);
             Toast.makeText(context, "Notificaciones desactivadas para el vehículo indicado", Toast.LENGTH_LONG).show();
         }
@@ -36,6 +37,6 @@ public class DisableNotificationReceiver extends BroadcastReceiver {
         }
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        notificationManager.cancel(1);
+        notificationManager.cancel(vehicleId);
     }
 }
