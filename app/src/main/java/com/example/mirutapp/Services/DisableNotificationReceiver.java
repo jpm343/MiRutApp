@@ -37,6 +37,5 @@ public class DisableNotificationReceiver extends BroadcastReceiver {
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.cancel(1);
-        System.out.println("NOTIFICATION");
     }
 }
