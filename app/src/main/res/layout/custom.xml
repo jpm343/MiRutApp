@@ -83,11 +83,11 @@
     <TimePicker
         android:id="@+id/timePicker"
         android:layout_width="match_parent"
-        android:layout_height="341dp"
+        android:layout_height="337dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="39dp" />
+        android:layout_marginTop="47dp" />
 
     <CheckBox
         android:id="@+id/checkBox"
@@ -153,9 +153,9 @@
     <Button
         android:id="@+id/dialogButtonOK"
         android:layout_width="match_parent"
-        android:layout_height="31dp"
+        android:layout_height="29dp"
         android:layout_below="@+id/image"
-        android:layout_marginTop="473dp"
+        android:layout_marginTop="478dp"
         android:layout_marginRight="5dp"
         android:background="#008577"
 

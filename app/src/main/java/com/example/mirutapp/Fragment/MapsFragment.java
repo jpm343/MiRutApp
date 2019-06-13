@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -597,14 +598,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 ////                image.setImageResource(R.drawable.ic_launcher_foreground);
 //
 //
-//                Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-//
-//                dialogButton.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        dialog.dismiss();
-//                    }
-//                });
+                Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
 //
 //                dialog.show();
 
