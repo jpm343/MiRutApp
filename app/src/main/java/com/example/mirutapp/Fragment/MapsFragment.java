@@ -16,15 +16,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 //import com.codetroopers.betterpickers.recurrencepicker.RecurrencePickerDialogFragment;
 //import com.codetroopers.betterpickers.timepicker.TimePickerBuilder;
+import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.DataParser;
 import com.example.mirutapp.Model.Incident;
+import com.example.mirutapp.Model.Route;
 import com.example.mirutapp.R;
 
+import com.example.mirutapp.Repository.RouteRepository;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -34,6 +38,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 
 
@@ -50,8 +55,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+
+import javax.inject.Inject;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -81,6 +90,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     private Context mContext;
 
     boolean doubleBackToExitPressedOnce = false;
+
+    @Inject
+    RouteRepository routeRepository;
 
     public MapsFragment() {
         // Required empty public constructor
@@ -159,6 +171,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        ((MiRutAppApplication) getActivity().getApplication())
+                .getApplicationComponent()
+                .inject(this);
     }
 
     @Override
@@ -599,13 +614,65 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 //
 //
                 Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                final TimePicker timePicker = (TimePicker) dialog.findViewById(R.id.timePicker);
+                final CheckBox cbMonday = (CheckBox) dialog.findViewById(R.id.checkBox);
+                final CheckBox cbTuesday = (CheckBox) dialog.findViewById(R.id.checkBox2);
+                final CheckBox cbWednesday = (CheckBox) dialog.findViewById(R.id.checkBox3);
+                final CheckBox cbThursday = (CheckBox) dialog.findViewById(R.id.checkBox5);
+                final CheckBox cbFriday = (CheckBox) dialog.findViewById(R.id.checkBox6);
+                final CheckBox cbSaturday = (CheckBox) dialog.findViewById(R.id.checkBox7);
+                final CheckBox cbSunday = (CheckBox) dialog.findViewById(R.id.checkBox8);
+                final TextInputEditText textInput = (TextInputEditText) dialog.findViewById(R.id.textInput);
+                timePicker.setIs24HourView(true); // to set 24 hours mode
+                timePicker.setIs24HourView(false); // to set 12 hours mode
 
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Set<Integer> days = new HashSet<Integer>();
+                        String routeName = textInput.getText().toString();
+                        if(!routeName.equals("")){
+                            if(!cbMonday.isChecked() && !cbTuesday.isChecked() && !cbWednesday.isChecked() && !cbThursday.isChecked() && !cbFriday.isChecked() && !cbSaturday.isChecked() && !cbSunday.isChecked())
+                                Toast.makeText(getContext(), "Debe seleccionar al menos un día.", Toast.LENGTH_LONG).show();
+                            else{
+                                if(cbMonday.isChecked()){
+                                    days.add(1);
+                                }
+                                if(cbTuesday.isChecked()){
+                                    days.add(2);
+                                }
+                                if(cbWednesday.isChecked()){
+                                    days.add(3);
+                                }
+                                if(cbThursday.isChecked()){
+                                    days.add(4);
+                                }
+                                if(cbFriday.isChecked()){
+                                    days.add(5);
+                                }
+                                if(cbSaturday.isChecked()){
+                                    days.add(6);
+                                }
+                                if(cbSunday.isChecked()){
+                                    days.add(0);
+                                }
+                            }
+                        int alarmHour = timePicker.getHour();
+                        int alarmMinute = timePicker.getMinute();
+                        String url = "https://maps.googleapis.com/maps/api/directions/json?origin=-33.452367254631895,-70.6842477992177&destination=-33.45019899569667,-70.67649889737368&sensor=false&key=AIzaSyCd9EduZIayU6ESWl8xB13Cily5Ju2y3hA";
+
+                        Route ruta = new Route(url,routeName,alarmHour,alarmMinute,days);
+                        routeRepository.createRoute(ruta);
                         dialog.dismiss();
+                        }else{
+                            Toast.makeText(getContext(), "¡Nombre de ruta vacía!", Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
+
+                dialog.show();
+
+
 //
 //                dialog.show();
 
@@ -620,12 +687,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
 
 
-                TimePicker timePicker = (TimePicker) dialog.findViewById(R.id.timePicker);
+          //      TimePicker timePicker = (TimePicker) dialog.findViewById(R.id.timePicker);
 
-                timePicker.setIs24HourView(true); // to set 24 hours mode
-                timePicker.setIs24HourView(false); // to set 12 hours mode
 
-                dialog.show();
+
+
 
 
 

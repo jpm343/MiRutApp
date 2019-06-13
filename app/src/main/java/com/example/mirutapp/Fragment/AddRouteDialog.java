@@ -66,31 +66,31 @@ public class AddRouteDialog extends DialogFragment {
                 Set<Integer> days = new HashSet<Integer>();
                 String routeName = editTextRouteName.getText().toString();
                 if(!routeName.equals("")){
-                    if(!checkBoxMonday.isChecked() && !checkBoxTuesday.isChecked() && !checkBoxWednesday.isChecked() && !checkBoxThursday.isChecked() && !checkBoxFriday.isChecked() && !checkBoxSaturday.isChecked() && !checkBoxSunday.isChecked()){
-                        Toast.makeText(getContext(), "Debe seleccionar al menos un día.", Toast.LENGTH_LONG).show();
-                    }else{
-                        if(checkBoxMonday.isChecked()){
-                            days.add(1);
+                        if(!checkBoxMonday.isChecked() && !checkBoxTuesday.isChecked() && !checkBoxWednesday.isChecked() && !checkBoxThursday.isChecked() && !checkBoxFriday.isChecked() && !checkBoxSaturday.isChecked() && !checkBoxSunday.isChecked()){
+                            Toast.makeText(getContext(), "Debe seleccionar al menos un día.", Toast.LENGTH_LONG).show();
+                        }else{
+                            if(checkBoxMonday.isChecked()){
+                                days.add(1);
+                            }
+                            if(checkBoxTuesday.isChecked()){
+                                days.add(2);
+                            }
+                            if(checkBoxWednesday.isChecked()){
+                                days.add(3);
+                            }
+                            if(checkBoxThursday.isChecked()){
+                                days.add(4);
+                            }
+                            if(checkBoxFriday.isChecked()){
+                                days.add(5);
+                            }
+                            if(checkBoxSaturday.isChecked()){
+                                days.add(6);
+                            }
+                            if(checkBoxSunday.isChecked()){
+                                days.add(0);
+                            }
                         }
-                        if(checkBoxTuesday.isChecked()){
-                            days.add(2);
-                        }
-                        if(checkBoxWednesday.isChecked()){
-                            days.add(3);
-                        }
-                        if(checkBoxThursday.isChecked()){
-                            days.add(4);
-                        }
-                        if(checkBoxFriday.isChecked()){
-                            days.add(5);
-                        }
-                        if(checkBoxSaturday.isChecked()){
-                            days.add(6);
-                        }
-                        if(checkBoxSunday.isChecked()){
-                            days.add(0);
-                        }
-                    }
                     //String url, String routeName, int alarmHour, int alarmMinute, Set<Integer> days
                     //Obtener url
                     //Descomponer hora
