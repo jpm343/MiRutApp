@@ -28,24 +28,23 @@
         android:hint="Alias" />
 
     <Button
-        android:id="@+id/buttonGuardar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextAlias"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="21dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:text="Guardar" />
-
-    <Button
         android:id="@+id/buttonCancelar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextAlias"
-        android:layout_marginStart="2dp"
         android:layout_marginTop="21dp"
-        android:layout_alignParentStart="@id/buttonGuardar"
-        android:layout_toEndOf="@+id/buttonGuardar"
+        android:layout_alignParentStart="true"
         android:text="Cancelar" />
 
+    <Button
+        android:id="@+id/buttonGuardar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextAlias"
+        android:layout_marginTop="21dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_marginStart="2dp"
+        android:layout_alignParentStart="@id/buttonCancelar"
+        android:layout_toEndOf="@+id/buttonCancelar"
+        android:text="Guardar" />
 </RelativeLayout>

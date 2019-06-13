@@ -24,4 +24,10 @@ public interface VehicleDao {
 
     @Query("SELECT * FROM vehicle WHERE id = :vehicleId")
     Vehicle getVehicleById(int vehicleId);
+
+    @Query("DELETE FROM vehicle WHERE patente = :patente")
+    void deleteVehicleByPatente(String patente);
+
+    @Query("UPDATE vehicle SET patente = :patenteNew, alias = :alias WHERE patente = :patenteOld")
+    void updateVehicleByPatente(String patenteOld, String patenteNew, String alias);
 }

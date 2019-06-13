@@ -1,6 +1,8 @@
 package com.example.mirutapp.Fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,10 +16,14 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mirutapp.MainActivity;
@@ -49,6 +55,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import static android.content.Context.LOCATION_SERVICE;
@@ -79,7 +86,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
     private OnFragmentInteractionListener mListener;
 
-    private Activity mActivity;
+    private Context mContext;
+
+    boolean doubleBackToExitPressedOnce = false;
 
     public MapsFragment() {
         // Required empty public constructor
@@ -186,15 +195,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-            if (context instanceof Activity){
-                mActivity =(Activity) context;
-            }
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+        mContext = context;
     }
 
 
@@ -294,18 +295,23 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             }
         });
 
-//        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-//            @Override
-//            public void onInfoWindowClick(Marker arg0){
-//                String url = "https://www.google.com";
-//                Intent i = new Intent(Intent.ACTION_VIEW);
-//                i.setData(Uri.parse(url));
-//                startActivity(i);
-//
-//                Log.d("urlASD", "onInfoWindowClick: "+arg0.getSnippet());
-//            }
-//
-//        });
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker){
+                String urlString = marker.getSnippet();
+                Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(urlString));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setPackage("com.android.chrome");
+                try {
+                    mContext.startActivity(intent);
+                } catch (ActivityNotFoundException ex) {
+                    // Chrome browser presumably not installed so allow user to choose instead
+                    intent.setPackage(null);
+                    mContext.startActivity(intent);
+                }
+            }
+
+        });
 
 
 
@@ -316,7 +322,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             @Override
             public boolean onMarkerClick(Marker marker) {
 
-                Log.d("urlASD", "onInfoWindowClick: "+marker.getSnippet());
+//                Log.d("urlASD", "onInfoWindowClick: "+marker.getSnippet());
 
 //                Toast.makeText(, "Clicked"+marker.getTitle(), Toast.LENGTH_SHORT).show();
 
@@ -338,19 +344,56 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
 //                startActivity(browserIntent);
 
-                String url = "http://www.example.com";
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
+//                String url = "http://www.google.com";
 
-                Activity activity = getActivity();
-                if(activity != null){
+//                Intent intent = new Intent(mContext, MapsFragment.class);
 
-                    // etc ...
-                    Log.d("activity not null", "onMarkerClick: ");
-                    startActivity(i);
-                }else {
-                    Log.d("activity null", "onMarkerClick: ");
-                }
+//                intent.setData(Uri.parse(url));
+
+//                startActivity(intent);
+
+
+
+//                if (doubleBackToExitPressedOnce) {
+//                    String urlString = marker.getSnippet();
+//                    Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(urlString));
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    intent.setPackage("com.android.chrome");
+//                    try {
+//                        mContext.startActivity(intent);
+//                    } catch (ActivityNotFoundException ex) {
+//                        // Chrome browser presumably not installed so allow user to choose instead
+//                        intent.setPackage(null);
+//                        mContext.startActivity(intent);
+//                    }
+//
+//                } else {
+//
+//                    doubleBackToExitPressedOnce = true;
+//
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            doubleBackToExitPressedOnce = false;
+//                        }
+//                    }, 2000);
+//                }
+
+
+
+
+
+
+//                if( isAdded()){
+//
+//                    // etc ...
+//                    Log.d("activity not null", "onMarkerClick: ");
+////                    startActivity(i);
+//                }else {
+//                    Log.d("activity null", "onMarkerClick: "+getContext());
+//                    Log.d("activity null", "onMarkerClick: "+mContext);
+//
+//                }
 
 
 
@@ -496,6 +539,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             ArrayList<LatLng> points;
             PolylineOptions lineOptions = null;
 
+
+            LinkedHashSet<Incident> hashSet = new LinkedHashSet<Incident>();
+
+
             // Traversing through all the routes
             for (int i = 0; i < result.size(); i++) {
                 points = new ArrayList<>();
@@ -515,6 +562,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
                     System.out.println("largo UOCT:"+MarkerPointsUOCT.size());
 
+
+
+
+
                     for (int k = 0; k < MarkerPointsUOCT.size(); k++) {
                         float distance = MarkerPointsUOCT.get(k).distanceInMeters(position);
 
@@ -524,8 +575,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
 
                         if (distance < 300){
+
                             System.out.println("es menor a 100");
                             System.out.println("PUNTO QUE INFLUYE LA RUTA"+MarkerPointsUOCT.get(k).getDescription());
+
+                            hashSet.add(MarkerPointsUOCT.get(k));
+
 //                            continue;
 
 //                            MarkerPointsUOCT.get(k)
@@ -537,6 +592,48 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
                     points.add(position);
                 }
+
+
+                // custom dialog
+                final Dialog dialog = new Dialog(mContext);
+
+                dialog.setContentView(R.layout.custom);
+                dialog.setTitle("Title...");
+
+
+
+                // set the custom dialog components - text, image and button
+                TextView text = (TextView) dialog.findViewById(R.id.text);
+
+
+                text.setText("Android custom dialog example!");
+
+                ImageView image = (ImageView) dialog.findViewById(R.id.image);
+
+//                image.setImageResource(R.drawable.ic_launcher_foreground);
+
+
+                Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+//                 if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+
+
+
+
+
+
+                Toast toast1 =
+                        Toast.makeText(mContext,
+                                "Hay "+hashSet.size()+" Incidentes que afectan tu ruta", Toast.LENGTH_SHORT);
+
+                toast1.show();
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
