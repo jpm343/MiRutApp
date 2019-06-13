@@ -7,6 +7,7 @@ import com.example.mirutapp.Fragment.InfoPatenteFragment;
 
 import com.example.mirutapp.Fragment.MapsFragment;
 import com.example.mirutapp.Fragment.NewsFragment;
+import com.example.mirutapp.Fragment.RouteFragment;
 import com.example.mirutapp.Fragment.VehicleFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         InfoPatenteFragment.OnFragmentInteractionListener,
         NewsFragment.OnListFragmentInteractionListener,
+        RouteFragment.OnListFragmentInteractionListener,
         VehicleFragment.OnFragmentInteractionListener,
         MapsFragment.OnFragmentInteractionListener {
 
@@ -158,6 +160,10 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_tools) {
             selectedFragment = new MapsFragment();
+            fragmentIsSelected = true;
+
+        } else if(id==R.id.nav_routes){
+            selectedFragment = new RouteFragment();
             fragmentIsSelected = true;
 
         } else if (id == R.id.nav_share) {
