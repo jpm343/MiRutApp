@@ -7,5 +7,5 @@
     android:clipToPadding="false"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
-    tools:context=".Fragment.IncidentListDialogFragment"
+    tools:context=".Fragment.HazardFragment"
     tools:listitem="@layout/fragment_incident_list_dialog_item" />
