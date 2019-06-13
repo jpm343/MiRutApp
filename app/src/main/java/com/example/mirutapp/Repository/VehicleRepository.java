@@ -40,13 +40,22 @@ public class VehicleRepository {
         });
     }
 
-    public void turnOffNotifications(final Vehicle vehicle) {
-        vehicle.setNotificating(false);
+    public void turnOnNotifications(final Vehicle vehicle) {
+        vehicle.setNotificating(true);
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 vehicleDao.save(vehicle);
             }
         });
+    }
+
+    //same with this. don't use on UI
+    public void turnOffNotificationsById(int id) {
+        Vehicle vehicle = vehicleDao.getVehicleById(id);
+        if(vehicle != null) {
+            vehicle.setNotificating(false);
+            vehicleDao.save(vehicle);
+        }
     }
 }

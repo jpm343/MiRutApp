@@ -1,16 +1,15 @@
 package com.example.mirutapp;
 
+import android.app.AlarmManager;
 import android.app.Application;
 
+import android.app.PendingIntent;
 import android.app.Service;
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 
 
 import com.example.mirutapp.DependencyInjection.ApplicationComponent;
@@ -18,7 +17,9 @@ import com.example.mirutapp.DependencyInjection.ApplicationModule;
 import com.example.mirutapp.DependencyInjection.DaggerApplicationComponent;
 import com.example.mirutapp.DependencyInjection.RoomModule;
 import com.example.mirutapp.DependencyInjection.WebServiceModule;
-import com.example.mirutapp.Services.VehicleCheckJobService;
+import com.example.mirutapp.Services.VehicleCheckAlarmReceiver;
+
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -49,27 +50,20 @@ public class MiRutAppApplication extends Application implements HasServiceInject
                 .roomModule(new RoomModule(this))
                 .build();
         createNotificationsChannels();
-        scheduleVehicleCheckJob();
+        setVehicleCheckAlarm();
     }
 
-    private void scheduleVehicleCheckJob() {
-        ComponentName componentName = new ComponentName(this, VehicleCheckJobService.class);
-        JobInfo info = new JobInfo.Builder(1, componentName)
-                .setPersisted(true)
-                .setPeriodic(24 * 60 * 60 * 1000)
-                .build();
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        int resultCode = scheduler.schedule(info);
-        if(resultCode == JobScheduler.RESULT_SUCCESS)
-            Log.d(TAG, "job scheduled");
-        else
-            Log.d(TAG, "job not scheduled");
-    }
-
-    private void cancelScheduleVehicleCheckJob() {
-        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
-        scheduler.cancel(1);
-        Log.d(TAG, "job cancelled");
+    private void setVehicleCheckAlarm() {
+        Calendar calendar = Calendar.getInstance();
+        //calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        //calendar.set(7, );
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        calendar.set(Calendar.MINUTE, 0);
+        Intent intent = new Intent(getApplicationContext(), VehicleCheckAlarmReceiver.class);
+        PendingIntent pendingIntent =
+                PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     public ApplicationComponent getApplicationComponent() {
