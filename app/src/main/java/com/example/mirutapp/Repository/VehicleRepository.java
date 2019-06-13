@@ -58,4 +58,22 @@ public class VehicleRepository {
             vehicleDao.save(vehicle);
         }
     }
+
+    public void deleteVehicle(final String patente){
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                vehicleDao.deleteVehicleByPatente(patente);
+            }
+        });
+    }
+
+    public void updateVehicle(final String patenteOld, final String patenteNew, final String alias){
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                vehicleDao.updateVehicleByPatente(patenteOld, patenteNew, alias);
+            }
+        });
+    }
 }
