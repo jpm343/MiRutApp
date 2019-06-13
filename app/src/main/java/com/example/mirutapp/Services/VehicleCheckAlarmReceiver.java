@@ -64,6 +64,7 @@ public class VehicleCheckAlarmReceiver extends BroadcastReceiver {
             return;
 
         for(Vehicle vehicle: vehicleList){
+            vehicle.setNotificating(true);
             Log.d(TAG, String.valueOf(vehicle.isNotificating()));
             if(vehicle.isNotificating()) {
                 //check for rules
@@ -88,47 +89,59 @@ public class VehicleCheckAlarmReceiver extends BroadcastReceiver {
     }
 
     private void sendNotification(@Nullable Vehicle vehicle) {
-        //if vehicle is null, notify all
-        String title = "Recordatorio de renovación de Revisión Técnica";
-        String messageBody;
-        if(vehicle == null) {
-            messageBody = "Recuerda que en marzo debes renovar las revisión de tus vehículos atrasados";
-        } else {
-            messageBody = "Para: " + vehicle.getAlias() + " (Patente: " + vehicle.getPatente() + ")";
-        }
-
         //intent with extra information in order to load vehicles section
         Intent activityIntent = new Intent(appContext, MainActivity.class);
         activityIntent.putExtra("comesFromNotification", "vehiclesFragment");
         PendingIntent contentIntent = PendingIntent.getActivity(appContext, 0, activityIntent, 0);
 
-        //intent to disable notifications for a vehicle
-        Intent broadcastIntent = new Intent(appContext, DisableNotificationReceiver.class);
-        broadcastIntent.putExtra("action", "disable");
-        broadcastIntent.putExtra("vehicleId", vehicle.getId()); //this should never be null
-        broadcastIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent actionIntent = PendingIntent.getBroadcast(appContext, 0, broadcastIntent, PendingIntent.FLAG_ONE_SHOT);
+        //if vehicle is null, notify all
+        String title = "Recordatorio de renovación de Revisión Técnica";
+        String messageBody;
+        if(vehicle == null) {
+            messageBody = "Recuerda que en marzo debes renovar las revisión de tus vehículos atrasados";
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(appContext);
+            Notification notification = new NotificationCompat.Builder(appContext, CHANNEL_1_ID)
+                    .setSmallIcon(R.drawable.ic_car)
+                    .setContentTitle(title)
+                    .setContentText(messageBody)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setCategory(NotificationCompat.CATEGORY_EVENT)
+                    .setAutoCancel(true)
+                    .setContentIntent(contentIntent)
+                    .build();
+            notificationManager.notify(1, notification);
 
-        //Intent to remember another day
-        Intent broadcastIntent2 = new Intent(appContext, DisableNotificationReceiver.class);
-        broadcastIntent2.putExtra("action", "remember");
-        broadcastIntent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent actionIntent2 = PendingIntent.getBroadcast(appContext, 1, broadcastIntent2, PendingIntent.FLAG_ONE_SHOT);
+        } else {
+            messageBody = "Para: " + vehicle.getAlias() + " (Patente: " + vehicle.getPatente() + ")";
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(appContext);
-        Notification notification = new NotificationCompat.Builder(appContext, CHANNEL_1_ID)
-                .setSmallIcon(R.drawable.ic_car)
-                .setContentTitle(title)
-                .setContentText(messageBody)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_EVENT)
-                .setAutoCancel(true)
-                .setContentIntent(contentIntent)
-                .addAction(R.mipmap.ic_launcher, "Entendido", actionIntent)
-                .addAction(R.mipmap.ic_launcher, "Recordarme mañana", actionIntent2)
-                .build();
+            //intent to disable notifications for a vehicle
+            Intent broadcastIntent = new Intent(appContext, DisableNotificationReceiver.class);
+            broadcastIntent.putExtra("action", "disable");
+            broadcastIntent.putExtra("vehicleId", vehicle.getId()); //this should never be null
+            broadcastIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent actionIntent = PendingIntent.getBroadcast(appContext, vehicle.getId(), broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        //error here: there should be a different id for each notification in case of more than one vehicle being notified
-        notificationManager.notify(1, notification);
+            //Intent to remember another day
+            Intent broadcastIntent2 = new Intent(appContext, DisableNotificationReceiver.class);
+            broadcastIntent2.putExtra("action", "remember");
+            broadcastIntent2.putExtra("vehicleId", vehicle.getId());
+            broadcastIntent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent actionIntent2 = PendingIntent.getBroadcast(appContext, vehicle.getId()+1, broadcastIntent2, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(appContext);
+            Notification notification = new NotificationCompat.Builder(appContext, CHANNEL_1_ID)
+                    .setSmallIcon(R.drawable.ic_car)
+                    .setContentTitle(title)
+                    .setContentText(messageBody)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setCategory(NotificationCompat.CATEGORY_EVENT)
+                    .setAutoCancel(true)
+                    .setContentIntent(contentIntent)
+                    .addAction(R.mipmap.ic_launcher, "Entendido", actionIntent)
+                    .addAction(R.mipmap.ic_launcher, "Recordarme mañana", actionIntent2)
+                    .build();
+            Log.d(TAG, String.valueOf(vehicle.getId()));
+            notificationManager.notify(vehicle.getId(), notification);
+        }
     }
 }
