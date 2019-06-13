@@ -54,6 +54,7 @@ public class VehicleCheckAlarmReceiver extends BroadcastReceiver {
                     notifyAllVehicles();
                 if(month == Calendar.DECEMBER)
                     resetNotifications();
+
             }
         }
     }
@@ -63,6 +64,7 @@ public class VehicleCheckAlarmReceiver extends BroadcastReceiver {
             return;
 
         for(Vehicle vehicle: vehicleList){
+            Log.d(TAG, String.valueOf(vehicle.isNotificating()));
             if(vehicle.isNotificating()) {
                 //check for rules
                 char lastDigit = vehicle.getPatente().charAt(5);
@@ -126,6 +128,7 @@ public class VehicleCheckAlarmReceiver extends BroadcastReceiver {
                 .addAction(R.mipmap.ic_launcher, "Recordarme mañana", actionIntent2)
                 .build();
 
+        //error here: there should be a different id for each notification in case of more than one vehicle being notified
         notificationManager.notify(1, notification);
     }
 }

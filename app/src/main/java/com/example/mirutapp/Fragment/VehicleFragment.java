@@ -89,7 +89,7 @@ public class VehicleFragment extends Fragment {
         // Inflate the layout for this fragment
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(VehicleViewModel.class);
         viewModel.init();
-        VehicleViewModel.Status status =viewModel.saveVehicle("bbdd13", "auto de Sebastian");
+        VehicleViewModel.Status status =viewModel.saveVehicle("bbdc13", "auto de Sebastian2");
         if(status == VehicleViewModel.Status.ERROR)
             Toast.makeText(getContext(), "Error en el formato de la patente. (formato de ejemplo: aabb12)", Toast.LENGTH_LONG).show();
         viewModel.getVehicles().observe(this, new Observer<List<Vehicle>>() {
