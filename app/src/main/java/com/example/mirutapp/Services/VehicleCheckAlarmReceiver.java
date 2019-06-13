@@ -2,8 +2,8 @@ package com.example.mirutapp.Services;
 
 import android.app.Notification;
 import android.app.PendingIntent;
-import android.app.job.JobParameters;
-import android.app.job.JobService;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -25,21 +25,19 @@ import javax.inject.Inject;
 
 import static com.example.mirutapp.MiRutAppApplication.CHANNEL_1_ID;
 
-public class VehicleCheckJobService extends JobService {
-    public static final String TAG = "VehicleCheckingService";
+public class VehicleCheckAlarmReceiver extends BroadcastReceiver {
+    public static final String TAG = "VehicleCheckAlarmReceiver";
     private List<Vehicle> vehicles;
+    private Context appContext;
     @Inject VehicleRepository vehicleRepository;
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        ((MiRutAppApplication) getApplication())
+    public void onReceive(Context context, Intent intent) {
+        ((MiRutAppApplication) context.getApplicationContext())
                 .getApplicationComponent()
                 .inject(this);
-    }
 
-    @Override
-    public boolean onStartJob(JobParameters params) {
+        appContext = context;
         vehicles = vehicleRepository.loadAll();
         if(vehicles != null){
             //get month and check its corresponding vehicle number
@@ -56,26 +54,20 @@ public class VehicleCheckJobService extends JobService {
                     notifyAllVehicles();
                 if(month == Calendar.DECEMBER)
                     resetNotifications();
+
             }
         }
-        return false;
     }
-
-    @Override
-    public boolean onStopJob(JobParameters params) {
-        return false;
-    }
-
     private void notifyVehiclesEndingIn(int digit) {
         List<Vehicle> vehicleList = vehicles;
         if(vehicleList == null)
             return;
 
         for(Vehicle vehicle: vehicleList){
+            Log.d(TAG, String.valueOf(vehicle.isNotificating()));
             if(vehicle.isNotificating()) {
                 //check for rules
                 char lastDigit = vehicle.getPatente().charAt(5);
-                String message = lastDigit + "=" + digit;
                 if(digit == Character.getNumericValue(lastDigit))
                     sendNotification(vehicle);
             }
@@ -88,6 +80,11 @@ public class VehicleCheckJobService extends JobService {
 
     private void resetNotifications() {
         //here we should modify the record in database
+        if(vehicles != null) {
+            for(Vehicle vehicle: vehicles) {
+                vehicleRepository.turnOnNotifications(vehicle);
+            }
+        }
     }
 
     private void sendNotification(@Nullable Vehicle vehicle) {
@@ -101,12 +98,25 @@ public class VehicleCheckJobService extends JobService {
         }
 
         //intent with extra information in order to load vehicles section
-        Intent activityIntent = new Intent(this, MainActivity.class);
+        Intent activityIntent = new Intent(appContext, MainActivity.class);
         activityIntent.putExtra("comesFromNotification", "vehiclesFragment");
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, activityIntent, 0);
+        PendingIntent contentIntent = PendingIntent.getActivity(appContext, 0, activityIntent, 0);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_1_ID)
+        //intent to disable notifications for a vehicle
+        Intent broadcastIntent = new Intent(appContext, DisableNotificationReceiver.class);
+        broadcastIntent.putExtra("action", "disable");
+        broadcastIntent.putExtra("vehicleId", vehicle.getId()); //this should never be null
+        broadcastIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent actionIntent = PendingIntent.getBroadcast(appContext, 0, broadcastIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        //Intent to remember another day
+        Intent broadcastIntent2 = new Intent(appContext, DisableNotificationReceiver.class);
+        broadcastIntent2.putExtra("action", "remember");
+        broadcastIntent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent actionIntent2 = PendingIntent.getBroadcast(appContext, 1, broadcastIntent2, PendingIntent.FLAG_ONE_SHOT);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(appContext);
+        Notification notification = new NotificationCompat.Builder(appContext, CHANNEL_1_ID)
                 .setSmallIcon(R.drawable.ic_car)
                 .setContentTitle(title)
                 .setContentText(messageBody)
@@ -114,8 +124,11 @@ public class VehicleCheckJobService extends JobService {
                 .setCategory(NotificationCompat.CATEGORY_EVENT)
                 .setAutoCancel(true)
                 .setContentIntent(contentIntent)
+                .addAction(R.mipmap.ic_launcher, "Entendido", actionIntent)
+                .addAction(R.mipmap.ic_launcher, "Recordarme mañana", actionIntent2)
                 .build();
 
+        //error here: there should be a different id for each notification in case of more than one vehicle being notified
         notificationManager.notify(1, notification);
     }
 }

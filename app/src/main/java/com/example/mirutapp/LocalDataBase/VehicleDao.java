@@ -21,4 +21,7 @@ public interface VehicleDao {
 
     @Query("SELECT * FROM vehicle")
     List<Vehicle> getAllVehicles();
+
+    @Query("SELECT * FROM vehicle WHERE id = :vehicleId")
+    Vehicle getVehicleById(int vehicleId);
 }
