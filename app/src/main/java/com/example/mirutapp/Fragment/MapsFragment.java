@@ -597,7 +597,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                 // custom dialog
                 final Dialog dialog = new Dialog(mContext);
 
-                dialog.setContentView(R.layout.custom3);
+                dialog.setContentView(R.layout.custom);
                 dialog.setTitle("Title...");
 
 
