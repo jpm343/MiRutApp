@@ -37,7 +37,6 @@ public class MyRouteRecyclerViewAdapter extends RecyclerView.Adapter<MyRouteRecy
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Route currentRoute = routes.get(position);
-        System.out.println(currentRoute.getRouteName());
         holder.routeName.setText(currentRoute.getRouteName());
         holder.routeHour.setText(String.valueOf(currentRoute.getAlarmHour())+":");
         holder.routeMinutes.setText(String.valueOf(currentRoute.getAlarmMinute()));
