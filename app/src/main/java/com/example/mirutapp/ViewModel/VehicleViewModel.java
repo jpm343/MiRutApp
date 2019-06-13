@@ -34,5 +34,13 @@ public class VehicleViewModel extends ViewModel {
         return Status.OK;
     }
 
+    public Status deleteVehicle(String patente){
+        vehicleRepository.deleteVehicle(patente);
+        return Status.OK;
+    }
 
+    public Status updateVehicle(String patenteOld, String patenteNew, String alias){
+        vehicleRepository.updateVehicle(patenteOld,patenteNew,alias);
+        return Status.OK;
+    }
 }
