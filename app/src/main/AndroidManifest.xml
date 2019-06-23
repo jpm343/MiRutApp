@@ -58,6 +58,8 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service android:name=".Services.RoutesAlarmSetterJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -71,5 +73,6 @@
 
         <receiver android:name=".Services.VehicleCheckAlarmReceiver" />
         <receiver android:name=".Services.DisableNotificationReceiver" />
+        <receiver android:name=".Services.RoutesAlarmReceiver" />
     </application>
 </manifest>

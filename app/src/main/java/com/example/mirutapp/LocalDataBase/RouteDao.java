@@ -14,7 +14,7 @@ import static androidx.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface RouteDao {
     @Insert(onConflict = REPLACE)
-    void save(Route route);
+    long save(Route route);
 
     @Query("SELECT * FROM route")
     LiveData<List<Route>> loadAll();

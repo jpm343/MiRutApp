@@ -8,6 +8,7 @@ import android.app.Service;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 
@@ -33,6 +34,7 @@ public class MiRutAppApplication extends Application implements HasServiceInject
     public static final String TAG = "MiRutAppApplication";
     public static final String CHANNEL_1_ID = "channel1";
     private ApplicationComponent applicationComponent;
+    private static Context appContext;
 
     @Override
     public AndroidInjector<Service> serviceInjector() {
@@ -42,6 +44,7 @@ public class MiRutAppApplication extends Application implements HasServiceInject
     @Override
     public void onCreate() {
         super.onCreate();
+        appContext = getApplicationContext();
 
         applicationComponent = DaggerApplicationComponent
                 .builder()
@@ -64,6 +67,10 @@ public class MiRutAppApplication extends Application implements HasServiceInject
                 PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    public static Context getAppContext() {
+        return appContext;
     }
 
     public ApplicationComponent getApplicationComponent() {

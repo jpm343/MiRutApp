@@ -1,5 +1,7 @@
 package com.example.mirutapp.Repository;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 
 import com.example.mirutapp.LocalDataBase.RouteDao;
@@ -28,9 +30,11 @@ public class RouteRepository {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                routeDao.save(route);
+                route.setId((int) routeDao.save(route));
+                Log.d("routeRepo1", String.valueOf(route.getId()));
             }
         });
+        Log.d("routeRepo2", String.valueOf(route.getId()));
     }
 
     public void turnOnNotifications(final Route route) {
@@ -53,4 +57,8 @@ public class RouteRepository {
         });
     }
 
+    //CAREFUL WITH THIS METHOD. IT IS SUPPOSED TO BE USED IN A BACKGROUND THREAD (MAY FREEZE UI)
+    public void createRouteInBackGround(Route route) {
+        route.setId((int) routeDao.save(route));
+    }
 }

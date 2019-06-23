@@ -494,7 +494,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                         int alarmHour = timePicker.getHour();
                         int alarmMinute = timePicker.getMinute();
                         String url = "https://maps.googleapis.com/maps/api/directions/json?origin=-33.452367254631895,-70.6842477992177&destination=-33.45019899569667,-70.67649889737368&sensor=false&key=AIzaSyCd9EduZIayU6ESWl8xB13Cily5Ju2y3hA";
-
                         viewModel.saveRoute(url, routeName, alarmHour, alarmMinute, days);
                         dialog.dismiss();
                         }else{
