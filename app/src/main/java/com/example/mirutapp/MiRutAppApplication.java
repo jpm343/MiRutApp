@@ -58,6 +58,7 @@ public class MiRutAppApplication extends Application implements HasServiceInject
 
     private void setVehicleCheckAlarm() {
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
         //calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         //calendar.set(7, );
         calendar.set(Calendar.HOUR_OF_DAY, 10);

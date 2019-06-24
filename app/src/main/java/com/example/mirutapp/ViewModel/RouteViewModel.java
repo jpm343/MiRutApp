@@ -1,12 +1,9 @@
 package com.example.mirutapp.ViewModel;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.os.PersistableBundle;
 import android.util.Log;
 
@@ -16,12 +13,9 @@ import androidx.lifecycle.ViewModel;
 import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Route;
 import com.example.mirutapp.Repository.RouteRepository;
-import com.example.mirutapp.Services.RoutesAlarmReceiver;
 import com.example.mirutapp.Services.RoutesAlarmSetterJobService;
 import com.google.gson.Gson;
 
-import java.security.acl.LastOwnerException;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
@@ -47,25 +41,19 @@ public class RouteViewModel extends ViewModel {
         if(days.isEmpty() || days.size() > 7)
             return Status.DAYS_ERROR;
 
-        //create and save
+        //create route
         Route route = new Route(url, routeName, alarmHour, alarmMinute, days);
 
-        //THE FOLLOWING MUST NOW BE DONE ON JOB SCHEDULER THREAD
-        //routeRepository.createRoute(route);
-
-        Log.d("routeviewmodel", String.valueOf(route.getId()));
-
-        //set alarm before return (maybe this should be done in a background job
-
-        //FIRST ATTEMPT
+        //set alarm before return. This should be done in a background job
         Context context = MiRutAppApplication.getAppContext();
 
+        //pass the route object using json
         Gson gson = new Gson();
         String json = gson.toJson(route);
-
         PersistableBundle bundle = new PersistableBundle();
         bundle.putString("Route", json);
 
+        //start background job
         ComponentName componentName = new ComponentName(context, RoutesAlarmSetterJobService.class);
         JobInfo info = new JobInfo.Builder(1, componentName)
                 .setOverrideDeadline(0)
@@ -81,11 +69,5 @@ public class RouteViewModel extends ViewModel {
         } else {
             return Status.DATABASE_ERROR;
         }
-
-        //END OF ATTEMPT
-
-        //this.setRouteAlarm(route);
     }
-
-
 }

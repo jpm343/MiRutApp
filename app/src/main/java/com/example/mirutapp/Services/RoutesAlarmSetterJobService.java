@@ -14,6 +14,7 @@ import com.example.mirutapp.Repository.RouteRepository;
 import com.google.gson.Gson;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.inject.Inject;
 
@@ -43,10 +44,11 @@ public class RoutesAlarmSetterJobService extends JobService {
                 Gson gson = new Gson();
                 Route route = gson.fromJson(json, Route.class);
 
+                //save route
                 repository.createRouteInBackGround(route);
 
-                Log.d(TAG, route.getRouteName());
-                Log.d(TAG, String.valueOf(route.getId()));
+                //set alarms
+                setRouteAlarm(route);
 
                 Log.d(TAG, "Job finished");
                 jobFinished(params, false);
@@ -65,27 +67,33 @@ public class RoutesAlarmSetterJobService extends JobService {
         Context context = getApplicationContext();
         Intent intent = new Intent(context, RoutesAlarmReceiver.class);
 
+        //put id to check repository in receiver class
+        intent.putExtra("RouteId", route.getId());
+
         //debug
-        Log.d("routeviewmodel", String.valueOf(route.getUrl().hashCode()));
+        Log.d(TAG+" routeId", String.valueOf(route.getId()));
 
         // Here we should verify if the alarm is created or not
         cancelAlarmIfExists(context, route.getId(), intent);
 
         for(int day: route.getDays()){
             // calendar enum starts at 1, so add 1 to day of week
+            Log.d(TAG, String.valueOf(day));
             scheduleAlarm(day+1, route, context, intent);
         }
     }
 
     private void scheduleAlarm(int dayOfWeek, Route route, Context context, Intent intent) {
         Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
         calendar.set(Calendar.HOUR_OF_DAY, route.getAlarmHour());
         calendar.set(Calendar.MINUTE, route.getAlarmMinute());
 
         // Check we aren't setting it in the past which would trigger it to fire instantly
         if(calendar.getTimeInMillis() < System.currentTimeMillis()) {
-            calendar.add(Calendar.DAY_OF_YEAR, 7);
+            calendar.add(Calendar.DAY_OF_YEAR, new GregorianCalendar().get(Calendar.DAY_OF_WEEK)-1);
+            //calendar.add(Calendar.DAY_OF_YEAR, 7);
         }
 
         // PendingIntent to be triggered

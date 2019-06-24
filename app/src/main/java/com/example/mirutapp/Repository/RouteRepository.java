@@ -57,8 +57,9 @@ public class RouteRepository {
         });
     }
 
-    //CAREFUL WITH THIS METHOD. IT IS SUPPOSED TO BE USED IN A BACKGROUND THREAD (MAY FREEZE UI)
+    //CAREFUL WITH THESE METHODS. THEY ARE SUPPOSED TO BE USED IN A BACKGROUND THREAD (MAY FREEZE UI)
     public void createRouteInBackGround(Route route) {
         route.setId((int) routeDao.save(route));
     }
+    public Route getRouteById(int routeId) { return routeDao.getRouteById(routeId); }
 }

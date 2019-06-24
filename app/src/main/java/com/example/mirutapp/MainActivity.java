@@ -66,15 +66,22 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new MapsFragment() ).commit();
+
         //verify if the app is launched from a notification
         String comesFromNotification = getIntent().getStringExtra("comesFromNotification");
         if(comesFromNotification != null) {
+            Log.d("mainActivity", comesFromNotification);
             if(comesFromNotification.equals("postFragment")) {
                 NewsFragment fragment = new NewsFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragment).commit();
             }
             else if(comesFromNotification.equals("vehiclesFragment")) {
                 VehicleFragment fragment = new VehicleFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragment).commit();
+            }
+            else if(comesFromNotification.equals("routeFragment")) {
+                RouteFragment fragment = new RouteFragment();
                 getSupportFragmentManager().beginTransaction().replace(R.id.content_main, fragment).commit();
             }
         }
@@ -98,9 +105,6 @@ public class MainActivity extends AppCompatActivity
                         System.out.println(token);
                     }
                 });
-
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_main, new MapsFragment() ).commit();
     }
 
     @Override
