@@ -14,7 +14,6 @@ import com.example.mirutapp.Repository.RouteRepository;
 import com.google.gson.Gson;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import javax.inject.Inject;
 
@@ -74,34 +73,28 @@ public class RoutesAlarmSetterJobService extends JobService {
         Log.d(TAG+" routeId", String.valueOf(route.getId()));
 
         // Here we should verify if the alarm is created or not
-        cancelAlarmIfExists(context, route.getId(), intent);
+        //cancelAlarmIfExists(context, route.getId(), intent);
 
-        for(int day: route.getDays()){
-            // calendar enum starts at 1, so add 1 to day of week
-            Log.d(TAG, String.valueOf(day));
-            scheduleAlarm(day+1, route, context, intent);
-        }
+        scheduleAlarm(route, context, intent);
     }
 
-    private void scheduleAlarm(int dayOfWeek, Route route, Context context, Intent intent) {
+    private void scheduleAlarm(Route route, Context context, Intent intent) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
         calendar.set(Calendar.HOUR_OF_DAY, route.getAlarmHour());
         calendar.set(Calendar.MINUTE, route.getAlarmMinute());
 
         // Check we aren't setting it in the past which would trigger it to fire instantly
-        if(calendar.getTimeInMillis() < System.currentTimeMillis()) {
-            calendar.add(Calendar.DAY_OF_YEAR, new GregorianCalendar().get(Calendar.DAY_OF_WEEK)-1);
-            //calendar.add(Calendar.DAY_OF_YEAR, 7);
-        }
+        Calendar now = Calendar.getInstance();
+        if(calendar.before(now))
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
 
         // PendingIntent to be triggered
         PendingIntent yourIntent =
                 PendingIntent.getBroadcast(context, route.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        // alarm is set to be triggered daily at given time. we should verify the day at broadcast receiver
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 7, yourIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, yourIntent);
         Log.d("routeviewmodel", "alarmScheduled");
     }
 

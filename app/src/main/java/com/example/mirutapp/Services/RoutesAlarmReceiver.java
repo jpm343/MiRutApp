@@ -18,6 +18,8 @@ import com.example.mirutapp.Model.Route;
 import com.example.mirutapp.R;
 import com.example.mirutapp.Repository.RouteRepository;
 
+import java.util.Calendar;
+
 import javax.inject.Inject;
 
 import static com.example.mirutapp.MiRutAppApplication.CHANNEL_1_ID;
@@ -39,8 +41,12 @@ public class RoutesAlarmReceiver extends BroadcastReceiver {
         int routeId = intent.getIntExtra("RouteId", -1);
         Route route = routeRepository.getRouteById(routeId);
 
-        //notify if route is notifying
-        this.sendNotification(route);
+        //notify if route is notifying and the current day match with any of the specified on route
+        Calendar c = Calendar.getInstance();
+        int currentDay = c.get(Calendar.DAY_OF_WEEK);
+        Log.d(TAG, String.valueOf(currentDay));
+        if(route.getDays().contains(currentDay-1))
+            this.sendNotification(route);
     }
 
     private void sendNotification(Route route) {
@@ -56,7 +62,7 @@ public class RoutesAlarmReceiver extends BroadcastReceiver {
         Notification notification = new NotificationCompat.Builder(appContext, CHANNEL_1_ID)
                 .setSmallIcon(R.drawable.ic_car)
                 .setColor(Color.BLUE)
-                .setVibrate(new long[] { 1000, 1000})
+                .setVibrate(new long[] {0, 500, 100, 500})
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setContentTitle(title)
                 .setContentText(messageBody)
