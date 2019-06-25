@@ -75,5 +75,12 @@
         <receiver android:name=".Services.VehicleCheckAlarmReceiver" />
         <receiver android:name=".Services.DisableNotificationReceiver" />
         <receiver android:name=".Services.RoutesAlarmReceiver" />
+        <receiver android:name=".Services.ResetRoutesAlarmAtBootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

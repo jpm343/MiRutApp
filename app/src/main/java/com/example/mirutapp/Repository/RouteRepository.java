@@ -62,4 +62,5 @@ public class RouteRepository {
         route.setId((int) routeDao.save(route));
     }
     public Route getRouteById(int routeId) { return routeDao.getRouteById(routeId); }
+    public List<Route> getAllRoutesInBackGround() { return routeDao.getAllRoutes(); }
 }

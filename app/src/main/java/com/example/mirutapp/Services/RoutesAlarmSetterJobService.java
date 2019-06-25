@@ -7,6 +7,7 @@ import android.app.job.JobService;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Route;
@@ -14,6 +15,7 @@ import com.example.mirutapp.Repository.RouteRepository;
 import com.google.gson.Gson;
 
 import java.util.Calendar;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -28,6 +30,16 @@ public class RoutesAlarmSetterJobService extends JobService {
         ((MiRutAppApplication) getApplicationContext())
                 .getApplicationComponent()
                 .inject(this);
+
+        //first check if we are doing a reset from boot receiver (when rebooting the device)
+        String resetFromReboot = params.getExtras().getString("ResetAlarms");
+        if(resetFromReboot != null && resetFromReboot.equals("true")) {
+            //do job in background
+            this.resetAlarmsInBackground();
+
+            //finally return to avoid doing unnecessary job
+            return true;
+        }
 
         Log.d(TAG, "Job started");
         this.doBackGroundWork(params);
@@ -51,6 +63,20 @@ public class RoutesAlarmSetterJobService extends JobService {
 
                 Log.d(TAG, "Job finished");
                 jobFinished(params, false);
+            }
+        }).start();
+    }
+
+    private void resetAlarmsInBackground() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //check all routes from repository and set their alarms
+                List<Route> routes = repository.getAllRoutesInBackGround();
+                for(Route route: routes) {
+                    Log.d(TAG, "Setting alarm for: "+route.getRouteName());
+                    setRouteAlarm(route);
+                }
             }
         }).start();
     }
