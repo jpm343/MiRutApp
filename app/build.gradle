@@ -64,6 +64,13 @@ dependencies {
 
     //for gmaps
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
+
+    implementation 'com.code-troopers.betterpickers:library:3.1.0'
+
+    implementation 'com.maltaisn:recurpicker:1.4.5'
+
+
+
 }
 
 //for firebase

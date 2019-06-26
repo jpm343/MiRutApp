@@ -94,7 +94,7 @@ public class RouteFragment extends Fragment {
         final MyRouteRecyclerViewAdapter adapter = new MyRouteRecyclerViewAdapter();
         recyclerRoutes.setAdapter(adapter);
 
-        /*viewModel = ViewModelProviders.of(this,viewModelFactory).get(RouteViewModel.class);
+        viewModel = ViewModelProviders.of(this,viewModelFactory).get(RouteViewModel.class);
         viewModel.init();
         viewModel.getRoutes().observe(this, new Observer<List<Route>>() {
             @Override
@@ -102,10 +102,10 @@ public class RouteFragment extends Fragment {
                 adapter.setRoutes(routes);
                 recyclerRoutes.setAdapter(adapter);
             }
-        });*/
+        });
         List<Route> routesFake = new ArrayList<>();
         //FAKE RUTAS
-        Set<Integer> days = new HashSet<Integer> ();
+        /*Set<Integer> days = new HashSet<Integer> ();
         days.add(1);
         days.add(2);
         days.add(0);
@@ -118,7 +118,7 @@ public class RouteFragment extends Fragment {
         days2.add(6);
         Route ruta2 = new Route("https:11232323","Casa a casa abuela",22,10,days2);
         routesFake.add(ruta2);
-        routesFake.add(ruta);
+        routesFake.add(ruta);*/
         adapter.setRoutes(routesFake);
         return view;
     }
