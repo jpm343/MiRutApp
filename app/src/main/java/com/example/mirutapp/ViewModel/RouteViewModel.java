@@ -1,9 +1,12 @@
 package com.example.mirutapp.ViewModel;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.os.PersistableBundle;
 import android.util.Log;
 
@@ -13,6 +16,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Route;
 import com.example.mirutapp.Repository.RouteRepository;
+import com.example.mirutapp.Services.RoutesAlarmReceiver;
 import com.example.mirutapp.Services.RoutesAlarmSetterJobService;
 import com.google.gson.Gson;
 
@@ -22,7 +26,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 public class RouteViewModel extends ViewModel {
-    public enum Status {OK, HOUR_ERROR, DAYS_ERROR, DATABASE_ERROR}
+    public enum Status {OK, HOUR_ERROR, DAYS_ERROR, DATABASE_ERROR, DELETE_ERROR}
     private LiveData<List<Route>> routes;
     private RouteRepository routeRepository;
 
@@ -69,5 +73,23 @@ public class RouteViewModel extends ViewModel {
         } else {
             return Status.DATABASE_ERROR;
         }
+    }
+
+    public Status deleteRoute(int routeId) {
+        //cancel alarms before delete
+        Context context = MiRutAppApplication.getAppContext();
+        Intent intent = new Intent(context, RoutesAlarmReceiver.class);
+        try {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, routeId, intent,0);
+            AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(pendingIntent);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Status.DELETE_ERROR;
+        }
+
+        //after that, safely delete the selected route
+        routeRepository.deleteRoute(routeId);
+        return Status.OK;
     }
 }

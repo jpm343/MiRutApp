@@ -37,6 +37,15 @@ public class RouteRepository {
         Log.d("routeRepo2", String.valueOf(route.getId()));
     }
 
+    public void deleteRoute(final int routeId) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                routeDao.deleteRouteById(routeId);
+            }
+        });
+    }
+
     public void turnOnNotifications(final Route route) {
         route.setNotificating(true);
         executor.execute(new Runnable() {
