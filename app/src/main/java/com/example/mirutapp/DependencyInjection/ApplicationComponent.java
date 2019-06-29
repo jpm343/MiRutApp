@@ -8,6 +8,8 @@ import com.example.mirutapp.Fragment.NewsFragment;
 import com.example.mirutapp.Fragment.RouteFragment;
 import com.example.mirutapp.Fragment.VehicleFragment;
 import com.example.mirutapp.Services.DisableNotificationReceiver;
+import com.example.mirutapp.Services.RoutesAlarmReceiver;
+import com.example.mirutapp.Services.RoutesAlarmSetterJobService;
 import com.example.mirutapp.Services.VehicleCheckAlarmReceiver;
 
 import javax.inject.Singleton;
@@ -23,7 +25,9 @@ public interface ApplicationComponent {
     void inject(RouteFragment routeFragment);
     void inject(VehicleCheckAlarmReceiver vehicleCheckAlarmReceiver);
     void inject(DisableNotificationReceiver disableNotificationReceiver);
+    void inject(RoutesAlarmReceiver routesAlarmReceiver);
     void inject(PatentesRecyclerViewAdapter patentesRecyclerViewAdapter);
+    void inject(RoutesAlarmSetterJobService routesAlarmSetterJobService);
     Application application();
 
 

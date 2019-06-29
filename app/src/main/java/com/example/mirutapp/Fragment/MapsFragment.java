@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,8 +21,6 @@ import android.widget.CheckBox;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-//import com.codetroopers.betterpickers.recurrencepicker.RecurrencePickerDialogFragment;
-//import com.codetroopers.betterpickers.timepicker.TimePickerBuilder;
 import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.DataParser;
 import com.example.mirutapp.Model.Incident;
@@ -29,6 +28,8 @@ import com.example.mirutapp.Model.Route;
 import com.example.mirutapp.R;
 
 import com.example.mirutapp.Repository.RouteRepository;
+import com.example.mirutapp.ViewModel.RouteViewModel;
+import com.example.mirutapp.ViewModel.RouteViewModelFactory;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,9 +39,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -80,6 +81,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     private String mParam1;
     private String mParam2;
 
+    //Attributes to RouteDialog Fragment. (add route)
+    private FloatingActionButton addRouteButton;
+
     private GoogleMap mMap;
     ArrayList<LatLng> MarkerPoints;
 
@@ -92,59 +96,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     boolean doubleBackToExitPressedOnce = false;
 
     @Inject
-    RouteRepository routeRepository;
+    RouteViewModelFactory routeViewModelFactory;
+    private RouteViewModel viewModel;
 
     public MapsFragment() {
         // Required empty public constructor
     }
-
-
-//
-//    class mylocationlistener implements LocationListener{
-//
-//        @Override
-//        public void onLocationChanged(Location location) {
-//
-//            if(location!=null)
-//            {
-//                double lat = location.getLatitude();
-//                double lng = location.getLongitude();
-//
-//            }
-//        }
-//
-//        @Override
-//        public void onProviderDisabled(String provider) {
-//            // TODO Auto-generated method stub
-//
-//        }
-//        @Override
-//        public void onProviderEnabled(String provider) {
-//            // TODO Auto-generated method stub
-//        }
-//        @Override
-//        public void onStatusChanged(String provider, int status,
-//                                    Bundle extras) {
-//            // TODO Auto-generated method stub
-//        }
-//    }
-
-//    mylocationlistener mylocationlistener = new mylocationlistener();
-//
-//    LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-//    Criteria criteria = new Criteria();
-//    String provider = locationManager.getBestProvider(criteria,
-//            true);
-//    Location location = locationManager.getLastKnownLocation(provider);
-//
-//    if (location != null) {
-//        mylocationlistener.onLocationChanged(location);
-//    }
-//    // updates location 30seconds once
-//    locationManager.requestLocationUpdates(provider, 30000, 0, this);
-
-
-
 
     /**
      * Use this factory method to create a new instance of
@@ -180,16 +137,26 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragment_maps);
-        if (mapFragment == null) {
-            mapFragment = SupportMapFragment.newInstance();
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_main, mapFragment).commit();
-        }
+        View v =  inflater.inflate(R.layout.fragment_maps, container, false);
+        SupportMapFragment mapFragment = (SupportMapFragment)this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        //initialize viewModel
+        viewModel = ViewModelProviders.of(this, routeViewModelFactory).get(RouteViewModel.class);
+
+        //button to open Route Dialog
+        addRouteButton = v.findViewById(R.id.addRouteButton);
+        addRouteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddRouteDialog dialog = new AddRouteDialog();
+                dialog.setTargetFragment(MapsFragment.this, 1);
+                dialog.show(MapsFragment.this.getFragmentManager(), "AddRouteDialog");
+            }
+        });
+
         MarkerPoints = new ArrayList<>();
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -227,22 +194,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-
-
-
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-33.4495857, -70.6823836);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marcador en tu posición").icon(BitmapDescriptorFactory.fromResource(R.drawable.iconuser)));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
-
         GetUOCT getUOCT = new GetUOCT();
-
         getUOCT.execute();
-
-
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
@@ -250,11 +209,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             public void onMapClick(LatLng point) {
                 // Already two locations
                 if (MarkerPoints.size() > 1) {
-
                     MarkerPoints.clear();
-//                    mMap.clear();
-
                 }
+
                 // Adding new item to the ArrayList
                 MarkerPoints.add(point);
 
@@ -277,7 +234,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 //                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                     options.icon(BitmapDescriptorFactory.fromResource(R.drawable.finish2));
                 }
-
 
                 // Add new marker to the Google Map Android API V2
                 mMap.addMarker(options);
@@ -320,105 +276,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
         });
 
-
-
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-
-
-
             @Override
             public boolean onMarkerClick(Marker marker) {
-
-//                Log.d("urlASD", "onInfoWindowClick: "+marker.getSnippet());
-
-//                Toast.makeText(, "Clicked"+marker.getTitle(), Toast.LENGTH_SHORT).show();
-
-//                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
-
-//                startActivity(new Intent(getActivity().getApplicationContext(), MapsFragment.class));
-//
-
-
-//                startActivity(browserIntent);
-
-//                String url = "http://www.google.com";
-//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-//                // Note the Chooser below. If no applications match,
-//                // Android displays a system message.So here there is no need for try-catch.
-//                startActivity(Intent.createChooser(intent, "Browse with"));
-
-
-
-//                startActivity(browserIntent);
-
-//                String url = "http://www.google.com";
-
-//                Intent intent = new Intent(mContext, MapsFragment.class);
-
-//                intent.setData(Uri.parse(url));
-
-//                startActivity(intent);
-
-
-
-//                if (doubleBackToExitPressedOnce) {
-//                    String urlString = marker.getSnippet();
-//                    Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(urlString));
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    intent.setPackage("com.android.chrome");
-//                    try {
-//                        mContext.startActivity(intent);
-//                    } catch (ActivityNotFoundException ex) {
-//                        // Chrome browser presumably not installed so allow user to choose instead
-//                        intent.setPackage(null);
-//                        mContext.startActivity(intent);
-//                    }
-//
-//                } else {
-//
-//                    doubleBackToExitPressedOnce = true;
-//
-//                    new Handler().postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            doubleBackToExitPressedOnce = false;
-//                        }
-//                    }, 2000);
-//                }
-
-
-
-
-
-
-//                if( isAdded()){
-//
-//                    // etc ...
-//                    Log.d("activity not null", "onMarkerClick: ");
-////                    startActivity(i);
-//                }else {
-//                    Log.d("activity null", "onMarkerClick: "+getContext());
-//                    Log.d("activity null", "onMarkerClick: "+mContext);
-//
-//                }
-
-
-
                 return false;
             }
         });
-
-
-
-
-
-
     }
-
-
-
-
-
 
     private String getUrl(LatLng origin, LatLng dest) {
 
@@ -442,14 +306,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         return url;
     }
 
-
-
     // Fetches data from url passed
     private class FetchUrl extends AsyncTask<String, Void, String> {
-
         @Override
         protected String doInBackground(String... url) {
-
             // For storing data from web service
             String data = "";
 
@@ -471,7 +331,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
             // Invokes the thread for parsing the JSON data
             parserTask.execute(result);
-
         }
     }
 
@@ -545,10 +404,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
             ArrayList<LatLng> points;
             PolylineOptions lineOptions = null;
-
-
             LinkedHashSet<Incident> hashSet = new LinkedHashSet<Incident>();
-
 
             // Traversing through all the routes
             for (int i = 0; i < result.size(); i++) {
@@ -566,12 +422,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                     double lng = Double.parseDouble(point.get("lng"));
                     LatLng position = new LatLng(lat, lng);
 
-
                     System.out.println("largo UOCT:"+MarkerPointsUOCT.size());
-
-
-
-
 
                     for (int k = 0; k < MarkerPointsUOCT.size(); k++) {
                         float distance = MarkerPointsUOCT.get(k).distanceInMeters(position);
@@ -579,23 +430,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                         System.out.println("Comparando:"+MarkerPointsUOCT.get(k).getLocation());
                         System.out.println("Comparando:"+position.toString());
 
-
-
                         if (distance < 300){
-
                             System.out.println("es menor a 100");
                             System.out.println("PUNTO QUE INFLUYE LA RUTA"+MarkerPointsUOCT.get(k).getDescription());
 
                             hashSet.add(MarkerPointsUOCT.get(k));
-
-//                            continue;
-
-//                            MarkerPointsUOCT.get(k)
-
                         }
-
                     }
-
 
                     points.add(position);
                 }
@@ -605,14 +446,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                 final Dialog dialog = new Dialog(mContext);
                 dialog.setContentView(R.layout.custom);
                 dialog.setTitle("Title...");
-//                // set the custom dialog components - text, image and button
-//                TextView text = (TextView) dialog.findViewById(R.id.text);
-//                text.setText("Android custom dialog example!");
-//                ImageView image = (ImageView) dialog.findViewById(R.id.image);
-//
-////                image.setImageResource(R.drawable.ic_launcher_foreground);
-//
-//
+
                 Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
                 final TimePicker timePicker = (TimePicker) dialog.findViewById(R.id.timePicker);
                 final CheckBox cbMonday = (CheckBox) dialog.findViewById(R.id.checkBox);
@@ -660,9 +494,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                         int alarmHour = timePicker.getHour();
                         int alarmMinute = timePicker.getMinute();
                         String url = "https://maps.googleapis.com/maps/api/directions/json?origin=-33.452367254631895,-70.6842477992177&destination=-33.45019899569667,-70.67649889737368&sensor=false&key=AIzaSyCd9EduZIayU6ESWl8xB13Cily5Ju2y3hA";
-
-                        Route ruta = new Route(url,routeName,alarmHour,alarmMinute,days);
-                        routeRepository.createRoute(ruta);
+                        viewModel.saveRoute(url, routeName, alarmHour, alarmMinute, days);
                         dialog.dismiss();
                         }else{
                             Toast.makeText(getContext(), "¡Nombre de ruta vacía!", Toast.LENGTH_LONG).show();
@@ -671,29 +503,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                 });
 
                 dialog.show();
-
-
-//
-//                dialog.show();
-
-
-//                RecurrencePickerDialog recurrencePickerDialog = new RecurrencePickerDialog();
-
-
-//                recurrencePickerDialog.show(getSupportFragmentManager(),"recurrencePicker");
-
-
-
-
-
-
-          //      TimePicker timePicker = (TimePicker) dialog.findViewById(R.id.timePicker);
-
-
-
-
-
-
 
                 Toast toast1 =
                         Toast.makeText(mContext,
@@ -779,27 +588,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
             {
                 try {
                     JSONArray incidents = response.getJSONArray("incidents");
-
-
-//                    System.out.println(incidents.length());
-
                     Gson gson=new Gson();
-
                     Incident[] incidentsObjects = new Incident[incidents.length()];
 
-
-
                     for (int i = 0; i < incidents.length(); i++) {
-//                        Log.e("Incidents"+i,incidents.get(i).toString());
-
                         Incident incident =gson.fromJson(incidents.get(i).toString(),Incident.class);
                         incidentsObjects[i] = incident;
 
                         MarkerPointsUOCT.add(incident);
-
-//
-//                        Log.e("Incidents"+i, incident.toString());
-
                     }
 
                     for (int i = 0; i < incidentsObjects.length ; i++) {
@@ -826,34 +622,20 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                          * for the end location, the color of marker is RED.
                          */
 
-//                        options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
-
                         options.icon(BitmapDescriptorFactory.fromResource(R.drawable.shieldwarning));
-
-
-
 
                         Log.e("Marker","options" +options);
                         // Add new marker to the Google Map Android API V2
                         mMap.addMarker(options);
-
-
-
-
                     }
 
                     Log.e("Incidents",incidents.toString());
                     Log.e("App", "Success: " + response.getString("incidents") );
-//                Log.e("App", "Success: " + response.getString("yourJsonElement") );
 
                 } catch (JSONException ex) {
                     Log.e("App", "Failure", ex);
                 }
             }
         }
-
     }
-
-
-
 }
