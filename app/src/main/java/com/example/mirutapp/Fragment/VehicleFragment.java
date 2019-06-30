@@ -171,13 +171,16 @@ public class VehicleFragment extends Fragment implements AddVehicleDialog.Connec
     }
 
     @Override
-    public int sendInput(String patente, String alias) {
+    public int sendInput(String patente, String alias, Vehicle.CarType type, boolean selloVerde) {
         //Saves a vehicle
-        VehicleViewModel.Status status =viewModel.saveVehicle(patente,alias);
+        VehicleViewModel.Status status =viewModel.saveVehicle(patente,alias,type,selloVerde);
         if(status == VehicleViewModel.Status.ERROR){
-            Toast.makeText(getContext(), "Error en el formato de la patente. (Ejemplo: AABB12)", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Error en el formato de la patente. (Ejemplo: AABB12 para auto o camión)", Toast.LENGTH_LONG).show();
             return 0;
-        }else
+        } else if(status == VehicleViewModel.Status.ERROR_MOTO) {
+            Toast.makeText(getContext(), "Error en el formato de la patente. (Ejemplo: AA123 ó AAA12 para motos)", Toast.LENGTH_LONG).show();
+            return 0;
+        }
             return 1;
     }
 
