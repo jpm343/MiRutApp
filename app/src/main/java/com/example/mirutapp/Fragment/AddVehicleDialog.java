@@ -80,44 +80,45 @@ public class AddVehicleDialog extends DialogFragment {
                 String inputPatente = editTextPatente.getText().toString();
                 String inputAlias = editTextAlias.getText().toString();
 
-                Vehicle.CarType type = Vehicle.CarType.AUTO;
+                Vehicle.CarType type;
                 boolean selloVerde = false;
-                //static
-                /*Vehicle.CarType type = Vehicle.CarType.AUTO;
-                boolean selloVerde = true;*/
 
                 if(radioAuto.isChecked()) {
                     type = Vehicle.CarType.AUTO;
-                    if(radioSi.isChecked())
-                        selloVerde=true;
-                    else if(radioNo.isChecked())
-                        selloVerde=false;
-                    else
-                        Toast.makeText(getContext(), "Debe seleccionar si es sello verde.", Toast.LENGTH_LONG).show();
                 }else if(radioCamion.isChecked()) {
                     type = Vehicle.CarType.CAMION;
-                    if(radioSi.isChecked())
-                        selloVerde=true;
-                    else if(radioNo.isChecked())
-                        selloVerde=false;
-                    else
-                        Toast.makeText(getContext(), "Debe seleccionar si es sello verde.", Toast.LENGTH_LONG).show();
                 }else if(radioMoto.isChecked()){
                     type = Vehicle.CarType.MOTO;
                     selloVerde = false;
                 }else{
-                    Toast.makeText(getContext(), "Debe seleccionar un tipo de auto.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Debe seleccionar un tipo de vehiculo.", Toast.LENGTH_LONG).show();
+                    type = null;
                 }
 
-                if(!inputAlias.equals("")){
-                    if(!inputPatente.equals("")){
-                        if(connectFragment.sendInput(inputPatente, inputAlias, type, selloVerde) == 1)
-                        getDialog().dismiss();
+                if(!inputPatente.equals("")){
+                    if(!inputAlias.equals("")){
+                        if(type != null){
+                            if(radioSi.isEnabled() && radioNo.isEnabled()){
+                                if(radioSi.isChecked()) {
+                                    selloVerde = true;
+                                    if(connectFragment.sendInput(inputPatente, inputAlias, type, selloVerde) == 1)
+                                        getDialog().dismiss();
+                                }else if(radioNo.isChecked()) {
+                                    selloVerde = false;
+                                    if(connectFragment.sendInput(inputPatente, inputAlias, type, selloVerde) == 1)
+                                        getDialog().dismiss();
+                                }else
+                                    Toast.makeText(getContext(), "Debe seleccionar si es sello verde.", Toast.LENGTH_LONG).show();
+                            }else{
+                                if(connectFragment.sendInput(inputPatente, inputAlias, type, selloVerde) == 1)
+                                    getDialog().dismiss();
+                            }
+                        }
                     }else{
-                        Toast.makeText(getContext(), "Debe ingresar una patente.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "Debe ingresar un nombre.", Toast.LENGTH_LONG).show();
                     }
                 }else{
-                    Toast.makeText(getContext(), "Debe ingresar un nombre.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Debe ingresar una patente.", Toast.LENGTH_LONG).show();
                 }
             }
         });
