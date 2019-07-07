@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:usesCleartextTraffic="true"
@@ -58,6 +59,8 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service android:name=".Services.RoutesAlarmSetterJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -71,5 +74,14 @@
 
         <receiver android:name=".Services.VehicleCheckAlarmReceiver" />
         <receiver android:name=".Services.DisableNotificationReceiver" />
+        <receiver android:name=".Services.RoutesAlarmReceiver" />
+        <receiver android:name=".Services.ResetRoutesAlarmAtBootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".Services.VehicleRestrictionReceiver" />
     </application>
 </manifest>

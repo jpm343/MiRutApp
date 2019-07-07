@@ -66,9 +66,13 @@ public class VehicleCheckAlarmReceiver extends BroadcastReceiver {
         for(Vehicle vehicle: vehicleList){
             vehicle.setNotificating(true);
             Log.d(TAG, String.valueOf(vehicle.isNotificating()));
+
+            //check for rules
             if(vehicle.isNotificating()) {
-                //check for rules
-                char lastDigit = vehicle.getPatente().charAt(5);
+                String patente = vehicle.getPatente();
+
+                //last digit of patente depends on vehicle type
+                char lastDigit = (vehicle.getType() == Vehicle.CarType.MOTO)? patente.charAt(4) : patente.charAt(5);
                 if(digit == Character.getNumericValue(lastDigit))
                     sendNotification(vehicle);
             }
@@ -141,6 +145,10 @@ public class VehicleCheckAlarmReceiver extends BroadcastReceiver {
                     .addAction(R.mipmap.ic_launcher, "Recordarme mañana", actionIntent2)
                     .build();
             Log.d(TAG, String.valueOf(vehicle.getId()));
+            Log.d(TAG, vehicle.getPatente());
+            Log.d(TAG, vehicle.getAlias());
+            Log.d(TAG, String.valueOf(vehicle.getType()));
+            Log.d(TAG, String.valueOf(vehicle.hasSelloVerde()));
             notificationManager.notify(vehicle.getId(), notification);
         }
     }

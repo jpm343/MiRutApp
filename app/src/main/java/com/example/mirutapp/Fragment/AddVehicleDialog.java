@@ -14,13 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.mirutapp.Model.Vehicle;
 import com.example.mirutapp.R;
 
 public class AddVehicleDialog extends DialogFragment {
 
     //Interface which passes the parameters to the VehicleFragment
     public interface ConnectFragment{
-        int sendInput(String patente, String alias);
+        int sendInput(String patente, String alias, Vehicle.CarType type, boolean selloVerde);
         int updateInput(String patenteNew, String patenteOld, String alias);
     }
 
@@ -57,10 +58,14 @@ public class AddVehicleDialog extends DialogFragment {
                 String inputPatente = editTextPatente.getText().toString();
                 String inputAlias = editTextAlias.getText().toString();
 
+                //static
+                Vehicle.CarType type = Vehicle.CarType.AUTO;
+                boolean selloVerde = true;
+
                 if(!inputAlias.equals("")){
                     if(!inputPatente.equals("")){
-                        if(connectFragment.sendInput(inputPatente, inputAlias) == 1)
-                            getDialog().dismiss();
+                        if(connectFragment.sendInput(inputPatente, inputAlias, type, selloVerde) == 1)
+                        getDialog().dismiss();
                     }else{
                         Toast.makeText(getContext(), "Debe ingresar una patente", Toast.LENGTH_LONG).show();
                     }
