@@ -1,6 +1,7 @@
 package com.example.mirutapp.Fragment;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -18,9 +19,6 @@ import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Incident;
 import com.example.mirutapp.Model.Location;
 import com.example.mirutapp.R;
-import com.example.mirutapp.Fragment.dummy.DummyContent;
-import com.example.mirutapp.Fragment.dummy.DummyContent.DummyItem;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +37,7 @@ public class HazardFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private List<Incident> incidents = new ArrayList<>();
     RecyclerView recyclerIncident;
+   // private HazardViewModel viewModel;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -81,6 +80,9 @@ public class HazardFragment extends Fragment {
         final MyHazardRecyclerViewAdapter adapter = new MyHazardRecyclerViewAdapter();
         // Set the adapter
         recyclerIncident.setAdapter(adapter);
+
+
+
         List<Incident> incidentsFake = new ArrayList<>();
         String[][] poly= {{"-33.5009345","-70.7100724"},{"-33.5009345","-70.7100724"}};
         Location location = new Location(poly,"Pedro Aguirre Cerda");
@@ -126,6 +128,6 @@ public class HazardFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Uri uri);
     }
 }
