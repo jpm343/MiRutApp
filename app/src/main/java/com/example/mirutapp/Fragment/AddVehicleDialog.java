@@ -91,7 +91,6 @@ public class AddVehicleDialog extends DialogFragment {
                     type = Vehicle.CarType.MOTO;
                     selloVerde = false;
                 }else{
-                    Toast.makeText(getContext(), "Debe seleccionar un tipo de vehiculo.", Toast.LENGTH_LONG).show();
                     type = null;
                 }
 
@@ -113,6 +112,8 @@ public class AddVehicleDialog extends DialogFragment {
                                 if(connectFragment.sendInput(inputPatente, inputAlias, type, selloVerde) == 1)
                                     getDialog().dismiss();
                             }
+                        }else{
+                            Toast.makeText(getContext(), "Debe seleccionar un tipo de vehiculo.", Toast.LENGTH_LONG).show();
                         }
                     }else{
                         Toast.makeText(getContext(), "Debe ingresar un nombre.", Toast.LENGTH_LONG).show();

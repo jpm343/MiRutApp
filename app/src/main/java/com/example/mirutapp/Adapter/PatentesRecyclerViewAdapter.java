@@ -1,6 +1,8 @@
 package com.example.mirutapp.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +61,25 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vehicleRepository.deleteVehicle(patentesList.get(position));
+                final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                //builder.setTitle();
+                builder.setMessage("¿Estás seguro que quieres eliminar el vehículo "+patentesList.get(position)+"?");
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        vehicleRepository.deleteVehicle(patentesList.get(position));
+                        Toast.makeText(mContext, "Vehículo eliminado exitosamente.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
@@ -69,7 +89,7 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
                 /*AddVehicleDialog dialog = new AddVehicleDialog();
                 dialog.setTargetFragment(VehicleFragment.this,1);
                 dialog.show(getFragmentManager(),"AddVehicleDialog");*/
-                vehicleRepository.updateVehicle(patentesList.get(position),"hola23","alias nuevo");
+                //vehicleRepository.updateVehicle(patentesList.get(position),"hola23","alias nuevo");
             }
         });
 
