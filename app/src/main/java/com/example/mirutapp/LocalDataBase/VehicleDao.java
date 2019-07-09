@@ -30,4 +30,7 @@ public interface VehicleDao {
 
     @Query("UPDATE vehicle SET patente = :patenteNew, alias = :alias WHERE patente = :patenteOld")
     void updateVehicleByPatente(String patenteOld, String patenteNew, String alias);
+
+    @Query("SELECT * FROM vehicle WHERE type = :carType")
+    List<Vehicle> selectByCarType(Vehicle.CarType carType);
 }

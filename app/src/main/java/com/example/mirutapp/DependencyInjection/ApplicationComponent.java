@@ -11,6 +11,7 @@ import com.example.mirutapp.Services.DisableNotificationReceiver;
 import com.example.mirutapp.Services.RoutesAlarmReceiver;
 import com.example.mirutapp.Services.RoutesAlarmSetterJobService;
 import com.example.mirutapp.Services.VehicleCheckAlarmReceiver;
+import com.example.mirutapp.Services.VehicleRestrictionReceiver;
 
 import javax.inject.Singleton;
 
@@ -28,6 +29,7 @@ public interface ApplicationComponent {
     void inject(RoutesAlarmReceiver routesAlarmReceiver);
     void inject(PatentesRecyclerViewAdapter patentesRecyclerViewAdapter);
     void inject(RoutesAlarmSetterJobService routesAlarmSetterJobService);
+    void inject(VehicleRestrictionReceiver vehicleRestrictionReceiver);
     Application application();
 
 
