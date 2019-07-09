@@ -1,12 +1,18 @@
 package com.example.mirutapp.Adapter;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,8 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mirutapp.Fragment.AddVehicleDialog;
-import com.example.mirutapp.Fragment.VehicleFragment;
 import com.example.mirutapp.MiRutAppApplication;
+import com.example.mirutapp.Model.Vehicle;
 import com.example.mirutapp.R;
 import com.example.mirutapp.Repository.VehicleRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,15 +34,19 @@ import javax.inject.Inject;
 
 public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRecyclerViewAdapter.ViewHolder>{
 
-    private ArrayList<String> patentesList = new ArrayList<>();
-    private ArrayList<String> aliasList = new ArrayList<>();
+    private ArrayList<Vehicle> vehiclesList = new ArrayList<>();
     private Context mContext;
+    public Dialog updateVehicleDialog;
+    EditText editTextPatente, editTextAlias;
+    RadioButton radioAuto, radioMoto, radioCamion, radioSi, radioNo;
+    Button buttonGuardar, buttonCancelar;
+    public AddVehicleDialog.ConnectFragment connectFragment;
+
     @Inject
     VehicleRepository vehicleRepository;
 
-    public PatentesRecyclerViewAdapter(ArrayList<String> patentesList, ArrayList<String> aliasList, Context mContext) {
-        this.patentesList = patentesList;
-        this.aliasList = aliasList;
+    public PatentesRecyclerViewAdapter(ArrayList<Vehicle> vehiclesList, Context mContext) {
+        this.vehiclesList = vehiclesList;
         this.mContext = mContext;
     }
 
@@ -51,29 +61,49 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
                 .getApplicationComponent()
                 .inject(this);
 
+        //Initialize Dialog
+        updateVehicleDialog = new Dialog(mContext);
+        updateVehicleDialog.setContentView(R.layout.dialog_add_vehicle);
+
+        //Texts
+        editTextPatente = updateVehicleDialog.findViewById(R.id.editTextPatente);
+        editTextAlias = updateVehicleDialog.findViewById(R.id.editTextAlias);
+
+        //Radio buttons
+        radioAuto = updateVehicleDialog.findViewById(R.id.radio_auto);
+        radioMoto = updateVehicleDialog.findViewById(R.id.radio_moto);
+        radioCamion = updateVehicleDialog.findViewById(R.id.radio_camion);
+        radioSi = updateVehicleDialog.findViewById(R.id.radio_si);
+        radioNo = updateVehicleDialog.findViewById(R.id.radio_no);
+
+        //Buttons
+        buttonCancelar = updateVehicleDialog.findViewById(R.id.buttonCancelar);
+        buttonGuardar = updateVehicleDialog.findViewById(R.id.buttonGuardar);
+
         return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        holder.textPatente.setText(patentesList.get(position));
-        holder.textAlias.setText(aliasList.get(position));
+        holder.textPatente.setText(vehiclesList.get(position).getPatente());
+        holder.textAlias.setText(vehiclesList.get(position).getAlias());
+
+        //Delete Button
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                //builder.setTitle();
-                builder.setMessage("¿Estás seguro que quieres eliminar el vehículo "+patentesList.get(position)+"?");
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                builder.setMessage("¿Estás seguro que quieres eliminar el vehículo "+vehiclesList.get(position).getPatente().toUpperCase()+"?");
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
                 });
-                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        vehicleRepository.deleteVehicle(patentesList.get(position));
+                        vehicleRepository.deleteVehicle(vehiclesList.get(position).getPatente());
                         Toast.makeText(mContext, "Vehículo eliminado exitosamente.", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -83,32 +113,133 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
             }
         });
 
+        //Edit Button
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*AddVehicleDialog dialog = new AddVehicleDialog();
-                dialog.setTargetFragment(VehicleFragment.this,1);
-                dialog.show(getFragmentManager(),"AddVehicleDialog");*/
-                //vehicleRepository.updateVehicle(patentesList.get(position),"hola23","alias nuevo");
+                updateVehicleDialog.show();
+
+                //Assign all values
+                //EditTexts
+                editTextPatente.setText(vehiclesList.get(position).getPatente());
+                editTextAlias.setText(vehiclesList.get(position).getAlias());
+
+                //RadioButtons
+                switch(vehiclesList.get(position).getType()){
+                    case AUTO:
+                        radioAuto.setChecked(true);
+                        break;
+                    case CAMION:
+                        radioCamion.setChecked(true);
+                        break;
+                    case MOTO:
+                        radioMoto.setChecked(true);
+                        radioSi.setEnabled(false);
+                        radioNo.setEnabled(false);
+                        break;
+                }
+
+                radioMoto.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if(isChecked) {
+                            radioSi.setEnabled(false);
+                            radioNo.setEnabled(false);
+                        }else{
+                            radioSi.setEnabled(true);
+                            radioNo.setEnabled(true);
+                        }
+                    }
+                });
+
+                if(radioSi.isEnabled() && radioNo.isEnabled()){
+                    if(vehiclesList.get(position).hasSelloVerde()){
+                        radioSi.setChecked(true);
+                    }else{
+                        radioNo.setChecked(true);
+                    }
+                }
+
+                //Buttons
+                buttonCancelar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        updateVehicleDialog.dismiss();
+                    }
+                });
+                buttonGuardar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String inputPatente = editTextPatente.getText().toString();
+                        String inputAlias = editTextAlias.getText().toString();
+
+                        Vehicle.CarType type;
+                        boolean selloVerde = false;
+
+                        if(radioAuto.isChecked()) {
+                            type = Vehicle.CarType.AUTO;
+                        }else if(radioCamion.isChecked()) {
+                            type = Vehicle.CarType.CAMION;
+                        }else if(radioMoto.isChecked()){
+                            type = Vehicle.CarType.MOTO;
+                            selloVerde = false;
+                        }else{
+                            type = null;
+                        }
+
+                        if(!inputPatente.equals("")){
+                            if(!inputAlias.equals("")){
+                                if(type != null){
+                                    if(radioSi.isEnabled() && radioNo.isEnabled()){
+                                        if(radioSi.isChecked()) {
+                                            selloVerde = true;
+                                            vehicleRepository.updateVehicle(vehiclesList.get(position).getPatente(),inputPatente, inputAlias, type, selloVerde);
+                                            updateVehicleDialog.dismiss();
+                                        }else if(radioNo.isChecked()) {
+                                            selloVerde = false;
+                                            vehicleRepository.updateVehicle(vehiclesList.get(position).getPatente(),inputPatente, inputAlias, type, selloVerde);
+                                            updateVehicleDialog.dismiss();
+                                        }else
+                                            Toast.makeText(mContext, "Debe seleccionar si es sello verde.", Toast.LENGTH_LONG).show();
+                                    }else{
+                                        System.out.println(vehiclesList.get(position).getPatente());
+                                        System.out.println(inputPatente);
+                                        System.out.println(inputAlias);
+                                        System.out.println(type);
+                                        System.out.println(selloVerde);
+                                        vehicleRepository.updateVehicle(vehiclesList.get(position).getPatente(),inputPatente, inputAlias, type, selloVerde);
+                                        updateVehicleDialog.dismiss();
+                                    }
+                                }else{
+                                    Toast.makeText(mContext, "Debe seleccionar un tipo de vehiculo.", Toast.LENGTH_LONG).show();
+                                }
+                            }else{
+                                Toast.makeText(mContext, "Debe ingresar un nombre.", Toast.LENGTH_LONG).show();
+                            }
+                        }else{
+                            Toast.makeText(mContext, "Debe ingresar una patente.", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
             }
         });
 
-        holder.misPatentesLayout.setOnClickListener(new View.OnClickListener(){
+        //Information Button
+        /*holder.misPatentesLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, aliasList.get(position), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, vehiclesList.get(position).getAlias(), Toast.LENGTH_LONG).show();
             }
-        });
+        });*/
     }
 
     @Override
     public int getItemCount() {
-        return patentesList.size();
+        return vehiclesList.size();
     }
 
-    public void setInfoList(ArrayList<String> patentesList, ArrayList<String> aliasList){
-       this.patentesList = patentesList;
-       this.aliasList = aliasList;
+    public void setInfoList(ArrayList<Vehicle> vehiclesList){
+        this.vehiclesList = vehiclesList;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

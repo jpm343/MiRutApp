@@ -68,11 +68,11 @@ public class VehicleRepository {
         });
     }
 
-    public void updateVehicle(final String patenteOld, final String patenteNew, final String alias){
+    public void updateVehicle(final String patenteOld, final String patenteNew, final String alias, final Vehicle.CarType type, final boolean selloVerde){
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                vehicleDao.updateVehicleByPatente(patenteOld, patenteNew, alias);
+                vehicleDao.updateVehicleByPatente(patenteOld, patenteNew, alias, type.getCode(), selloVerde);
             }
         });
     }

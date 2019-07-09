@@ -24,7 +24,7 @@ public class AddVehicleDialog extends DialogFragment {
     //Interface which passes the parameters to the VehicleFragment
     public interface ConnectFragment{
         int sendInput(String patente, String alias, Vehicle.CarType type, boolean selloVerde);
-        int updateInput(String patenteNew, String patenteOld, String alias);
+        int updateInput(String patenteNew, String patenteOld, String alias, Vehicle.CarType type, boolean selloVerde);
     }
 
     public ConnectFragment connectFragment;
