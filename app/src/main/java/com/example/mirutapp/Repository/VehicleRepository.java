@@ -26,11 +26,6 @@ public class VehicleRepository {
         return vehicleDao.loadAll();
     }
 
-    //this could freeze UI. be aware to use this method in background services only
-    public List<Vehicle> loadAll() {
-        return vehicleDao.getAllVehicles();
-    }
-
     public void createVehicle(final Vehicle vehicle) {
         executor.execute(new Runnable() {
             @Override
@@ -50,15 +45,6 @@ public class VehicleRepository {
         });
     }
 
-    //same with this. don't use on UI
-    public void turnOffNotificationsById(int id) {
-        Vehicle vehicle = vehicleDao.getVehicleById(id);
-        if(vehicle != null) {
-            vehicle.setNotificating(false);
-            vehicleDao.save(vehicle);
-        }
-    }
-
     public void deleteVehicle(final String patente){
         executor.execute(new Runnable() {
             @Override
@@ -75,5 +61,19 @@ public class VehicleRepository {
                 vehicleDao.updateVehicleByPatente(patenteOld, patenteNew, alias, type.getCode(), selloVerde);
             }
         });
+    }
+
+    // warning, the following methods could freeze UI. be aware to use this method in background services only
+    public List<Vehicle> loadAll() {
+        return vehicleDao.getAllVehicles();
+    }
+    public List<Vehicle> selectByCarType(Vehicle.CarType type) { return vehicleDao.selectByCarType(type); }
+
+    public void turnOffNotificationsById(int id) {
+        Vehicle vehicle = vehicleDao.getVehicleById(id);
+        if(vehicle != null) {
+            vehicle.setNotificating(false);
+            vehicleDao.save(vehicle);
+        }
     }
 }
