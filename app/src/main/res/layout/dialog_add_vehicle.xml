@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="200dp"
+    android:layout_width="match_parent" android:layout_height="400dp"
     android:paddingEnd="20dp"
     android:paddingStart="20dp"
     android:paddingBottom="20dp"
@@ -10,41 +10,116 @@
         android:id="@+id/editTextPatente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:ems="10"
-        android:inputType="text"
-        android:hint="Patente" />
+        android:hint="Patente"
+        android:inputType="text" />
 
     <EditText
         android:id="@+id/editTextAlias"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextPatente"
-        android:layout_marginTop="9dp"
-        android:layout_centerHorizontal="true"
+        android:layout_marginTop="52dp"
         android:ems="10"
-        android:inputType="text"
-        android:hint="Alias" />
+        android:hint="Alias"
+        android:inputType="text" />
 
     <Button
         android:id="@+id/buttonCancelar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextAlias"
-        android:layout_marginTop="21dp"
-        android:layout_alignParentStart="true"
+        android:layout_marginTop="320dp"
         android:text="Cancelar" />
 
     <Button
         android:id="@+id/buttonGuardar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextAlias"
-        android:layout_marginTop="21dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:layout_marginStart="2dp"
         android:layout_alignParentStart="@id/buttonCancelar"
         android:layout_toEndOf="@+id/buttonCancelar"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_marginTop="320dp"
         android:text="Guardar" />
+
+    <TextView
+        android:id="@+id/textViewPatent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
+        android:text="Ingrese la patente:" />
+
+    <TextView
+        android:id="@+id/textViewNombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="93dp"
+        android:text="Ingrese un nombre para el Vehículo:" />
+
+    <TextView
+        android:id="@+id/textViewTipo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="192dp"
+        android:text="Tipo de Vehículo: " />
+
+    <RadioGroup
+        android:id="@+id/opciones_tipo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="210dp"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/radio_auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Auto" />
+
+        <RadioButton
+            android:id="@+id/radio_moto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Moto" />
+        <RadioButton
+            android:id="@+id/radio_camion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Camión" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textViewSello"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="260dp"
+        android:text="¿Tiene sello verde?" />
+
+    <RadioGroup
+        android:id="@+id/opciones_sello"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="280dp"
+        android:orientation="horizontal">
+        <RadioButton
+            android:id="@+id/radio_si"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:checked="false"
+            android:text="Sí" />
+
+        <RadioButton
+            android:id="@+id/radio_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="No" />
+    </RadioGroup>
+
 </RelativeLayout>

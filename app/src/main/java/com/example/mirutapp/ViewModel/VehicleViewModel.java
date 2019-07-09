@@ -43,8 +43,8 @@ public class VehicleViewModel extends ViewModel {
         return Status.OK;
     }
 
-    public Status updateVehicle(String patenteOld, String patenteNew, String alias){
-        vehicleRepository.updateVehicle(patenteOld,patenteNew,alias);
+    public Status updateVehicle(String patenteOld, String patenteNew, String alias, Vehicle.CarType type, boolean selloVerde){
+        vehicleRepository.updateVehicle(patenteOld,patenteNew,alias, type, selloVerde);
         return Status.OK;
     }
 }

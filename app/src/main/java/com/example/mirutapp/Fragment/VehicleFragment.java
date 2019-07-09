@@ -5,18 +5,14 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.mirutapp.Adapter.PatentesRecyclerViewAdapter;
@@ -56,8 +52,7 @@ public class VehicleFragment extends Fragment implements AddVehicleDialog.Connec
     private OnFragmentInteractionListener mListener;
 
     //Important attributes for vehicles
-    private ArrayList<String> patenteList = new ArrayList<>();
-    private ArrayList<String> aliasList = new ArrayList<>();
+    private ArrayList<Vehicle> vehiclesList = new ArrayList<>();
     private RecyclerView recyclerView;
 
     //Attributes for dialogFragment (add vehicle)
@@ -122,7 +117,7 @@ public class VehicleFragment extends Fragment implements AddVehicleDialog.Connec
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         //Instance the recyclerView adapter
-        final PatentesRecyclerViewAdapter prvAdapter = new PatentesRecyclerViewAdapter(patenteList,aliasList,this.getContext());
+        final PatentesRecyclerViewAdapter prvAdapter = new PatentesRecyclerViewAdapter(vehiclesList,this.getContext());
         recyclerView.setAdapter(prvAdapter);
 
         //Initialize viewModel
@@ -133,13 +128,11 @@ public class VehicleFragment extends Fragment implements AddVehicleDialog.Connec
         viewModel.getVehicles().observe(this, new Observer<List<Vehicle>>() {
             @Override
             public void onChanged(List<Vehicle> vehicles) {
-                patenteList.clear();
-                aliasList.clear();
+                vehiclesList.clear();
                 for (Vehicle vehicle: vehicles) {
-                    patenteList.add(vehicle.getPatente());
-                    aliasList.add(vehicle.getAlias());
+                    vehiclesList.add(vehicle);
                 }
-                prvAdapter.setInfoList(patenteList,aliasList);
+                prvAdapter.setInfoList(vehiclesList);
                 recyclerView.setAdapter(prvAdapter);
             }
         });
@@ -185,8 +178,8 @@ public class VehicleFragment extends Fragment implements AddVehicleDialog.Connec
     }
 
     @Override
-    public int updateInput(String patenteOld, String patenteNew, String alias) {
-        VehicleViewModel.Status status = viewModel.updateVehicle(patenteOld,patenteNew,alias);
+    public int updateInput(String patenteOld, String patenteNew, String alias, Vehicle.CarType type, boolean selloVerde) {
+        VehicleViewModel.Status status = viewModel.updateVehicle(patenteOld,patenteNew,alias, type, selloVerde);
         if(status == VehicleViewModel.Status.OK){
             return 1;
         }else {
