@@ -9,9 +9,10 @@ public class VehicleRestriction {
     private String fecha_title;
     private String tipo_alerta;
 
-    // the following 4 fields are important.
+    // the following 5 fields are important.
     private String csv;
     private String ssv;
+    private String bike;
     private String truck_ssv;
     private String truck_csv;
 
@@ -28,6 +29,7 @@ public class VehicleRestriction {
     public String getTipo_alerta() { return tipo_alerta; }
     public String getCsv() { return csv; }
     public String getSsv() { return ssv; }
+    public String getBike() { return bike; }
     public String getTruck_ssv() { return truck_ssv; }
     public String getTruck_csv() { return truck_csv; }
     public String getUrl() { return url; }
@@ -42,6 +44,7 @@ public class VehicleRestriction {
     public void setTipo_alerta(String tipo_alerta) { this.tipo_alerta = tipo_alerta; }
     public void setCsv(String csv) { this.csv = csv; }
     public void setSsv(String ssv) { this.ssv = ssv; }
+    public void setBike(String bike) { this.bike = bike; }
     public void setTruck_ssv(String truck_ssv) { this.truck_ssv = truck_ssv; }
     public void setTruck_csv(String truck_csv) { this.truck_csv = truck_csv; }
     public void setUrl(String url) { this.url = url; }
