@@ -37,10 +37,11 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
     private ArrayList<Vehicle> vehiclesList = new ArrayList<>();
     private Context mContext;
     public Dialog updateVehicleDialog;
+    public Dialog infoVehicleDialog;
     EditText editTextPatente, editTextAlias;
     RadioButton radioAuto, radioMoto, radioCamion, radioSi, radioNo;
-    Button buttonGuardar, buttonCancelar;
-    public AddVehicleDialog.ConnectFragment connectFragment;
+    Button buttonGuardar, buttonCancelar, buttonVolver;
+    TextView tvPatente, tvAlias, tvTipo, tvSello, tvRevTec, tvRestriccion;
 
     @Inject
     VehicleRepository vehicleRepository;
@@ -61,7 +62,7 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
                 .getApplicationComponent()
                 .inject(this);
 
-        //Initialize Dialog
+        //Initialize update Vehicle Dialog
         updateVehicleDialog = new Dialog(mContext);
         updateVehicleDialog.setContentView(R.layout.dialog_add_vehicle);
 
@@ -79,6 +80,23 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
         //Buttons
         buttonCancelar = updateVehicleDialog.findViewById(R.id.buttonCancelar);
         buttonGuardar = updateVehicleDialog.findViewById(R.id.buttonGuardar);
+
+
+        //---------------------
+        //Initialize View information of a vehicle dialog
+        infoVehicleDialog = new Dialog(mContext);
+        infoVehicleDialog.setContentView(R.layout.dialog_info_vehicle);
+
+        //TextViews
+        tvPatente = infoVehicleDialog.findViewById(R.id.textViewPatenteInfo);
+        tvAlias = infoVehicleDialog.findViewById(R.id.textViewAliasInfo);
+        tvTipo = infoVehicleDialog.findViewById(R.id.textViewTipoInfo);
+        tvSello = infoVehicleDialog.findViewById(R.id.textViewSelloInfo);
+        tvRevTec = infoVehicleDialog.findViewById(R.id.textViewRevTecInfo);
+        tvRestriccion = infoVehicleDialog.findViewById(R.id.textViewRestriccionInfo);
+
+        //Button
+        buttonVolver = infoVehicleDialog.findViewById(R.id.buttonVolver);
 
         return holder;
     }
@@ -224,13 +242,31 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
             }
         });
 
-        //Information Button
-        /*holder.misPatentesLayout.setOnClickListener(new View.OnClickListener(){
+        //Information of a vehicle Button
+        holder.viewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, vehiclesList.get(position).getAlias(), Toast.LENGTH_LONG).show();
+                infoVehicleDialog.show();
+
+                //assign values
+                tvPatente.setText(vehiclesList.get(position).getPatente());
+                tvAlias.setText(vehiclesList.get(position).getAlias());
+                tvTipo.setText(vehiclesList.get(position).getType().toString());
+                if(vehiclesList.get(position).hasSelloVerde())
+                    tvSello.setText("Si");
+                else
+                    tvSello.setText("No");
+                //tvRevTec = infoVehicleDialog.findViewById(R.id.textViewRevTecInfo);
+                //tvRestriccion = infoVehicleDialog.findViewById(R.id.textViewRestriccionInfo);
+
+                buttonVolver.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        infoVehicleDialog.dismiss();
+                    }
+                });
             }
-        });*/
+        });
     }
 
     @Override
