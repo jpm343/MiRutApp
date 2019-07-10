@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mirutapp.Fragment.AddVehicleDialog;
+import com.example.mirutapp.LocalDataBase.RevisionTecnica;
 import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Vehicle;
 import com.example.mirutapp.R;
@@ -256,7 +258,16 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
                     tvSello.setText("Si");
                 else
                     tvSello.setText("No");
-                //tvRevTec = infoVehicleDialog.findViewById(R.id.textViewRevTecInfo);
+
+
+                int month;
+                SparseIntArray rules = RevisionTecnica.rules;
+                if(vehiclesList.get(position).getType() == Vehicle.CarType.MOTO) {
+                    month = rules.keyAt(rules.indexOfValue(Character.getNumericValue(vehiclesList.get(position).getPatente().charAt(4))));
+                }else
+                    month = rules.keyAt(rules.indexOfValue(Character.getNumericValue(vehiclesList.get(position).getPatente().charAt(5))));
+               tvRevTec.setText(getMonthSpanish(month));
+
                 //tvRestriccion = infoVehicleDialog.findViewById(R.id.textViewRestriccionInfo);
 
                 buttonVolver.setOnClickListener(new View.OnClickListener() {
@@ -274,6 +285,48 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
         return vehiclesList.size();
     }
 
+    public String getMonthSpanish(Integer month){
+        String mes = null;
+        switch (month){
+            case 0:
+                mes = "enero";
+                break;
+            case 1:
+                mes = "febrero";
+                break;
+            case 2:
+                mes = "marzo";
+                break;
+            case 3:
+                mes = "abril";
+                break;
+            case 4:
+                mes = "mayo";
+                break;
+            case 5:
+                mes = "junio";
+                break;
+            case 6:
+                mes = "julio";
+                break;
+            case 7:
+                mes = "agosto";
+                break;
+            case 8:
+                mes = "septiembre";
+                break;
+            case 9:
+                mes = "octubre";
+                break;
+            case 10:
+                mes = "noviembre";
+                break;
+            case 11:
+                mes = "diciembre";
+                break;
+        }
+        return mes;
+    }
     public void setInfoList(ArrayList<Vehicle> vehiclesList){
         this.vehiclesList = vehiclesList;
     }
