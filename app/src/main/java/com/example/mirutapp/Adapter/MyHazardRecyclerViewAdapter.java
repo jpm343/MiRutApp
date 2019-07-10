@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.mirutapp.Fragment.HazardFragment.OnListFragmentInteractionListener;
-import com.example.mirutapp.Fragment.dummy.DummyContent.DummyItem;
 import com.example.mirutapp.Model.Incident;
 import com.example.mirutapp.R;
 
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link } and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  * TODO: Replace the implementation with code for your data type.
  */

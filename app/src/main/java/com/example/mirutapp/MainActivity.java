@@ -3,6 +3,7 @@ package com.example.mirutapp;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.example.mirutapp.Fragment.IncidentListDialogFragment;
 import com.example.mirutapp.Fragment.InfoPatenteFragment;
 
 import com.example.mirutapp.Fragment.MapsFragment;
@@ -42,7 +43,8 @@ public class MainActivity extends AppCompatActivity
         NewsFragment.OnListFragmentInteractionListener,
         RouteFragment.OnListFragmentInteractionListener,
         VehicleFragment.OnFragmentInteractionListener,
-        MapsFragment.OnFragmentInteractionListener {
+        MapsFragment.OnFragmentInteractionListener,
+        IncidentListDialogFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
