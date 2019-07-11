@@ -9,6 +9,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.util.Log;
@@ -35,6 +37,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
@@ -408,7 +411,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, AddRou
             ArrayList<LatLng> points;
             PolylineOptions lineOptions = null;
             LinkedHashSet<Incident> hashSet = new LinkedHashSet<Incident>();
-
+            //List<Incident> incidentsUOCT = new ArrayList<>();
+            Boolean hazardOnTheRoute = false;
             // Traversing through all the routes
             for (int i = 0; i < result.size(); i++) {
                 points = new ArrayList<>();
@@ -425,24 +429,27 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, AddRou
                     double lng = Double.parseDouble(point.get("lng"));
                     LatLng position = new LatLng(lat, lng);
 
-                    System.out.println("largo UOCT:"+MarkerPointsUOCT.size());
+                    //System.out.println("largo UOCT:"+MarkerPointsUOCT.size());
 
                     for (int k = 0; k < MarkerPointsUOCT.size(); k++) {
                         float distance = MarkerPointsUOCT.get(k).distanceInMeters(position);
 
-                        System.out.println("Comparando:"+MarkerPointsUOCT.get(k).getLocation());
-                        System.out.println("Comparando:"+position.toString());
+                        //System.out.println("Comparando:"+MarkerPointsUOCT.get(k).getLocation());
+                        //System.out.println("Comparando:"+position.toString());
 
                         if (distance < 300){
-                            System.out.println("es menor a 100");
-                            System.out.println("PUNTO QUE INFLUYE LA RUTA"+MarkerPointsUOCT.get(k).getDescription());
-
                             hashSet.add(MarkerPointsUOCT.get(k));
+                            hazardOnTheRoute = true;
                         }
                     }
-
                     points.add(position);
                 }
+
+                Toast toast1 =
+                        Toast.makeText(mContext,
+                                "Hay "+hashSet.size()+" Incidentes que afectan tu ruta", Toast.LENGTH_SHORT);
+
+                toast1.show();
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
@@ -452,6 +459,27 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, AddRou
                 Log.d("onPostExecute","onPostExecute lineoptions decoded");
 
             }
+
+            //////////////////////////////////////////////////
+            if (hazardOnTheRoute){
+                //Open bottom modal with Hazards close to your route
+                IncidentListDialogFragment incidentDialog  = new IncidentListDialogFragment();
+                Bundle bundles = new Bundle();
+                bundles.putSerializable("INCIDENTS",hashSet);
+                incidentDialog.setArguments(bundles);
+                FragmentManager fm = getFragmentManager();
+                incidentDialog.show(fm,incidentDialog.getTag());
+            }
+            /* DIALOGO PARA HAZARD, VER DONDE LLAMAR
+            else {
+                HazardDialog hazardDialog = new HazardDialog();
+                Bundle bundles = new Bundle();
+                System.out.println("ESTE ES EL LINK " + MarkerPointsUOCT.get(0).getLink());
+                bundles.putString("URLHAZARD",MarkerPointsUOCT.get(0).getLink());
+                hazardDialog.setArguments(bundles);
+                FragmentManager fm = getFragmentManager();
+                hazardDialog.show(fm,hazardDialog.getTag());
+            }*/
 
             // Drawing polyline in the Google Map for the i-th route
             if(lineOptions != null) {
@@ -478,7 +506,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, AddRou
 //            String str="http://www.uoct.cl/historial/ultimos-eventos/json-waze/";
             String str="https://api.myjson.com/bins/o16ox";
 
-            System.out.printf(str);
+           // System.out.printf(str);
 
             URLConnection urlConn = null;
             BufferedReader bufferedReader = null;

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="#00EF6C00">
+
+    <Button
+        android:id="@+id/buttonInfo"
+        android:layout_width="155dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="29dp"
+        android:backgroundTint="#0277BD"
+        android:clickable="true"
+        android:text="MÁS INFORMACIÓN" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/colorPrimary"
+        android:gravity="center_horizontal|top"
+        android:text="OPCIONES INCIDENTE"
+        android:textColor="#D5D5D5"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+
+    <Button
+        android:id="@+id/buttonTweet"
+        android:layout_width="155dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_marginStart="230dp"
+        android:layout_marginTop="29dp"
+        android:backgroundTint="#0277BD"
+        android:clickable="true"
+        android:text="TWEET" />
+
+    <Button
+        android:id="@+id/buttonCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_marginStart="165dp"
+        android:layout_marginTop="97dp"
+        android:backgroundTint="#EF6C00"
+        android:text="CANCELAR" />
+
+</RelativeLayout>

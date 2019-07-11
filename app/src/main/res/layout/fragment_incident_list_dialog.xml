@@ -1,11 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/incidentList"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="false"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    tools:context=".Fragment.IncidentListDialogFragment"
-    tools:listitem="@layout/fragment_incident_list_dialog_item" />
+   >
+
+    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/incidentList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:clipToPadding="false"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        tools:context=".Fragment.IncidentListDialogFragment"
+        tools:listitem="@layout/fragment_incident_list_dialog_item" />
+
+    <com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal|top"
+        android:background="@color/colorPrimary"
+        android:clickable="false">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="INCIDENTES EN TU RUTA"
+            android:textColor="#FDFDFE"
+            android:textSize="16sp" />
+
+    </com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader>
+</FrameLayout>
