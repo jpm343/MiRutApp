@@ -71,7 +71,7 @@ import javax.inject.Inject;
  * Use the {@link MapsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapsFragment extends Fragment implements OnMapReadyCallback{
+public class MapsFragment extends Fragment implements OnMapReadyCallback, AddRouteDialog.ConnectMapFragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -149,6 +149,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         addRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //IF PUNTOS SELECCIONADOS; SI NO SELECCIONA PUNTOS PLS CON TOAST
                 AddRouteDialog dialog = new AddRouteDialog();
                 dialog.setTargetFragment(MapsFragment.this, 1);
                 dialog.show(MapsFragment.this.getFragmentManager(), "AddRouteDialog");
@@ -443,7 +444,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
 
 
                 // custom dialog
-                final Dialog dialog = new Dialog(mContext);
+                /*final Dialog dialog = new Dialog(mContext);
                 dialog.setContentView(R.layout.custom);
                 dialog.setTitle("Title...");
 
@@ -508,7 +509,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                         Toast.makeText(mContext,
                                 "Hay "+hashSet.size()+" Incidentes que afectan tu ruta", Toast.LENGTH_SHORT);
 
-                toast1.show();
+                toast1.show();*/
 
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
@@ -637,5 +638,18 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                 }
             }
         }
+    }
+
+    @Override
+    public int sendInputs(String url, String routeName, int alarmHour, int alarmMinute, Set<Integer> days) {
+        RouteViewModel.Status status = viewModel.saveRoute(url,routeName,alarmHour,alarmMinute,days);
+        if(status == RouteViewModel.Status.OK){
+            Toast.makeText(getContext(), "Ruta guardada exitosamente", Toast.LENGTH_LONG).show();
+            return 1;
+        }else if(status == RouteViewModel.Status.DATABASE_ERROR){
+            Toast.makeText(getContext(), "No se pudo guardar la ruta. Intente más tarde.", Toast.LENGTH_LONG).show();
+            return 0;
+        }
+        return 0;
     }
 }

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,9 +30,10 @@ public class AddRouteDialog extends DialogFragment {
     public ConnectMapFragment connect;
 
     //Widgets
-    private EditText editTextRouteName, editTextTime;
+    private EditText editTextRouteName;
     private Button buttonCancelar, buttonGuardar;
     private CheckBox checkBoxMonday, checkBoxTuesday, checkBoxWednesday, checkBoxThursday, checkBoxFriday, checkBoxSaturday, checkBoxSunday;
+    private TimePicker timePicker;
 
     @Nullable
     @Override
@@ -40,9 +42,6 @@ public class AddRouteDialog extends DialogFragment {
 
         //Attaching ids to widgets
         editTextRouteName = view.findViewById(R.id.editTextRouteName);
-        editTextTime = view.findViewById(R.id.editTextTime);
-        buttonCancelar = view.findViewById(R.id.buttonCancelar);
-        buttonGuardar = view.findViewById(R.id.buttonGuardar);
         checkBoxMonday = view.findViewById(R.id.checkBoxMonday);
         checkBoxTuesday = view.findViewById(R.id.checkboxTuesday);
         checkBoxWednesday = view.findViewById(R.id.checkboxWednesday);
@@ -50,6 +49,10 @@ public class AddRouteDialog extends DialogFragment {
         checkBoxFriday = view.findViewById(R.id.checkBoxFriday);
         checkBoxSaturday = view.findViewById(R.id.checkBoxSaturday);
         checkBoxSunday = view.findViewById(R.id.checkBoxSunday);
+        timePicker = view.findViewById(R.id.timePickerTP);
+        buttonCancelar = view.findViewById(R.id.buttonCancelar);
+        buttonGuardar = view.findViewById(R.id.buttonGuardar);
+
 
         //Cancel Dialog
         buttonCancelar.setOnClickListener(new View.OnClickListener() {
@@ -91,16 +94,12 @@ public class AddRouteDialog extends DialogFragment {
                                 days.add(0);
                             }
                         }
-                    //String url, String routeName, int alarmHour, int alarmMinute, Set<Integer> days
-                    //Obtener url
-                    //Descomponer hora
-                    String url = "hola";
-
-                    /*if(connect.sendInputs(url, routeName,) == 1){
-                        Toast.makeText(getContext(), "Se guardó", Toast.LENGTH_LONG).show();
+                        int alarmHour = timePicker.getHour();
+                        int alarmMinute = timePicker.getMinute();
+                        String url = "hola";
+                    if(connect.sendInputs(url,routeName,alarmHour,alarmMinute,days) == 1){
                         getDialog().dismiss();
-                    }*/
-                    Toast.makeText(getContext(), "llego", Toast.LENGTH_LONG).show();
+                    }
                 }else{
                     Toast.makeText(getContext(), "Debe ingresar nombre de ruta.", Toast.LENGTH_LONG).show();
                 }
