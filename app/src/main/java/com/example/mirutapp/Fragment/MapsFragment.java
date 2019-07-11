@@ -441,68 +441,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                     }
                     points.add(position);
                 }
-                // custom dialog
-                final Dialog dialog = new Dialog(mContext);
-                dialog.setContentView(R.layout.custom);
-                dialog.setTitle("Title...");
-
-                Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-                final TimePicker timePicker = (TimePicker) dialog.findViewById(R.id.timePicker);
-                final CheckBox cbMonday = (CheckBox) dialog.findViewById(R.id.checkBox);
-                final CheckBox cbTuesday = (CheckBox) dialog.findViewById(R.id.checkBox2);
-                final CheckBox cbWednesday = (CheckBox) dialog.findViewById(R.id.checkBox3);
-                final CheckBox cbThursday = (CheckBox) dialog.findViewById(R.id.checkBox5);
-                final CheckBox cbFriday = (CheckBox) dialog.findViewById(R.id.checkBox6);
-                final CheckBox cbSaturday = (CheckBox) dialog.findViewById(R.id.checkBox7);
-                final CheckBox cbSunday = (CheckBox) dialog.findViewById(R.id.checkBox8);
-                final TextInputEditText textInput = (TextInputEditText) dialog.findViewById(R.id.textInput);
-                timePicker.setIs24HourView(true); // to set 24 hours mode
-                timePicker.setIs24HourView(false); // to set 12 hours mode
-
-                dialogButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Set<Integer> days = new HashSet<Integer>();
-                        String routeName = textInput.getText().toString();
-                        if(!routeName.equals("")){
-                            if(!cbMonday.isChecked() && !cbTuesday.isChecked() && !cbWednesday.isChecked() && !cbThursday.isChecked() && !cbFriday.isChecked() && !cbSaturday.isChecked() && !cbSunday.isChecked())
-                                Toast.makeText(getContext(), "Debe seleccionar al menos un día.", Toast.LENGTH_LONG).show();
-                            else{
-                                if(cbMonday.isChecked()){
-                                    days.add(1);
-                                }
-                                if(cbTuesday.isChecked()){
-                                    days.add(2);
-                                }
-                                if(cbWednesday.isChecked()){
-                                    days.add(3);
-                                }
-                                if(cbThursday.isChecked()){
-                                    days.add(4);
-                                }
-                                if(cbFriday.isChecked()){
-                                    days.add(5);
-                                }
-                                if(cbSaturday.isChecked()){
-                                    days.add(6);
-                                }
-                                if(cbSunday.isChecked()){
-                                    days.add(0);
-                                }
-                            }
-                        int alarmHour = timePicker.getHour();
-                        int alarmMinute = timePicker.getMinute();
-                        String url = "https://maps.googleapis.com/maps/api/directions/json?origin=-33.452367254631895,-70.6842477992177&destination=-33.45019899569667,-70.67649889737368&sensor=false&key=AIzaSyCd9EduZIayU6ESWl8xB13Cily5Ju2y3hA";
-                        viewModel.saveRoute(url, routeName, alarmHour, alarmMinute, days);
-                        dialog.dismiss();
-                        }else{
-                            Toast.makeText(getContext(), "¡Nombre de ruta vacía!", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
-                dialog.show();
-
+                
                 Toast toast1 =
                         Toast.makeText(mContext,
                                 "Hay "+hashSet.size()+" Incidentes que afectan tu ruta", Toast.LENGTH_SHORT);
