@@ -8,6 +8,7 @@ import androidx.room.Query;
 import com.example.mirutapp.Model.Route;
 
 import java.util.List;
+import java.util.Set;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
@@ -27,4 +28,7 @@ public interface RouteDao {
 
     @Query("DELETE FROM route WHERE id = :routeId")
     void deleteRouteById(int routeId);
+
+    @Query("UPDATE route SET routeName = :routeName, days = :days, alarmHour = :alarmHour, alarmMinute = :alarmMinute WHERE id = :routeId")
+    void updateRouteById(int routeId, String routeName, Set<Integer> days, int alarmHour, int alarmMinute);
 }

@@ -8,6 +8,7 @@ import com.example.mirutapp.LocalDataBase.RouteDao;
 import com.example.mirutapp.Model.Route;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -62,6 +63,15 @@ public class RouteRepository {
             @Override
             public void run() {
                 routeDao.save(route);
+            }
+        });
+    }
+
+    public void updateRoute(final int routeId, final String routeName, final Set<Integer> days, final int alarmHour, final int alarmMinute){
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                routeDao.updateRouteById(routeId,routeName,days,alarmHour,alarmMinute);
             }
         });
     }

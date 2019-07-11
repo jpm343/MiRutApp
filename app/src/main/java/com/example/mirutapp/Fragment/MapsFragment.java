@@ -1,6 +1,5 @@
 package com.example.mirutapp.Fragment;
 
-import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -16,9 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.mirutapp.MiRutAppApplication;
@@ -151,7 +147,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, AddRou
             public void onClick(View view) {
                 if(MarkerPoints.size()==2){
                     String url = getUrl(MarkerPoints.get(0),MarkerPoints.get(1));
-                    AddRouteDialog dialog = new AddRouteDialog(url);
+                    AddRouteDialog dialog = new AddRouteDialog(url,false,null);
                     dialog.setTargetFragment(MapsFragment.this, 1);
                     dialog.show(MapsFragment.this.getFragmentManager(), "AddRouteDialog");
                     MarkerPoints.clear();
@@ -591,6 +587,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, AddRou
             return 0;
         }else {
             Toast.makeText(getContext(), "URL vacía", Toast.LENGTH_LONG).show();
+            return 0;
+        }
+    }
+
+    @Override
+    public int updateInputs(int routeId, String routeName, Set<Integer> days, int alarmHour, int alarmMinute) {
+        RouteViewModel.Status status = viewModel.updateRoute(routeId,routeName,days,alarmHour,alarmMinute);
+        if(status == RouteViewModel.Status.OK) {
+            return 1;
+        }else {
+            Toast.makeText(getContext(), "No se logró actualizar los datos de la ruta.", Toast.LENGTH_LONG).show();
             return 0;
         }
     }
