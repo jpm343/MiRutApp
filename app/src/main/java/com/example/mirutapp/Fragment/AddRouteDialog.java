@@ -34,6 +34,11 @@ public class AddRouteDialog extends DialogFragment {
     private Button buttonCancelar, buttonGuardar;
     private CheckBox checkBoxMonday, checkBoxTuesday, checkBoxWednesday, checkBoxThursday, checkBoxFriday, checkBoxSaturday, checkBoxSunday;
     private TimePicker timePicker;
+    public String url;
+
+    public AddRouteDialog(String url) {
+        this.url = url;
+    }
 
     @Nullable
     @Override
@@ -96,7 +101,9 @@ public class AddRouteDialog extends DialogFragment {
                         }
                         int alarmHour = timePicker.getHour();
                         int alarmMinute = timePicker.getMinute();
-                        String url = "hola";
+                        //String url = "hola";
+                    System.out.println("URLLLLLL");
+                    System.out.println(url);
                     if(connect.sendInputs(url,routeName,alarmHour,alarmMinute,days) == 1){
                         getDialog().dismiss();
                     }
