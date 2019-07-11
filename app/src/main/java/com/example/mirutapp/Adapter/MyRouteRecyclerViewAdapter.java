@@ -3,17 +3,27 @@ package com.example.mirutapp.Adapter;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Route;
 import com.example.mirutapp.R;
 import com.example.mirutapp.Fragment.RouteFragment.OnListFragmentInteractionListener;
+import com.example.mirutapp.Repository.RouteRepository;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link } and makes a call to the
@@ -25,13 +35,27 @@ public class MyRouteRecyclerViewAdapter extends RecyclerView.Adapter<MyRouteRecy
     //private final List<DummyItem> mValues;
     //private final OnListFragmentInteractionListener mListener;
     private  List<Route> routes = new ArrayList<>();
+    private Context mContext;
+
+    @Inject
+    RouteRepository routeRepository;
+
+    public MyRouteRecyclerViewAdapter(Context mContext) {
+        this.mContext = mContext;
+    }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.route_fragment_item, parent, false);
-        return new ViewHolder(view);
+        ViewHolder holder = new ViewHolder(view);
+        //injection dependencies
+        ((MiRutAppApplication) mContext.getApplicationContext())
+                .getApplicationComponent()
+                .inject(this);
+
+        return holder;
     }
 
     @Override
@@ -62,6 +86,47 @@ public class MyRouteRecyclerViewAdapter extends RecyclerView.Adapter<MyRouteRecy
             holder.saturday.setVisibility(View.GONE);
         }
 
+        //Delete button
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setMessage("¿Estás seguro que quieres eliminar la ruta "+currentRoute.getRouteName()+"?");
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        routeRepository.deleteRoute(currentRoute.getId());
+                        Toast.makeText(mContext, "Ruta eliminada exitosamente.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        //Edit button
+        holder.editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        //View button
+        holder.viewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
 
     @Override
@@ -74,6 +139,8 @@ public class MyRouteRecyclerViewAdapter extends RecyclerView.Adapter<MyRouteRecy
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView routeName, routeHour, routeMinutes, monday, tuesday, wednesday, thursday, friday, saturday, sunday;
+        FloatingActionButton deleteButton, editButton, viewButton;
+        LinearLayout misRutasLayout;
 
         public ViewHolder(View view) {
             super(view);
@@ -87,6 +154,10 @@ public class MyRouteRecyclerViewAdapter extends RecyclerView.Adapter<MyRouteRecy
             friday = view.findViewById(R.id.idFriday);
             saturday = view.findViewById(R.id.idSaturday);
             sunday = view.findViewById(R.id.idSunday);
+            deleteButton = (FloatingActionButton) itemView.findViewById(R.id.deleteButton);
+            editButton = (FloatingActionButton) itemView.findViewById(R.id.editButton);
+            viewButton = (FloatingActionButton) itemView.findViewById(R.id.viewButton);
+            misRutasLayout = itemView.findViewById(R.id.myRoutesLayout);
         }
 
     }

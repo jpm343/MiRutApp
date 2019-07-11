@@ -2,6 +2,7 @@ package com.example.mirutapp.DependencyInjection;
 
 import android.app.Application;
 
+import com.example.mirutapp.Adapter.MyRouteRecyclerViewAdapter;
 import com.example.mirutapp.Adapter.PatentesRecyclerViewAdapter;
 import com.example.mirutapp.Fragment.MapsFragment;
 import com.example.mirutapp.Fragment.NewsFragment;
@@ -28,6 +29,7 @@ public interface ApplicationComponent {
     void inject(DisableNotificationReceiver disableNotificationReceiver);
     void inject(RoutesAlarmReceiver routesAlarmReceiver);
     void inject(PatentesRecyclerViewAdapter patentesRecyclerViewAdapter);
+    void inject(MyRouteRecyclerViewAdapter myRouteRecyclerViewAdapter);
     void inject(RoutesAlarmSetterJobService routesAlarmSetterJobService);
     void inject(VehicleRestrictionReceiver vehicleRestrictionReceiver);
     Application application();

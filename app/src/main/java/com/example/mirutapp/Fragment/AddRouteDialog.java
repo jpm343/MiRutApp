@@ -101,9 +101,6 @@ public class AddRouteDialog extends DialogFragment {
                         }
                         int alarmHour = timePicker.getHour();
                         int alarmMinute = timePicker.getMinute();
-                        //String url = "hola";
-                    System.out.println("URLLLLLL");
-                    System.out.println(url);
                     if(connect.sendInputs(url,routeName,alarmHour,alarmMinute,days) == 1){
                         getDialog().dismiss();
                     }
