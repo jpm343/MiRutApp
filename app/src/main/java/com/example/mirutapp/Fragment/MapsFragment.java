@@ -441,7 +441,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                     }
                     points.add(position);
                 }
-                
+
                 Toast toast1 =
                         Toast.makeText(mContext,
                                 "Hay "+hashSet.size()+" Incidentes que afectan tu ruta", Toast.LENGTH_SHORT);
