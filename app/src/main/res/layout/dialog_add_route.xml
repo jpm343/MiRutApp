@@ -5,7 +5,9 @@
     android:paddingBottom="20dp"
     android:paddingEnd="20dp"
     android:paddingStart="20dp"
-    android:paddingTop="20dp">
+    android:paddingTop="20dp"
+    android:scrollbars="vertical"
+    android:scrollbarAlwaysDrawVerticalTrack="true">
 
     <TextView
         android:id="@+id/textViewName1"
@@ -27,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/timePickerTP"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="0dp"
         android:text="Seleccione los días: " />
 
     <CheckBox
@@ -97,16 +99,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextRouteName"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:text="Escoja la hora: " />
 
     <TimePicker
         android:id="@+id/timePickerTP"
-        android:layout_width="match_parent"
-        android:layout_height="370dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/textViewTime"
-        android:layout_centerInParent="true"
         android:layout_marginTop="4dp"
+        android:timePickerMode="spinner"
         android:amPmBackgroundColor="#009688"
         android:headerBackground="@color/colorPrimary" />
 

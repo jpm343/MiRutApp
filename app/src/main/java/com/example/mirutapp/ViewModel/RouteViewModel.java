@@ -92,4 +92,9 @@ public class RouteViewModel extends ViewModel {
         routeRepository.deleteRoute(routeId);
         return Status.OK;
     }
+
+    public Status updateRoute(int routeId,String routeName, Set<Integer> days, int alarmHour, int alarmMinute){
+        routeRepository.updateRoute(routeId,routeName,days,alarmHour,alarmMinute);
+        return Status.OK;
+    }
 }

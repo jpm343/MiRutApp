@@ -1,8 +1,10 @@
 package com.example.mirutapp.Adapter;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.fragment.app.FragmentManager;
 
+import com.example.mirutapp.Fragment.AddRouteDialog;
 import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Route;
 import com.example.mirutapp.R;
@@ -115,7 +119,12 @@ public class MyRouteRecyclerViewAdapter extends RecyclerView.Adapter<MyRouteRecy
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                AddRouteDialog dialog = new AddRouteDialog(null,true,currentRoute);
+                //dialog.setTargetFragment(MyRouteRecyclerViewAdapter.this,1);
+                //dialog.setTargetFragment();
+                //FragmentManager manager = ((Activity)mContext).getFragmentManager();
+                FragmentManager manager = ((AppCompatActivity)mContext).getSupportFragmentManager();
+                dialog.show(manager,"addRouteVehicle");
             }
         });
 
@@ -123,6 +132,7 @@ public class MyRouteRecyclerViewAdapter extends RecyclerView.Adapter<MyRouteRecy
         holder.viewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               //MapsFragment mf = new MapsFragment();
 
             }
         });
