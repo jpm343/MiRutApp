@@ -71,7 +71,7 @@ import javax.inject.Inject;
  * Use the {@link MapsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MapsFragment extends Fragment implements OnMapReadyCallback{
+public class MapsFragment extends Fragment implements OnMapReadyCallback, AddRouteDialog.ConnectMapFragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -149,9 +149,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
         addRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddRouteDialog dialog = new AddRouteDialog();
-                dialog.setTargetFragment(MapsFragment.this, 1);
-                dialog.show(MapsFragment.this.getFragmentManager(), "AddRouteDialog");
+                if(MarkerPoints.size()==2){
+                    String url = getUrl(MarkerPoints.get(0),MarkerPoints.get(1));
+                    AddRouteDialog dialog = new AddRouteDialog(url);
+                    dialog.setTargetFragment(MapsFragment.this, 1);
+                    dialog.show(MapsFragment.this.getFragmentManager(), "AddRouteDialog");
+                    MarkerPoints.clear();
+                }else{
+                    Toast.makeText(getContext(),"Debe ingresar origen y destino en el mapa.",Toast.LENGTH_LONG).show();
+                }
+
             }
         });
 
@@ -441,75 +448,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                     points.add(position);
                 }
 
-
-                // custom dialog
-                final Dialog dialog = new Dialog(mContext);
-                dialog.setContentView(R.layout.custom);
-                dialog.setTitle("Title...");
-
-                Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-                final TimePicker timePicker = (TimePicker) dialog.findViewById(R.id.timePicker);
-                final CheckBox cbMonday = (CheckBox) dialog.findViewById(R.id.checkBox);
-                final CheckBox cbTuesday = (CheckBox) dialog.findViewById(R.id.checkBox2);
-                final CheckBox cbWednesday = (CheckBox) dialog.findViewById(R.id.checkBox3);
-                final CheckBox cbThursday = (CheckBox) dialog.findViewById(R.id.checkBox5);
-                final CheckBox cbFriday = (CheckBox) dialog.findViewById(R.id.checkBox6);
-                final CheckBox cbSaturday = (CheckBox) dialog.findViewById(R.id.checkBox7);
-                final CheckBox cbSunday = (CheckBox) dialog.findViewById(R.id.checkBox8);
-                final TextInputEditText textInput = (TextInputEditText) dialog.findViewById(R.id.textInput);
-                timePicker.setIs24HourView(true); // to set 24 hours mode
-                timePicker.setIs24HourView(false); // to set 12 hours mode
-
-                dialogButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Set<Integer> days = new HashSet<Integer>();
-                        String routeName = textInput.getText().toString();
-                        if(!routeName.equals("")){
-                            if(!cbMonday.isChecked() && !cbTuesday.isChecked() && !cbWednesday.isChecked() && !cbThursday.isChecked() && !cbFriday.isChecked() && !cbSaturday.isChecked() && !cbSunday.isChecked())
-                                Toast.makeText(getContext(), "Debe seleccionar al menos un día.", Toast.LENGTH_LONG).show();
-                            else{
-                                if(cbMonday.isChecked()){
-                                    days.add(1);
-                                }
-                                if(cbTuesday.isChecked()){
-                                    days.add(2);
-                                }
-                                if(cbWednesday.isChecked()){
-                                    days.add(3);
-                                }
-                                if(cbThursday.isChecked()){
-                                    days.add(4);
-                                }
-                                if(cbFriday.isChecked()){
-                                    days.add(5);
-                                }
-                                if(cbSaturday.isChecked()){
-                                    days.add(6);
-                                }
-                                if(cbSunday.isChecked()){
-                                    days.add(0);
-                                }
-                            }
-                        int alarmHour = timePicker.getHour();
-                        int alarmMinute = timePicker.getMinute();
-                        String url = "https://maps.googleapis.com/maps/api/directions/json?origin=-33.452367254631895,-70.6842477992177&destination=-33.45019899569667,-70.67649889737368&sensor=false&key=AIzaSyCd9EduZIayU6ESWl8xB13Cily5Ju2y3hA";
-                        viewModel.saveRoute(url, routeName, alarmHour, alarmMinute, days);
-                        dialog.dismiss();
-                        }else{
-                            Toast.makeText(getContext(), "¡Nombre de ruta vacía!", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
-                dialog.show();
-
-                Toast toast1 =
-                        Toast.makeText(mContext,
-                                "Hay "+hashSet.size()+" Incidentes que afectan tu ruta", Toast.LENGTH_SHORT);
-
-                toast1.show();
-
                 // Adding all the points in the route to LineOptions
                 lineOptions.addAll(points);
                 lineOptions.width(10);
@@ -636,6 +574,24 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                     Log.e("App", "Failure", ex);
                 }
             }
+        }
+    }
+
+    @Override
+    public int sendInputs(String url, String routeName, int alarmHour, int alarmMinute, Set<Integer> days) {
+        if(url!=null){
+            RouteViewModel.Status status = viewModel.saveRoute(url,routeName,alarmHour,alarmMinute,days);
+            if(status == RouteViewModel.Status.OK){
+                Toast.makeText(getContext(), "Ruta guardada exitosamente", Toast.LENGTH_LONG).show();
+                return 1;
+            }else if(status == RouteViewModel.Status.DATABASE_ERROR){
+                Toast.makeText(getContext(), "No se pudo guardar la ruta. Intente más tarde.", Toast.LENGTH_LONG).show();
+                return 0;
+            }
+            return 0;
+        }else {
+            Toast.makeText(getContext(), "URL vacía", Toast.LENGTH_LONG).show();
+            return 0;
         }
     }
 }

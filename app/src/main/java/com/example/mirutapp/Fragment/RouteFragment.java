@@ -91,7 +91,7 @@ public class RouteFragment extends Fragment {
         recyclerRoutes.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerRoutes.setHasFixedSize(true);
 
-        final MyRouteRecyclerViewAdapter adapter = new MyRouteRecyclerViewAdapter();
+        final MyRouteRecyclerViewAdapter adapter = new MyRouteRecyclerViewAdapter(this.getContext());
         recyclerRoutes.setAdapter(adapter);
 
         viewModel = ViewModelProviders.of(this,viewModelFactory).get(RouteViewModel.class);
