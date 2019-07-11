@@ -285,7 +285,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, AddRou
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                return false;
+                HazardDialog hazardDialog = new HazardDialog();
+                Bundle bundles = new Bundle();
+                System.out.println("ESTE ES EL LINK " + MarkerPointsUOCT.get(0).getLink());
+                bundles.putString("URLHAZARD",MarkerPointsUOCT.get(0).getLink());
+                hazardDialog.setArguments(bundles);
+                FragmentManager fm = getFragmentManager();
+                hazardDialog.show(fm,hazardDialog.getTag());
+                return true;
             }
         });
     }

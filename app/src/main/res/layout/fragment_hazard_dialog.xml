@@ -6,11 +6,10 @@
 
     <Button
         android:id="@+id/buttonInfo"
-        android:layout_width="155dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="-1dp"
         android:backgroundTint="#0277BD"
         android:clickable="true"
         android:text="MÁS INFORMACIÓN" />
@@ -21,6 +20,7 @@
         android:layout_height="40dp"
         android:background="@color/colorPrimary"
         android:gravity="center_horizontal|top"
+        android:paddingTop="7dp"
         android:text="OPCIONES INCIDENTE"
         android:textColor="#D5D5D5"
         android:textSize="16sp"
@@ -28,21 +28,19 @@
 
     <Button
         android:id="@+id/buttonTweet"
-        android:layout_width="155dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title"
-        android:layout_marginStart="230dp"
-        android:layout_marginTop="29dp"
+        android:layout_marginTop="48dp"
         android:backgroundTint="#0277BD"
         android:clickable="true"
         android:text="TWEET" />
 
     <Button
         android:id="@+id/buttonCancel"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title"
-        android:layout_marginStart="165dp"
         android:layout_marginTop="97dp"
         android:backgroundTint="#EF6C00"
         android:text="CANCELAR" />
