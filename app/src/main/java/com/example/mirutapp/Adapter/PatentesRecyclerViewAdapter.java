@@ -24,13 +24,16 @@ import com.example.mirutapp.Fragment.AddVehicleDialog;
 import com.example.mirutapp.LocalDataBase.RevisionTecnica;
 import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Vehicle;
+import com.example.mirutapp.Model.VehicleRestriction;
 import com.example.mirutapp.R;
 import com.example.mirutapp.Repository.VehicleRepository;
+import com.example.mirutapp.Services.VehicleRestrictionReceiver;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -259,7 +262,7 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
                 else
                     tvSello.setText("No");
 
-
+                //Assign revisión técnica
                 int month;
                 SparseIntArray rules = RevisionTecnica.rules;
                 if(vehiclesList.get(position).getType() == Vehicle.CarType.MOTO) {
@@ -267,6 +270,33 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
                 }else
                     month = rules.keyAt(rules.indexOfValue(Character.getNumericValue(vehiclesList.get(position).getPatente().charAt(5))));
                tvRevTec.setText(getMonthSpanish(month));
+
+               //Assign restricción
+                //VehicleRestriction vr = MiRutAppApplication.restriction;
+                //System.out.println("RESTRICCION");
+                //System.out.println(vr);
+                if(VehicleRestrictionReceiver.fecha != null){
+                    tvRestriccion.setText("No para "+VehicleRestrictionReceiver.fecha);
+                    List<Vehicle> list = VehicleRestrictionReceiver.vehicleList;
+                    for(int i = 0; i < list.size(); i++){
+                        if(vehiclesList.get(position).getPatente().equals(list.get(i).getPatente())){
+                            tvRestriccion.setText("Si para " + VehicleRestrictionReceiver.fecha);
+                            i = list.size();
+                        }
+                    }
+                }else{
+                    tvRestriccion.setText("No");
+                    List<Vehicle> list = VehicleRestrictionReceiver.vehicleList;
+                    for(int i = 0; i < list.size(); i++){
+                        if(vehiclesList.get(position).getPatente().equals(list.get(i).getPatente())){
+                            tvRestriccion.setText("Si");
+                            i = list.size();
+                        }
+                    }
+                }
+
+
+
 
                 //tvRestriccion = infoVehicleDialog.findViewById(R.id.textViewRestriccionInfo);
 
