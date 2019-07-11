@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +21,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mirutapp.Fragment.AddVehicleDialog;
+import com.example.mirutapp.LocalDataBase.RevisionTecnica;
 import com.example.mirutapp.MiRutAppApplication;
 import com.example.mirutapp.Model.Vehicle;
+import com.example.mirutapp.Model.VehicleRestriction;
 import com.example.mirutapp.R;
 import com.example.mirutapp.Repository.VehicleRepository;
+import com.example.mirutapp.Services.VehicleRestrictionReceiver;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -37,10 +42,11 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
     private ArrayList<Vehicle> vehiclesList = new ArrayList<>();
     private Context mContext;
     public Dialog updateVehicleDialog;
+    public Dialog infoVehicleDialog;
     EditText editTextPatente, editTextAlias;
     RadioButton radioAuto, radioMoto, radioCamion, radioSi, radioNo;
-    Button buttonGuardar, buttonCancelar;
-    public AddVehicleDialog.ConnectFragment connectFragment;
+    Button buttonGuardar, buttonCancelar, buttonVolver;
+    TextView tvPatente, tvAlias, tvTipo, tvSello, tvRevTec, tvRestriccion;
 
     @Inject
     VehicleRepository vehicleRepository;
@@ -61,7 +67,7 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
                 .getApplicationComponent()
                 .inject(this);
 
-        //Initialize Dialog
+        //Initialize update Vehicle Dialog
         updateVehicleDialog = new Dialog(mContext);
         updateVehicleDialog.setContentView(R.layout.dialog_add_vehicle);
 
@@ -79,6 +85,23 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
         //Buttons
         buttonCancelar = updateVehicleDialog.findViewById(R.id.buttonCancelar);
         buttonGuardar = updateVehicleDialog.findViewById(R.id.buttonGuardar);
+
+
+        //---------------------
+        //Initialize View information of a vehicle dialog
+        infoVehicleDialog = new Dialog(mContext);
+        infoVehicleDialog.setContentView(R.layout.dialog_info_vehicle);
+
+        //TextViews
+        tvPatente = infoVehicleDialog.findViewById(R.id.textViewPatenteInfo);
+        tvAlias = infoVehicleDialog.findViewById(R.id.textViewAliasInfo);
+        tvTipo = infoVehicleDialog.findViewById(R.id.textViewTipoInfo);
+        tvSello = infoVehicleDialog.findViewById(R.id.textViewSelloInfo);
+        tvRevTec = infoVehicleDialog.findViewById(R.id.textViewRevTecInfo);
+        tvRestriccion = infoVehicleDialog.findViewById(R.id.textViewRestriccionInfo);
+
+        //Button
+        buttonVolver = infoVehicleDialog.findViewById(R.id.buttonVolver);
 
         return holder;
     }
@@ -224,13 +247,67 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
             }
         });
 
-        //Information Button
-        /*holder.misPatentesLayout.setOnClickListener(new View.OnClickListener(){
+        //Information of a vehicle Button
+        holder.viewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, vehiclesList.get(position).getAlias(), Toast.LENGTH_LONG).show();
+                infoVehicleDialog.show();
+
+                //assign values
+                tvPatente.setText(vehiclesList.get(position).getPatente());
+                tvAlias.setText(vehiclesList.get(position).getAlias());
+                tvTipo.setText(vehiclesList.get(position).getType().toString());
+                if(vehiclesList.get(position).hasSelloVerde())
+                    tvSello.setText("Si");
+                else
+                    tvSello.setText("No");
+
+                //Assign revisión técnica
+                int month;
+                SparseIntArray rules = RevisionTecnica.rules;
+                if(vehiclesList.get(position).getType() == Vehicle.CarType.MOTO) {
+                    month = rules.keyAt(rules.indexOfValue(Character.getNumericValue(vehiclesList.get(position).getPatente().charAt(4))));
+                }else
+                    month = rules.keyAt(rules.indexOfValue(Character.getNumericValue(vehiclesList.get(position).getPatente().charAt(5))));
+               tvRevTec.setText(getMonthSpanish(month));
+
+               //Assign restricción
+                //VehicleRestriction vr = MiRutAppApplication.restriction;
+                //System.out.println("RESTRICCION");
+                //System.out.println(vr);
+                if(VehicleRestrictionReceiver.fecha != null){
+                    tvRestriccion.setText("No para "+VehicleRestrictionReceiver.fecha);
+                    List<Vehicle> list = VehicleRestrictionReceiver.vehicleList;
+                    for(int i = 0; i < list.size(); i++){
+                        if(vehiclesList.get(position).getPatente().equals(list.get(i).getPatente())){
+                            tvRestriccion.setText("Si para " + VehicleRestrictionReceiver.fecha);
+                            i = list.size();
+                        }
+                    }
+                }else{
+                    tvRestriccion.setText("No");
+                    List<Vehicle> list = VehicleRestrictionReceiver.vehicleList;
+                    for(int i = 0; i < list.size(); i++){
+                        if(vehiclesList.get(position).getPatente().equals(list.get(i).getPatente())){
+                            tvRestriccion.setText("Si");
+                            i = list.size();
+                        }
+                    }
+                }
+
+
+
+
+                //tvRestriccion = infoVehicleDialog.findViewById(R.id.textViewRestriccionInfo);
+
+                buttonVolver.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        infoVehicleDialog.dismiss();
+                    }
+                });
             }
-        });*/
+        });
     }
 
     @Override
@@ -238,6 +315,48 @@ public class PatentesRecyclerViewAdapter extends RecyclerView.Adapter<PatentesRe
         return vehiclesList.size();
     }
 
+    public String getMonthSpanish(Integer month){
+        String mes = null;
+        switch (month){
+            case 0:
+                mes = "enero";
+                break;
+            case 1:
+                mes = "febrero";
+                break;
+            case 2:
+                mes = "marzo";
+                break;
+            case 3:
+                mes = "abril";
+                break;
+            case 4:
+                mes = "mayo";
+                break;
+            case 5:
+                mes = "junio";
+                break;
+            case 6:
+                mes = "julio";
+                break;
+            case 7:
+                mes = "agosto";
+                break;
+            case 8:
+                mes = "septiembre";
+                break;
+            case 9:
+                mes = "octubre";
+                break;
+            case 10:
+                mes = "noviembre";
+                break;
+            case 11:
+                mes = "diciembre";
+                break;
+        }
+        return mes;
+    }
     public void setInfoList(ArrayList<Vehicle> vehiclesList){
         this.vehiclesList = vehiclesList;
     }

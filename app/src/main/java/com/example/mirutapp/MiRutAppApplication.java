@@ -38,7 +38,7 @@ public class MiRutAppApplication extends Application implements HasServiceInject
     private static Context appContext;
 
     //This field is updated everyday by VehicleRestrictionReceiver. verify if it is not null before accessing.
-    private static VehicleRestriction restriction;
+    public static VehicleRestriction restriction;
 
     @Override
     public AndroidInjector<Service> serviceInjector() {

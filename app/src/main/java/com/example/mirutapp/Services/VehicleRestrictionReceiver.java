@@ -21,6 +21,7 @@ import com.example.mirutapp.Repository.VehicleRepository;
 import com.example.mirutapp.WebService.VehicleRestrictionWebService;
 import com.example.mirutapp.util.RestrictionNumbersParser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -36,6 +37,8 @@ import static com.example.mirutapp.MiRutAppApplication.CHANNEL_1_ID;
 public class VehicleRestrictionReceiver extends BroadcastReceiver {
     public static final String TAG = "VehicleRestrictionReceiver";
     private Context appContext;
+    public static List<Vehicle> vehicleList = new ArrayList<>();
+    public static String fecha;
     @Inject VehicleRepository repository;
 
     @Override
@@ -77,6 +80,7 @@ public class VehicleRestrictionReceiver extends BroadcastReceiver {
                     bikeString = vehicleRestriction.getBike();
                     truckSSVString = vehicleRestriction.getTruck_ssv();
                     truckCSVString = vehicleRestriction.getTruck_csv();
+                    fecha = vehicleRestriction.getFecha();
                 }
 
                 //debug
@@ -118,6 +122,7 @@ public class VehicleRestrictionReceiver extends BroadcastReceiver {
                 char lastDigit = patente.charAt(patente.length()-1);
                 for(Integer number: numbers) {
                     if(number == Character.getNumericValue(lastDigit)) {
+                        vehicleList.add(vehicle);
                         // here we should notify
                         sendNotification(vehicle);
                     }
