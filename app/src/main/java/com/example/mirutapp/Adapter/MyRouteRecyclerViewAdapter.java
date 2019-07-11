@@ -1,6 +1,7 @@
 package com.example.mirutapp.Adapter;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
@@ -118,12 +119,12 @@ public class MyRouteRecyclerViewAdapter extends RecyclerView.Adapter<MyRouteRecy
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*AddRouteDialog dialog = new AddRouteDialog(null,true,currentRoute);
+                AddRouteDialog dialog = new AddRouteDialog(null,true,currentRoute);
                 //dialog.setTargetFragment(MyRouteRecyclerViewAdapter.this,1);
                 //dialog.setTargetFragment();
-                FragmentManager manager = ((Activity)mContext).getFragmentManager();
+                //FragmentManager manager = ((Activity)mContext).getFragmentManager();
                 FragmentManager manager = ((AppCompatActivity)mContext).getSupportFragmentManager();
-                dialog.show(manager,"addRouteVehicle");*/
+                dialog.show(manager,"addRouteVehicle");
             }
         });
 
