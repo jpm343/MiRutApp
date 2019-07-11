@@ -3,6 +3,7 @@ package com.example.mirutapp.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -19,7 +20,10 @@ import android.widget.Button;
 
 import com.example.mirutapp.R;
 
+import java.util.List;
 import java.util.Set;
+
+import static com.example.mirutapp.util.SringUtil.urlEncode;
 
 /**
  * A simple {@link DialogFragment} subclass.
@@ -66,7 +70,26 @@ public class HazardDialog extends DialogFragment {
         });
 
         //Go to Twitter App
+        buttonTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create intent using ACTION_VIEW and a normal Twitter url:
+                String tweetUrl = String.format("https://twitter.com/intent/tweet?text=%s&url=%s",
+                        urlEncode("#UOCT"),
+                        urlEncode(" #MiRutApp"));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(tweetUrl));
 
+                // Narrow down to official Twitter app, if available:
+                List<ResolveInfo> matches = getActivity().getPackageManager().queryIntentActivities(intent, 0);
+                for (ResolveInfo info : matches) {
+                    if (info.activityInfo.packageName.toLowerCase().startsWith("com.twitter")) {
+                        intent.setPackage(info.activityInfo.packageName);
+                    }
+                }
+
+                startActivity(intent);
+            }
+        });
 
         return view;
     }

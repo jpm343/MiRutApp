@@ -528,6 +528,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback{
                 FragmentManager fm = getFragmentManager();
                 incidentDialog.show(fm,incidentDialog.getTag());
             }
+            /* DIALOGO PARA HAZARD, VER DONDE LLAMAR
+            else {
+                HazardDialog hazardDialog = new HazardDialog();
+                Bundle bundles = new Bundle();
+                System.out.println("ESTE ES EL LINK " + MarkerPointsUOCT.get(0).getLink());
+                bundles.putString("URLHAZARD",MarkerPointsUOCT.get(0).getLink());
+                hazardDialog.setArguments(bundles);
+                FragmentManager fm = getFragmentManager();
+                hazardDialog.show(fm,hazardDialog.getTag());
+            }*/
 
             // Drawing polyline in the Google Map for the i-th route
             if(lineOptions != null) {

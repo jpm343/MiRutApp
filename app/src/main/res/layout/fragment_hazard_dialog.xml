@@ -19,7 +19,6 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:autoText="false"
         android:background="@color/colorPrimary"
         android:gravity="center_horizontal|top"
         android:text="OPCIONES INCIDENTE"
@@ -36,7 +35,7 @@
         android:layout_marginTop="29dp"
         android:backgroundTint="#0277BD"
         android:clickable="true"
-        android:text="TWEET FEEDBACK" />
+        android:text="TWEET" />
 
     <Button
         android:id="@+id/buttonCancel"
