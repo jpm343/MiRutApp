@@ -4,23 +4,19 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bartoszlipinski.recyclerviewheader2.RecyclerViewHeader;
 import com.example.mirutapp.Adapter.IncidentAdapter;
 import com.example.mirutapp.Model.Incident;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mirutapp.R;
 
@@ -65,9 +61,13 @@ public class IncidentListDialogFragment extends BottomSheetDialogFragment {
         // Copy incidentHash into incidents
         incidents.addAll(0,incidentsHash);
 
+        //Header
+
+        RecyclerViewHeader header = (RecyclerViewHeader) view.findViewById(R.id.header);
         recyclerIncidets = view.findViewById(R.id.incidentList);
         recyclerIncidets.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerIncidets.setHasFixedSize(true);
+        header.attachTo(recyclerIncidets);
 
         final IncidentAdapter adapter = new IncidentAdapter();
         recyclerIncidets.setAdapter(adapter);

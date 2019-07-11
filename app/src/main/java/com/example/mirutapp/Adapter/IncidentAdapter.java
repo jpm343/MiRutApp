@@ -35,7 +35,7 @@ public class IncidentAdapter extends RecyclerView.Adapter<IncidentAdapter.ViewHo
     public void onBindViewHolder(@NonNull IncidentAdapter.ViewHolder holder, int position) {
         final Incident currentIncident = incidents.get(position);
         holder.title.setText(currentIncident.getDescription());
-        holder.link.setText(currentIncident.getLink());
+        //holder.link.setText(currentIncident.getLink());
     }
 
     @Override
@@ -53,7 +53,7 @@ public class IncidentAdapter extends RecyclerView.Adapter<IncidentAdapter.ViewHo
         public  ViewHolder(View view){
             super(view);
             title = view.findViewById(R.id.idDescription);
-            link = view.findViewById(R.id.idLink);
+           // link = view.findViewById(R.id.idLink);
         }
     }
 }

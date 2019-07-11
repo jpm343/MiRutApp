@@ -69,6 +69,7 @@ dependencies {
 
     implementation 'com.maltaisn:recurpicker:1.4.5'
 
+    implementation 'com.bartoszlipinski:recyclerviewheader2:2.0.1'
 
 
 }
