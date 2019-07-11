@@ -152,15 +152,16 @@
 
     <Button
         android:id="@+id/dialogButtonOK"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="29dp"
         android:layout_below="@+id/image"
         android:layout_marginTop="478dp"
-        android:layout_marginRight="5dp"
-        android:background="#008577"
+        android:layout_marginRight="0dp"
+        android:background="@color/colorPrimary"
 
 
-        android:text=" Guardar Ruta " />
+        android:text=" Guardar Ruta "
+        android:textColor="#F7EFEF" />
 
     <CheckBox
         android:id="@+id/checkBox8"
